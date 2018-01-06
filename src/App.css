@@ -117,8 +117,9 @@ and (max-width : 667px) {
 
 /* Stage/Cube Styles */
 .wrapper {
-	margin-top: -250px;
-	position: inherit;
+	top: 50%;
+	left: 50%;
+	position: absolute;
   -moz-transform: scale(0.4);
   -webkit-transform: scale(0.4);
   -o-transform: scale(0.4);
@@ -129,12 +130,12 @@ and (max-width : 667px) {
 .cube {
 	border: 5px solid white;
 	box-sizing: border-box;
-	position: absolute;
+	position: inherit;
 	display: grid;
   grid-template-columns: auto auto auto;
   grid-template-rows: auto auto auto;
 	transform-style: preserve-3d;
-	margin-left: 50%;
+	text-align: center;
 }
 
 .face {
