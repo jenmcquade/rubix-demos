@@ -11,6 +11,13 @@ Open http://localhost:3000 to view it in the browser.
 The page will reload if you make edits.
 You will also see any lint errors in the console.
 
+## Origins
+CodePen examples were produces the first week of 2018.
+- Day 1 (1/2/18): *Creation of Cube HTML* https://codepen.io/JonMcQuade/pen/qpjgzm
+- Day 2 (1/3/18): *Introduction of Media Queries* https://codepen.io/JonMcQuade/pen/aEwgQq
+- Day 3 (1/4/18): *Introduction of Menu elements* https://codepen.io/JonMcQuade/pen/rpzZvK
+
+## Day 4 onwards
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks with an app created from Create React App.<br>
