@@ -16,10 +16,11 @@ class Perspective extends Component {
     this.setState(prevState => ({
       isToggleOn: !prevState.isToggleOn
     }));
-
+    this.setState({'contentAnimation': ''});
+    this.setState({'toggleClass': 'menu-reset'});
     
     // Mobile or small width detection /
-    if( window.matchMedia("(max-width: 720px)").matches ) {		
+    if( window.matchMedia("(max-width: 720px)").matches ) {
       if(this.state.isToggleOn) {
         this.setState({'inlineContentTransform': 'rotateX(0deg)'});
       }	else {
@@ -28,12 +29,24 @@ class Perspective extends Component {
       return true;
     }
 
+    // Standard menu animations
     if(this.state.isToggleOn) {
       this.setState({'toggleClass': 'menu-flip-down'});
-      this.setState({'contentAnimation': 'menu-open-content'});
+      const container = this;
+      setTimeout( 
+        () => {
+          this.setState({'contentAnimation': 'menu-open-content'})
+        }, 800
+      );
     } else {
-      this.setState({'toggleClass': 'menu-reset'});
       this.setState({'contentAnimation': 'menu-close-content'});
+      setTimeout( 
+        () => {
+          this.setState({'toggleClass': 'menu-reset'});
+        }, 800
+      );
+
+
     }
   }
 
