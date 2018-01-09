@@ -1,4 +1,4 @@
-# To run app from the included React dev server
+# To run this app from the included React dev server
 - Install Node with NPM: https://www.npmjs.com/get-npm
 - Run this in the pulled directory:
 
