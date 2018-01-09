@@ -1,6 +1,13 @@
+# To run app from the included React dev server
+- Install Node with NPM: https://www.npmjs.com/get-npm
+- Run this in the pulled directory:
+
+* `npm install`
+* `npm start`
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
-Below you will find some information on how to perform common tasks.<br>
+Below you will find some information on how to perform common tasks with an app created from Create React App.<br>
 You can find the most recent version of this guide [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
 
 ## Table of Contents
