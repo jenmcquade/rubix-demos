@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import Box from './components/containers/Box.js'
-import Menu from './components/containers/Menu.js'
+import Box from './components/containers/Box'
+import Menu from './components/containers/Menu'
+import './animations/menu.css';
+import './animations/rotations.css';
+import './animations/text.css';
 import './App.css';
 
 class App extends Component {

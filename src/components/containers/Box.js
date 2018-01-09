@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import '../styles/box.css';
+
 class Box extends Component {
   render() {
     return (

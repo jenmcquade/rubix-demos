@@ -1,0 +1,139 @@
+/* Menu styles */
+.menu {
+	max-width: 25%;
+  justify-content: center;
+	padding: 0.2em;
+	position: relative;
+}
+.nav-item {
+	display: flex;
+  flex-flow: row wrap;
+	cursor: pointer;
+	cursor: hand;
+	text-align: center;
+	transform-origin: top left;
+}
+.nav-item .content {
+	position: inherit;
+	min-height: 500px;
+	min-width: 100%;
+	border: 2px solid red;
+	transform: rotateX(90deg); 
+}
+.menu a {
+	color: white; 
+	min-width: 100%;
+}
+.menu a:hover {
+	text-decoration: none;
+	animation: fade 0.5s forwards; 
+}
+.menu .glyphicon {
+	font-size: 20pt;
+	margin-bottom: 0.5em;
+}
+.menu .glyphicon-th {
+  font-size: 20pt; 
+}
+.menu span {
+	font-size: 20pt;
+}
+.menu-flip-down {
+	animation: menuTitleDrop 1.5s forwards ease-out; 
+}
+.menu-reset {
+	animation: menuReset 0.8s forwards ease-out; 
+}
+.menu-open-content {
+	animation: menuOpenContent 0.8s forwards ease-out; 
+}
+.menu-close-content {
+	animation: menuCloseContent 0.8s forwards ease-out; 
+}
+#perspective a {
+  background-color: red;
+}
+#perspective .content {
+	background-color: red;
+}
+
+/* Media Queries for menu */
+@media only screen 
+and (min-width : 75px) 
+and (max-width : 667px) {
+	.menu {
+		max-width: 100%;
+		width: 100%;
+		height: 100%;
+		z-index: 99;
+		padding: 0;
+		position: relative;
+	  padding-top: 0.5em;
+	}
+	.menu .nav-item {
+		display: flex;
+		flex-flow: row wrap;
+		cursor: pointer;
+		cursor: hand;
+		text-align: center;
+		transform-origin: top left;
+	}
+	.menu .nav-item a {
+	  padding-top: 0.5em;
+	}
+	.menu .nav-item i {
+		font-size: 2em;
+	}
+  .menu .nav-item span {
+		display: none;
+	}
+	.menu .nav-item .content {
+		position: inherit;
+		min-height: 500px;
+		min-width: 100%;
+		border: 2px solid red;
+		transform: rotateX(90deg); 
+	}
+	#perspective a {
+		color: red;
+  	background-color: white;
+	}
+	#perspective a:hover {
+		animation: fadeToBlack 1s forwards; 
+	}
+	#perspective .content {
+	  background: rgba(0,0,0,0.7);
+	}
+}
+
+@media only screen 
+and (min-width: 668px)
+and (max-width: 719px){ 
+	.menu .nav-item span {
+		display: none;
+	}
+}
+
+@media only screen 
+and (min-width: 720px) 
+and (max-width: 1023px) { 
+	.menu {
+		max-width: 20%;
+	}
+	.menu .nav-item {
+		margin: 0 0 0 5%;
+	}
+	.menu .nav-item i {
+		margin: 0 40%;
+	}
+  .menu .nav-item span {
+		display: none;
+	}
+}
+
+@media only screen 
+and (min-width: 1024px) { 
+	.menu .nav-item span {
+		margin-left: .5em;
+	}
+}

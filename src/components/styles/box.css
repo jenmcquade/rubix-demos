@@ -1,0 +1,124 @@
+.cube {
+	border: 5px solid white;
+	box-sizing: border-box;
+	position: inherit;
+	display: grid;
+  grid-template-columns: auto auto auto;
+  grid-template-rows: auto auto auto;
+	transform-style: preserve-3d;
+	text-align: center;
+}
+
+.face {
+	min-width: 200%;
+	min-height: 200%;
+	display: grid;
+	grid-template-columns: auto auto auto;
+  grid-template-rows: auto auto auto;
+	grid-row-start: span 3;
+	grid-gap: auto auto;
+	grid-auto-flow: row;
+	justify-items: stretch;
+	align-items: stretch;
+	align-content: stretch;
+	place-content: stretch;
+	box-sizing: border-box;
+	position: absolute;
+	justify-content: center;
+	transform-style: preserve-3d;
+	transform-origin: top left;
+	padding: auto auto;
+  box-shadow: inset 0px 0px 50px 0px white;
+	background-color: rgba(0, 0, 0, 0.7); 
+  border-radius: 10%;
+}
+
+.center {
+	width: 100px;
+	height: 100px;
+}
+
+.side {
+	width: 100px;
+	height: 100px;
+	z-index: 7;
+}
+
+.corner {
+	width: 100px;
+	height: 100px;
+	position: relative;
+}
+
+.item {
+	align-items: center;
+	justify-content: center;
+	width: 100px;
+	height: 100px;
+	display: flex;
+	border-radius: 25%;
+	margin: 10px;
+	box-shadow: inset 0 0 15px #fff;
+	transform-style: preserve-3d;
+	position: relative;
+	text-transform: uppercase;
+}
+
+
+/*  Face-specific Styles */
+/*  Faces have default colors
+      and should be replaced using JS
+      if controllers are implemented
+*/
+
+.white .item {
+	background-color: white;
+	color: black;
+}
+
+.blue .item {
+	background-color: blue;
+}
+
+.green .item {
+	background-color: green;
+}
+
+.yellow .item {
+	background-color: yellow;
+	color: black;
+}
+
+.red .item {
+	background-color: red;
+}
+
+.orange .item {
+	background-color: orange;
+}
+
+/* Cube formation */
+
+#top {
+	transform: scale(1, 1) rotateX(0) rotateY(0) rotateZ(0) translateX(0) translateY(0) translateZ(0);
+}
+
+#bottom {
+	transform: scale(1, 1) rotateX(-180deg) rotateY(0) rotateZ(0) translateX(0) translateY(-100%) translateZ(360px);
+}
+
+#back {
+	transform: scale(1, 1) rotateX(90deg) rotateY(0) rotateZ(0) translateX(0) translateY(-100%) translateZ(0);
+}
+
+#right {
+  transform: scale(1, -1) rotateX(-90deg) rotateY(-90deg) rotateZ(0) translateX(-100%) translateY(0) translateZ(-360px);
+}
+
+#front {
+	transform: scale(1, 1) rotateX(270deg) rotateY(0) rotateZ(0deg) translateX(0) translateY(0) translateZ(360px);
+}
+
+#left {
+  transform: scale(-1, 1) rotateX(-90deg) rotateY(-90deg) rotateZ(0) translateX(0) translateY(0) translateZ(0);
+}
