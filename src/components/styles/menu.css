@@ -90,7 +90,7 @@ and (max-width : 667px) {
 	.menu .nav-item a {
 		display: block;
 		padding-top: 0.5em;
-		width: 100%;
+		width: 100%; /* One link is taking up 100% right now */
 		height: 100%;
 		animation: "";
 	}
@@ -129,7 +129,14 @@ and (max-width: 719px){
 	.menu {
 		z-index: 99;
 		width: 100%;
+		max-width: 100%;
+		width: 100%;
+		height: 100%;
+		z-index: 99;
+		padding: 0;
+		position: relative;
 	}
+	
 	.menu .nav-item span {
 		display: none;
 	}
