@@ -6,6 +6,8 @@
 	box-sizing: border-box;
 	font-size: 2em;
 	font-family: "Anton";
+	margin: 0;
+	padding: 0;
 }
 
 /* Stage/Cube Styles */

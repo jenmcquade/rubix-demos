@@ -2,7 +2,6 @@
 .menu {
 	max-width: 25%;
   justify-content: center;
-	padding: 0.2em;
 	position: relative;
 }
 .nav-item {
@@ -20,6 +19,7 @@
 	border: 2px solid red;
 	margin-top: -50px;
 	position: inherit;
+	transform: rotateX(-90deg);
 }
 .menu a {
 	color: white; 
@@ -157,9 +157,6 @@ and (max-width: 1023px) {
 		max-width: 20%;
 		z-index: 99;
 	}
-	.menu .nav-item {
-		margin: 0 0 0 5%;
-	}
 	.menu .nav-item i {
 		margin: 0 40%;
 	}
@@ -170,12 +167,15 @@ and (max-width: 1023px) {
 		padding-top: 5%;
 	}
 	#perspective .content h2 {
-		margin-top: 0;
+		margin-top: 0%;
 	}
 }
 
 @media only screen 
 and (min-width: 1024px) { 
+	.menu .nav-item .content {
+		padding-top: 5%;
+	}
 	.menu .nav-item span {
 		margin-left: .5em;
 	}
