@@ -13,6 +13,7 @@
 	top: 50%;
 	left: 50%;
 	position: absolute;
+	z-index: 10;
   -moz-transform: scale(0.4);
   -webkit-transform: scale(0.4);
   -o-transform: scale(0.4);
@@ -44,10 +45,18 @@ and (max-width: 719px){
     animation: simpleRotateX 20s infinite ease-in-out; 
 	}
 	.cube-wrapper {
-		margin-top: -25%;
 		margin-left: 0%;
-		transform: scale(0.6);
-		-moz-transform: scale(0.6);
+		transform: scale(0.8);
+		-moz-transform: scale(0.8);
+	}
+	.menu {
+		min-width: 100%;
+	}
+	.menu .nav-item a {
+		width: 100%;
+	}
+	.menu .nav-item .content {
+		width: 100%;
 	}
 }
 
@@ -59,8 +68,8 @@ and (max-width: 1023px) {
 	}
 	.cube-wrapper {
 		margin-top: -25%;
-		transform: scale(0.5);
-		-moz-transform: scale(0.5);
+		transform: scale(0.8);
+		-moz-transform: scale(0.8);
 	}
 }
 

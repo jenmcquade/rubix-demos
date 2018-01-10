@@ -18,6 +18,7 @@ class Perspective extends Component {
       isToggleOn: !prevState.isToggleOn
     }));
 
+    this.setState({'menuAnchorClass': ''});
     this.setState({'contentAnimation': ''});
     
     // Mobile or small width detection /

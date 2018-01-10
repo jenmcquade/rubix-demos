@@ -12,6 +12,7 @@
 	cursor: hand;
 	text-align: center;
 	transform-origin: top left;
+	z-index: 9;
 }
 .nav-item .content {
 	min-width: 15em;
@@ -25,6 +26,7 @@
 	min-width: 15em;
 	transform-origin: top left;
 	height: 50px;
+	z-index: 10;
 }
 .menu a:hover {
 	text-decoration: none;
@@ -105,15 +107,15 @@ and (max-width : 667px) {
 		position: inherit;
 		min-height: 20em;
 		min-width: 100%;
-		border: 2px solid red;
 		margin-top: 0%;
 		transform: rotateZ(0deg) translateY(0);
 	}
 	#perspective a {
+		background-color: white;
 		color: red;
-  	background-color: white;
 	}
 	#perspective .content {
+		border: 2px solid red;
 	  background: rgba(0,0,0,0.7);
 	}
 	#perspective .content h2:after {
@@ -126,9 +128,24 @@ and (min-width: 668px)
 and (max-width: 719px){ 
 	.menu {
 		z-index: 99;
+		width: 100%;
 	}
 	.menu .nav-item span {
 		display: none;
+	}
+	.menu a i:hover, .menu a span:hover {
+		animation: fadeToBlack 0.5s forwards; 
+	}
+	#perspective a {
+		background-color: white;
+		color: red;
+	}
+	#perspective .content {
+		margin-top: 0em;
+		background-color: rgba(0,0,0,0.7);
+	}
+	#perspective .content h2:after {
+		content: "Perspective";
 	}
 }
 
@@ -147,6 +164,15 @@ and (max-width: 1023px) {
 	}
   .menu .nav-item span {
 		display: none;
+	}
+	.menu .nav-item .content {
+		padding-top: 5%;
+	}
+	#perspective .content h2 {
+		margin-top: 0;
+	}
+	#perspective .content h2:after {
+		content: "Perspective";
 	}
 }
 
