@@ -14,18 +14,23 @@
 	transform-origin: top left;
 }
 .nav-item .content {
-	position: inherit;
-	min-height: 500px;
-	min-width: 100%;
+	min-width: 15em;
+	min-height: 15em;
 	border: 2px solid red;
-	transform: rotateX(90deg); 
+	margin-top: -50px;
+	position: inherit;
 }
 .menu a {
 	color: white; 
-	min-width: 100%;
+	min-width: 15em;
+	transform-origin: top left;
+	height: 50px;
 }
 .menu a:hover {
 	text-decoration: none;
+	color: rgba(255,255,255,0.9);
+}
+.menu a i:hover, .menu a span:hover {
 	animation: fade 0.5s forwards; 
 }
 .menu .glyphicon {
@@ -39,16 +44,19 @@
 	font-size: 20pt;
 }
 .menu-flip-down {
-	animation: menuTitleDrop 1.5s forwards ease-out; 
+	animation: menuTitleDrop 1s forwards ease-out; 
+}
+.menu-flip-up {
+	animation: menuTitleFlipUp 1s forwards ease-out; 
 }
 .menu-reset {
-	animation: menuReset 0.8s forwards ease-out; 
+	animation: menuReset 1s forwards ease-out; 
 }
 .menu-open-content {
-	animation: menuOpenContent 0.8s forwards ease-out; 
+	animation: menuOpenContent 1s forwards ease-out; 
 }
 .menu-close-content {
-	animation: menuCloseContent 0.8s forwards ease-out; 
+	animation: menuCloseContent 1s forwards ease-out; 
 }
 #perspective a {
   background-color: red;
@@ -68,7 +76,6 @@ and (max-width : 667px) {
 		z-index: 99;
 		padding: 0;
 		position: relative;
-	  padding-top: 0.5em;
 	}
 	.menu .nav-item {
 		display: flex;
@@ -79,7 +86,14 @@ and (max-width : 667px) {
 		transform-origin: top left;
 	}
 	.menu .nav-item a {
-	  padding-top: 0.5em;
+		display: block;
+		padding-top: 0.5em;
+		width: 100%;
+		height: 100%;
+		animation: "";
+	}
+	.menu a i:hover, .menu a span:hover {
+		animation: fadeToBlack 0.5s forwards; 
 	}
 	.menu .nav-item i {
 		font-size: 2em;
@@ -89,26 +103,30 @@ and (max-width : 667px) {
 	}
 	.menu .nav-item .content {
 		position: inherit;
-		min-height: 500px;
+		min-height: 20em;
 		min-width: 100%;
 		border: 2px solid red;
-		transform: rotateX(90deg); 
+		margin-top: 0%;
+		transform: rotateZ(0deg) translateY(0);
 	}
 	#perspective a {
 		color: red;
   	background-color: white;
 	}
-	#perspective a:hover {
-		animation: fadeToBlack 1s forwards; 
-	}
 	#perspective .content {
 	  background: rgba(0,0,0,0.7);
+	}
+	#perspective .content h2:after {
+		content: "Perspective";
 	}
 }
 
 @media only screen 
 and (min-width: 668px)
 and (max-width: 719px){ 
+	.menu {
+		z-index: 99;
+	}
 	.menu .nav-item span {
 		display: none;
 	}
@@ -119,6 +137,7 @@ and (min-width: 720px)
 and (max-width: 1023px) { 
 	.menu {
 		max-width: 20%;
+		z-index: 99;
 	}
 	.menu .nav-item {
 		margin: 0 0 0 5%;

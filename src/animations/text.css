@@ -14,13 +14,13 @@
 
 @keyframes fadeToBlack {
 	0% {
-  	transition: background-color ease-in-out;
+  	transition: color ease-in-out;
   	-moz-transition: color;
   	-webkit-transition: color;
 	}
 	100% {
-		background-color: rgba(255,255,255,0.7);
-  	transition: background-color .25s ease-in-out;
+		color: rgba(0,0,0,0.7);
+  	transition: color .25s ease-in-out;
   	-moz-transition: background-color .25s ease-in-out;
   	-webkit-transition: background-color .25s ease-in-out;
 	}

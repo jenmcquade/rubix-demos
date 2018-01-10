@@ -4,7 +4,7 @@ import '../styles/box.css';
 class Box extends Component {
   render() {
     return (
-      <div className="wrapper">
+      <div className="cube-wrapper">
         <div className="cube">
           <div id="top" className="face white">
             <div className="item corner top-left">top left</div>

@@ -7,6 +7,7 @@ class Perspective extends Component {
       isToggleOn: true, 
       toggleClass: '',
       contentAnimation: '',
+      menuAnchorClass: '',
       inlineContentTransform: 'rotateX(-90deg) rotateZ(0deg)'
     };
     this.handleClick = this.handleClick.bind(this);
@@ -16,8 +17,8 @@ class Perspective extends Component {
     this.setState(prevState => ({
       isToggleOn: !prevState.isToggleOn
     }));
+
     this.setState({'contentAnimation': ''});
-    this.setState({'toggleClass': 'menu-reset'});
     
     // Mobile or small width detection /
     if( window.matchMedia("(max-width: 720px)").matches ) {
@@ -31,34 +32,27 @@ class Perspective extends Component {
 
     // Standard menu animations
     if(this.state.isToggleOn) {
-      this.setState({'toggleClass': 'menu-flip-down'});
-      const container = this;
-      setTimeout( 
-        () => {
-          this.setState({'contentAnimation': 'menu-open-content'})
-        }, 800
-      );
+      this.setState({'menuAnchorClass': 'menu-flip-down'});
+      this.setState({'contentAnimation': 'menu-open-content'})
     } else {
+      this.setState({'menuAnchorClass': 'menu-flip-up'});
       this.setState({'contentAnimation': 'menu-close-content'});
-      setTimeout( 
-        () => {
-          this.setState({'toggleClass': 'menu-reset'});
-        }, 800
-      );
-
-
     }
   }
 
   render() {
     return (
       <div className={'nav-item ' + this.state.toggleClass} id="perspective">
-        <a onClick={this.handleClick}>
+        <a className={this.state.menuAnchorClass} onClick={this.handleClick}>
           <i className="glyphicon glyphicon-th"></i>
           <span>Perspective</span>
         </a>
         <div style={{transform: this.state.inlineContentTransform}} id="content" className={'content ' + this.state.contentAnimation}>
-        
+          <h2 className="title"></h2>
+          <ul>
+            <li>Nav item 1</li>
+            <li>Nav item 2</li>
+          </ul>
         </div>
       </div>
   )}
