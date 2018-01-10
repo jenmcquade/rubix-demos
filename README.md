@@ -1,5 +1,5 @@
 ## Objective
-A demonstration playground of CSS animations and object interactions for importing three-dimensional React components rendered to the DOM for Web VR.
+A demonstration playground of CSS animations and object interactions for importing and reviewing three-dimensional React components rendered to the DOM for Web VR.
 
 # To run this app from the included React dev server
 - Install Node with NPM: https://www.npmjs.com/get-npm
