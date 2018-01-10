@@ -49,7 +49,7 @@ class Perspective extends Component {
           <span>Perspective</span>
         </a>
         <div style={{transform: this.state.inlineContentTransform}} id="content" className={'content ' + this.state.contentAnimation}>
-          <h2 className="title"></h2>
+          <h2 className="title">Perspective</h2>
           <ul>
             <li>Nav item 1</li>
             <li>Nav item 2</li>

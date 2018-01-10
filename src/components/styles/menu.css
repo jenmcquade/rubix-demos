@@ -118,9 +118,6 @@ and (max-width : 667px) {
 		border: 2px solid red;
 	  background: rgba(0,0,0,0.7);
 	}
-	#perspective .content h2:after {
-		content: "Perspective";
-	}
 }
 
 @media only screen 
@@ -151,9 +148,6 @@ and (max-width: 719px){
 		margin-top: 0em;
 		background-color: rgba(0,0,0,0.7);
 	}
-	#perspective .content h2:after {
-		content: "Perspective";
-	}
 }
 
 @media only screen 
@@ -178,14 +172,14 @@ and (max-width: 1023px) {
 	#perspective .content h2 {
 		margin-top: 0;
 	}
-	#perspective .content h2:after {
-		content: "Perspective";
-	}
 }
 
 @media only screen 
 and (min-width: 1024px) { 
 	.menu .nav-item span {
 		margin-left: .5em;
+	}
+	#perspective .content h2 {
+		display: none;
 	}
 }
