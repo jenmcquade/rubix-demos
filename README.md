@@ -1,5 +1,10 @@
 ## Objective
-A demonstration playground of CSS animations and object interactions for importing and reviewing three-dimensional React components rendered to the DOM for Web VR.
+- A demonstration playground of CSS animations and object interactions for importing and reviewing three-dimensional React components rendered to the DOM for Web VR
+- An import and viewing tool for 3D HTML5/CSS objects
+- A demonstration of feature management using a Git repository
+- A sampling of transcriptions to cross-platform Mobile Native toolkits using React Native and Angular.
+- A sampling of menu-driven DOM elelement interactions with Social Network APIs.
+- A sampling of keyboard-driven and visually-impaired device targeting interactions
 
 # To run this app from the included React dev server
 - Install Node with NPM: https://www.npmjs.com/get-npm
@@ -13,6 +18,10 @@ Open http://localhost:3000 to view it in the browser.
 
 The page will reload if you make edits.
 You will also see any lint errors in the console.
+
+## Currently In Progress
+- As of 1/11/18
+* `git checkout -b feature_menu_perspective`
 
 ## Origins
 CodePen examples were produces the first week of 2018.
