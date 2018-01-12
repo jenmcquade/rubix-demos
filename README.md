@@ -1,5 +1,5 @@
 ## Objective
-- A demonstration playground of CSS animations and object interactions for importing and reviewing three-dimensional React components rendered to the DOM for Web VR
+- A demonstration playground of CSS animations and object interactions for importing and reviewing three-dimensional React components rendered to the DOM
 - An import and viewing tool for 3D HTML5/CSS objects
 - A demonstration of feature management using a Git repository
 - A sampling of transcriptions to cross-platform Mobile Native toolkits using React Native.
