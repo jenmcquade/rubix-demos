@@ -8,8 +8,8 @@ const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
 const TARGET = process.env.npm_lifecycle_event;
 const ROOT_PATH = path.resolve(__dirname);
-const MODULES_PATH = __dirname + '/node_modules';
-const PUBLIC_PATH = __dirname + 'public';
+const MODULES_PATH = path.resolve(__dirname, 'node_modules');
+const PUBLIC_PATH = path.resolve(__dirname, 'public');
 const BUNDLE_PATH = path.join(PUBLIC_PATH, 'js');
 const SRC_PATH = path.join(ROOT_PATH, 'src');
 
@@ -25,7 +25,7 @@ module.exports = {
   },
 
   devServer: {
-    contentBase: path.join(__dirname, 'public'),
+    contentBase: PUBLIC_PATH,
     port: 3000,
     inline: true,
     overlay: true,
@@ -34,7 +34,7 @@ module.exports = {
   },
 
   output: {
-    path: path.join(__dirname, 'public/js'),
+    path: BUNDLE_PATH,
     publicPath: '/assets/',
     filename: 'bundle.js',
   },
@@ -49,14 +49,14 @@ module.exports = {
         // proxy the Webpack Dev Server endpoint 
         // (which should be serving on http://localhost:3000/) 
         // through BrowserSync 
-        proxy: 'http://localhost:3000/webpack-dev-server/'
+        proxy: 'http://localhost:3000'
       },
       // plugin options 
       {
         // prevent BrowserSync from reloading the page 
         // and let Webpack Dev Server take care of this 
         reload: false,
-        inline: true
+        inline: false
       }
     ),
     new Webpack.optimize.OccurrenceOrderPlugin(),

@@ -52,7 +52,7 @@ class Perspective extends Component {
           <h2 className="title">Perspective</h2>
           <ul>
             <li>Nav item 1</li>
-            <li>Nav item 4</li>
+            <li>Nav item 2</li>
           </ul>
         </div>
       </div>
