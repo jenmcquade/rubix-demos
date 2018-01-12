@@ -2,7 +2,7 @@
   "name": "rubix-demos",
   "version": "0.1.0",
   "repository": "https://github.com/jonmcquade/rubix-demos/blob/master/README.md",
-  "license": "CC-BY-SA-4.0",
+  "license": "GNU GPLv3",
   "scripts": {
     "start": "webpack-dev-server --progress --colors",
     "build": "webpack -p",
