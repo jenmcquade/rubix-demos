@@ -22,7 +22,7 @@ class Perspective extends Component {
     this.setState({'contentAnimation': ''});
     
     // Mobile or small width detection /
-    if( window.matchMedia("(max-width: 720px)").matches ) {
+    if( window.matchMedia('(max-width: 720px)').matches ) {
       if(this.state.isToggleOn) {
         this.setState({'inlineContentTransform': 'rotateX(0deg)'});
       }	else {

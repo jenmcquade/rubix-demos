@@ -5,7 +5,7 @@ import '../styles/menu.css';
 class Menu extends Component {
   render() {
     return (
-      <div id="container" className="menu">
+      <div id="container" className="menu" role="navigation">
         <Perspective></Perspective>
       </div>
     )

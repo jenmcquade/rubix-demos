@@ -93,6 +93,7 @@ and (max-width : 667px) {
 		width: 100%; /* One link is taking up 100% right now */
 		height: 100%;
 		animation: "";
+		transform: rotateZ(0deg) translateY(0em);
 	}
 	.menu a i:hover, .menu a span:hover {
 		animation: fadeToBlack 0.5s forwards; 
