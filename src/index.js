@@ -5,23 +5,20 @@ import App from './App';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 
-const renderApp = Component => {
+const render = Component => {
   ReactDOM.render(
     <AppContainer>
       <Component />
     </AppContainer>,
-    document.getElementById('root')
-  );
-};
+    document.getElementById('root'),
+  )
+}
 
-renderApp(App);
+render(App)
 
+// Webpack Hot Module Replacement API
 if (module.hot) {
   module.hot.accept('./App', () => {
-      const NextApp = require('./App').default;
-      renderApp(
-        NextApp,
-        document.getElementById('root'),
-      );
-  });
+    render(App)
+  })
 }

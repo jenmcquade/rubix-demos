@@ -7,7 +7,7 @@ class Box extends Component {
       <div className="cube-wrapper">
         <div className="cube">
           <div id="top" className="face white">
-            <div className="item corner top-left">top left</div>
+            <div className="item corner top-left">top lefts</div>
             <div className="item side top">top</div>
             <div className="item corner top-right">top right</div>
             <div className="item side left">left</div>
