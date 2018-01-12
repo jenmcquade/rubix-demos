@@ -13,11 +13,15 @@
 * `npm install`
 * `npm start`
 
-Runs the app in the development mode.
-Open http://localhost:3000 to view it in the browser.
+- Runs the app in development mode; scripts are bundled but not compressed
+- Automatically opens http://localhost:8080 to view the app in the browser.
 
-The page will reload if you make edits.
-You will also see any lint errors in the console.
+## Hot Module Replacement with WebPack and React
+Hot Module Replacement (HMR) comes as part of the development bundle of scripts.  If you save a React component, the change will be compiled and injected into the DOM without a full page refresh, when using Webpack Dev Server.
+
+## Webpack Dev Server with Browsersync
+When running `npm start` a browser session will be opened to *http://localhost:8080*.  This is a BrowserSync proxy address that opens Webpack Dev Server runnning on *http://localhost:3000*.  BrowserSync administration can be accessed from *http://localhost:3001*.
+- More info about BrowserSync is available here: https://browsersync.io/
 
 ## Currently In Progress
 - As of 1/11/18
