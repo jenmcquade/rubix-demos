@@ -1,10 +1,11 @@
 {
   "name": "rubix-demos",
   "version": "0.1.0",
-  "repository": "https://github.com/jonmcquade/rubix-demos/blob/master/README.md",
+  "repository": "https://github.com/jonmcquade/rubix-demos",
   "license": "GNU GPLv3",
   "scripts": {
     "start": "webpack-dev-server --progress --colors",
+    "react-tools-start": "react-scripts start",
     "build": "webpack -p",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"

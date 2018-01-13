@@ -26,16 +26,26 @@ module.exports = {
 
   devServer: {
     contentBase: PUBLIC_PATH,
-    port: 3000,
+    port: 3002,
     inline: true,
     overlay: true,
     hot: true,
-    progress: true
+    progress: true,
+    host: '0.0.0.0',
+    disableHostCheck: true,
+    useLocalIp: true,
+    compress: true,
+    open: false,
+    overlay: {
+      warnings: true,
+      errors: true
+    },
+    publicPath: 'http://0.0.0.0:3002/assets/',
+    watchContentBase: true
   },
 
   output: {
     path: BUNDLE_PATH,
-    publicPath: '/assets/',
     filename: 'bundle.js',
   },
 
@@ -44,19 +54,19 @@ module.exports = {
       // BrowserSync options 
       {
         // browse to http://localhost:8080/ during development 
-        host: 'localhost',
+        host: '0.0.0.0',
         port: 8080,
         // proxy the Webpack Dev Server endpoint 
         // (which should be serving on http://localhost:3000/) 
         // through BrowserSync 
-        proxy: 'http://localhost:3000'
+        proxy: 'http://localhost:3002'
       },
       // plugin options 
       {
         // prevent BrowserSync from reloading the page 
         // and let Webpack Dev Server take care of this 
         reload: false,
-        inline: false
+        inline: true
       }
     ),
     new Webpack.optimize.OccurrenceOrderPlugin(),
