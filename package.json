@@ -53,6 +53,7 @@
     "sass-loader": "^6.0.6",
     "start-server-webpack-plugin": "^2.2.0",
     "style-loader": "^0.19.1",
+    "styled-components": "^2.4.0",
     "svg-react-loader": "^0.4.5",
     "to-string-loader": "^1.1.5",
     "url-loader": "^0.6.2",
