@@ -1,36 +1,4 @@
-/* Menu styles */
-.menu {
-	max-width: 33%;
-  justify-content: center;
-	position: relative;
-	box-sizing: border-box;
-	align-content: stretch;
-	place-content: stretch;
-}
-.nav-item {
-	display: inline-grid;
-	display: -ms-inline-grid;
-  flex-flow: row wrap;
-	cursor: pointer;
-	cursor: hand;
-	text-align: center;
-	transform-origin: top left;
-	z-index: 9;
-}
-.nav-item .content {
-	min-width: 15em;
-	min-height: 15em;
-	margin-top: -2.63em;
-	position: inherit;
-	transform: rotateX(-90deg);
-}
-.menu a {
-	color: white; 
-	width: 100%;
-	transform-origin: top left;
-	z-index: 10;
-	padding: 0.5em;
-}
+
 .menu a:hover {
 	text-decoration: none;
 	color: rgba(255,255,255,0.9);
@@ -38,138 +6,12 @@
 .menu a i:hover, .menu a span:hover {
 	animation: fade 0.5s forwards; 
 }
-.menu .glyphicon {
-	font-size: 20pt;
-	margin-bottom: 0.5em;
-}
-.menu .glyphicon-th {
-  font-size: 20pt; 
-}
-.menu span {
-	font-size: 20pt;
-}
-.menu-flip-down {
-	animation: menuTitleDrop 1s forwards ease-out; 
-}
-.menu-flip-up {
-	animation: menuTitleFlipUp 1s forwards ease-out; 
-}
-.menu-reset {
-	animation: menuReset 1s forwards ease-out; 
-}
-.menu-open-content {
-	animation: menuOpenContent 1s forwards ease-out; 
-}
-.menu-close-content {
-	animation: menuCloseContent 1s forwards ease-out; 
-}
-#perspective a {
-  background-color: red;
-}
-#perspective .content {
-	background-color: red;
-}
 
 /* Media Queries for menu */
 @media only screen 
 and (min-width : 75px) 
 and (max-width : 719px) {
-	.menu {
-		max-width: 100%;
-		min-width: 100%;
-		z-index: 99;
-		padding: 0;
-		background-color: white;
-		max-height: 100px;
-	}
-	.menu .nav-item {
-		display: flex;
-		flex-flow: row wrap;
-		cursor: pointer;
-		cursor: hand;
-		text-align: center;
-		transform-origin: top left;
-	}
-	.menu .nav-item a {
-		animation: "";
-		transform: rotateZ(0deg) translateY(0em);
-		padding: 0.5em 0.1em 0 0.1em;
-	}
 	.menu a i:hover, .menu a span:hover {
 		animation: fadeToBlack 0.5s forwards; 
-	}
-	.menu .nav-item i {
-		font-size: 2em;
-	}
-  .menu .nav-item span {
-		display: none;
-	}
-	.menu .nav-item .content {
-		min-height: 18em;
-		min-width: 100%;
-		margin-top: 2px;
-		transform: rotateZ(0deg) translateY(0);
-		display: table-row;
-	}
-	#perspective a {
-		background-color: white;
-		color: red;
-	}
-	#perspective .content {
-	  background: rgba(255,0,0,0.7);
-	}
-}
-
-@media only screen 
-and (min-width: 720px) 
-and (max-width: 1023px) { 
-	.menu {
-		max-width: 20%;
-		z-index: 99;
-	}
-	.menu a {
-		padding-left: 0;
-	}
-	.menu .nav-item i {
-		margin: 0 40%;
-	}
-  .menu .nav-item span {
-		display: none;
-	}
-	.menu .nav-item .content {
-		padding-top: 5%;
-		margin-top: -2.43em;
-	}
-	#perspective .content h2 {
-		margin-top: 0%;
-	}
-}
-
-@media only screen 
-and (min-width: 1024px) { 
-	.menu .nav-item .content {
-		padding-top: 5%;
-	}
-	.menu .nav-item span {
-		margin-left: .5em;
-	}
-	#perspective .content h2 {
-		display: none;
-	}
-}
-
-@media only screen 
-and (min-width: 1920px) { 
-	.menu a {
-		max-height: 2.5em;
-	}
-	.menu .nav-item .content {
-		padding-top: 5%;
-	}
-	.menu .nav-item span {
-		margin-left: .5em;
-	}
-	#perspective .content h2 {
-		display: none;
 	}
 }

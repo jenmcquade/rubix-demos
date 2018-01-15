@@ -24,8 +24,17 @@ When running `npm start` a browser session will be opened to *http://localhost:8
 - More info about BrowserSync is available here: https://browsersync.io/
 
 ## Currently In Progress
-- As of 1/11/18
+- As of 1/15/18
 * `git checkout -b feature_menu_perspective`
+* Running `npm install` is suggested if you have previously cloned from the master branch.
+
+## This project has many dependencies
+Open project.json and you'll notice that there are several listed dependencies that will
+be downloaded when you run `npm install`.  Some packages are currently implemented and some are listed now, in preparation for further work.  By installing them now, you save yourself quirks of having to run `npm install` after pulling down the latest updates.  See the "Currently in Progress" section above to determine if running `npm install` is suggested.
+
+## This Project contains Babel and ESLint ReactJS configurations
+My preferred IDE for React development is Visual Studio Code.  There are several plugins native to Visual Studio Code that can assist you in identifying bugs or issues with code style.  *This project uses double spaces* instead of tabs, which is consistent with React lint modules.
+
 
 ## Origins
 CodePen examples were produces the first week of 2018.
