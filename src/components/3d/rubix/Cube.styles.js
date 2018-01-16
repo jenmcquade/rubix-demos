@@ -21,13 +21,13 @@ class Styles {
       and (min-width : 75px) 
       and (max-width : 667px) 
       { 
-        margin-left: -18%;
+        margin-left: -8em;
         transform: scale(0.6);
       }
       @media only screen 
       and (min-width: 668px)
       and (max-width: 719px){ 
-        margin-left: -25%;
+        margin-left: -10.5em;
         transform: scale(0.8);
       }
       @media only screen 
