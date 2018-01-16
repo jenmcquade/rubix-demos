@@ -151,6 +151,7 @@ class Styles {
 
     this.icon = styled.i`
       font-size: 20pt;
+      margin-top: 0.17em;
       margin-bottom: 0.5em;
 
       @media only screen
