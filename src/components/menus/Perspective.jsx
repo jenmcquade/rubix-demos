@@ -9,15 +9,11 @@ const Title = Style.title;
 const Trigger = Style.trigger;
 const Category = Style.category;
 
-class Perspective extends Component {
+export default class Perspective extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isToggleOn: true,
-      toggleClass: '',
-      contentAnimation: '',
-      menuAnchorClass: '',
-      inlineContentTransform: 'rotateX(-90deg) rotateZ(0deg)',
+      isToggleOn: false
     };
     this.handleClick = this.handleClick.bind(this);
   }
@@ -27,44 +23,22 @@ class Perspective extends Component {
       isToggleOn: !prevState.isToggleOn,
     }));
 
-    this.setState({ menuAnchorClass: '' });
-    this.setState({ contentAnimation: '' });
-
-    // Mobile or small width detection /
-    if (window.matchMedia('(max-width: 720px)').matches) {
-      if (this.state.isToggleOn) {
-        this.setState({ inlineContentTransform: 'rotateX(0deg)' });
-      } else {
-        this.setState({ inlineContentTransform: 'rotateX(-90deg)' });
-      }
-      return true;
-    }
-
-    // Standard menu animations
-    if (this.state.isToggleOn) {
-      this.setState({ menuAnchorClass: 'menu-flip-down' });
-      this.setState({ contentAnimation: 'menu-open-content' });
-    } else {
-      this.setState({ menuAnchorClass: 'menu-flip-up' });
-      this.setState({ contentAnimation: 'menu-close-content' });
-    }
-
     return true;
   }
 
   render() {
     return (
       <Item className={this.state.toggleClass}>
-        <Trigger
-          className={this.state.menuAnchorClass}
+        <Trigger 
+          active={this.state.isToggleOn}
           onClick={this.handleClick}
         >
           <Icon className="glyphicon glyphicon-th" />
           <Category>Perspective</Category>
         </Trigger>
         <Content
+          active={this.state.isToggleOn} 
           style={{ transform: this.state.inlineContentTransform }}
-          className={this.state.contentAnimation}
         >
           <Title>Perspective</Title>
           <ul>
@@ -77,4 +51,3 @@ class Perspective extends Component {
   }
 }
 
-export default Perspective;

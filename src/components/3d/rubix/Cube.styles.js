@@ -1,8 +1,8 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import Rotations from '../../../animations/rotations';
 import './transform.css';
 
-const rots = new Rotations();
+const rots = new Rotations(keyframes);
 
 class Styles {
   constructor() {

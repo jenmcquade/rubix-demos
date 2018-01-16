@@ -1,14 +1,12 @@
-import { keyframes } from 'styled-components';
-
-class Rotations {
-  constructor() {
+export default class Rotations {
+  constructor(keyframes) {
     this.simpleRotateX = keyframes`
         0% {
           transform: rotateX(0);
         }
         
         50% {
-          transform: rotateX(360deg)
+          transform: rotateX(360deg);
         }
         
         100% {
@@ -22,7 +20,7 @@ class Rotations {
       }
       
       50% {
-        transform: rotateY(360deg)
+        transform: rotateY(360deg);
       }
       
       100% {
@@ -45,5 +43,3 @@ class Rotations {
     `;
   }
 }
-
-export default Rotations;

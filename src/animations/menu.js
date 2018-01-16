@@ -1,6 +1,4 @@
-import styled from 'styled-components';
-
-class Menu {
+export default class Menu {
   constructor(keyframes) {
     this.menuReset = keyframes`
       0% {
@@ -20,19 +18,19 @@ class Menu {
         transform: rotateZ(90deg) translateY(0em);
       }
       50% {
-        transform: rotateZ(90deg) translateY(-8em);
+        transform: rotateZ(90deg) translateY(-4.5em);
       }
       100% {
-        transform: rotateZ(90deg) translateY(-16.5em);
+        transform: rotateZ(90deg) translateY(-8.8em);
       }
     `;
 
     this.menuTitleFlipUp = keyframes`
       0% { 
-        transform: rotateZ(90deg) translateY(-16.5em);
+        transform: rotateZ(90deg) translateY(-8.8em);
       }
       25% {
-        transform: rotateZ(90deg) translateY(-8em);
+        transform: rotateZ(90deg) translateY(-4.5em);
       }
       50% {
         transform: rotateZ(90deg) translateY(0em);
@@ -57,7 +55,7 @@ class Menu {
       }		
     `;
 
-    this.menuClosecontent = keyframes`
+    this.menuCloseContent = keyframes`
       0% {
         transform: translateX(0%);
       }
@@ -76,5 +74,3 @@ class Menu {
     `;
   }
 }
-
-export default Menu;
