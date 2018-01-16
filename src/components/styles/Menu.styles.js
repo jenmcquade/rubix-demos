@@ -170,7 +170,7 @@ class Styles {
     this.content = styled.div`
       min-width: 15em;
       min-height: 15em;
-      margin-top: -3.5em;
+      margin-top: -3.6em;
       position: inherit;
       transform: rotateX(-90deg);
       background-color: red;
