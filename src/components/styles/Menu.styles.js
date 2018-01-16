@@ -157,6 +157,7 @@ class Styles {
       @media only screen
       and (min-width : 75px) 
       and (max-width : 719px) {
+        margin-top: 0;
         font-size: 2em;
       }
       @media only screen 
