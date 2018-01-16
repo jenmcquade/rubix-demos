@@ -108,7 +108,6 @@ class Styles {
       and (min-width: 720px) 
       and (max-width: 1023px) { 
         padding: 0.5em 1em 0.5em .5em;
-
       }
 
       @media only screen 
@@ -186,7 +185,7 @@ class Styles {
         background: rgba(255,0,0,0.7);
         padding-top: 1em;
 
-        ${props => !props.active && css`
+        ${props => props.active && css`
          transform: rotateX(0deg);
         `}
       }
