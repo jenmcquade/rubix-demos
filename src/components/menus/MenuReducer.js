@@ -1,15 +1,18 @@
 // Import Actions
-import { TOGGLE_MENU } from './MenuActions';
+import { 
+  TOGGLE_PERSPECTIVE, 
+} from './MenuActions';
 
 // Initial State
 const initialState = {
   menuIsOpen: false,
+  objectIsFlat: false,
 };
 
 const MenuReducer = (state = initialState, action) => {
   switch (action.type) {
 
-    case TOGGLE_MENU:
+    case TOGGLE_PERSPECTIVE:
       return {
         menuIsOpen: !state.menuIsOpen,
       };

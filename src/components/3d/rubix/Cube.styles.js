@@ -1,6 +1,5 @@
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import Rotations from '../../../animations/rotations';
-import './transform.css';
 
 const rots = new Rotations(keyframes);
 
@@ -17,6 +16,7 @@ class Styles {
       position: absolute;
       z-index: 10;
       transform: scale(0.4); 
+      transition: transform 0.8s;
       @media only screen 
       and (min-width : 75px) 
       and (max-width : 667px) 
@@ -76,6 +76,14 @@ class Styles {
       and (min-width: 1024px) { 
         animation: ${rots.spin} 60s infinite ease-in-out;
       }
+      
+      ${props => props.flat && css`
+        > div {
+          background-color: transparent;
+          box-shadow: white 0px 0px 0px 0px inset;
+          border-radius: 1%;
+        }
+      `}
     `;
 
     this.face = styled.div`
@@ -100,6 +108,19 @@ class Styles {
       box-shadow: inset 0px 0px 50px 0px white;
       border-radius: 10%;
       background-color: rgba(0,0,0,0.7);
+      transition: transform 0.8s;
+
+      ${props => props.itemBgColor && css`
+        > div {
+          background-color: ${props.itemBgColor};
+	        color: ${props.itemColor ? props.itemColor : 'white'};
+        }
+      `}
+
+      ${props => props.id && props.id === 'top' && css`
+        z-index: 1;
+      `}
+
     `;
 
     this.item = styled.div`
@@ -114,6 +135,7 @@ class Styles {
       transform-style: preserve-3d;
       position: relative;
       text-transform: uppercase;
+      font-size: 0.8em;
     `;
   }
 }

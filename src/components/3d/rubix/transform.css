@@ -22,33 +22,3 @@
 #left {
   transform: scale(-1, 1) rotateX(-90deg) rotateY(-90deg) rotateZ(0) translateX(0) translateY(0) translateZ(0);
 }
-
-/*  Face-specific Styles */
-/*  Faces have default colors
-    and should be replaced using JS
-*/
-#top div {
-	background-color: white;
-	color: black;
-}
-
-#front div {
-	background-color: blue;
-}
-
-#back div {
-	background-color: green;
-}
-
-#bottom div {
-	background-color: yellow;
-	color: black;
-}
-
-#left div {
-	background-color: red;
-}
-
-#right div {
-	background-color: orange;
-}

@@ -12,8 +12,9 @@
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
-    "jquery": "^3.2.1",
+    "jquery": "^3.3.1",
     "react": "^16.2.0",
+    "react-bootstrap": "^0.32.0",
     "react-helmet": "^5.2.0",
     "react-scripts": "1.0.17",
     "react-shortcut": "^1.0.6",

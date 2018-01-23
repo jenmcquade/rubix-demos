@@ -1,5 +1,6 @@
 import styled, { css, keyframes } from 'styled-components';
 import animations from '../../animations/menu';
+import { Button, ButtonGroup } from 'react-bootstrap';
 
 const anims = new animations(keyframes);
 
@@ -38,7 +39,6 @@ class Styles {
     `;
 
     this.item = styled.div`
-      cursor: pointer;
       text-align: center;
       transform-origin: top left;
       z-index: 9;
@@ -62,6 +62,7 @@ class Styles {
     `;
 
     this.trigger = styled.a`
+      cursor: pointer;
       color: rgba(255,255,255,1);
       text-decoration: none;
       transform-origin: top left;
@@ -80,7 +81,7 @@ class Styles {
         color: rgba(255,255,255,0.8);
       }
 
-      ${props => !props.active && css`
+      ${props => !props.active && !props.default && css`
         animation: ${anims.menuTitleFlipUp} 1s forwards ease-out;
       `}
 
@@ -187,7 +188,7 @@ class Styles {
         background: rgba(255,0,0,0.7);
         padding-top: 1em;
 
-        ${props => props.active && css`
+        ${props => props.active && !props.default && css`
          transform: rotateX(0deg);
         `}
       }
@@ -197,11 +198,11 @@ class Styles {
       and (max-width: 1023px) { 
         padding-top: 5%;
         margin-top: -3em;
-        ${props => props.active && css`
+        ${props => props.active && !props.default && css`
           animation: ${anims.menuOpenContent} 1s forwards ease-out;
         `}
 
-        ${props => !props.active && css`
+        ${props => !props.active && !props.default && css`
           animation: ${anims.menuCloseContent} 1s forwards ease-out;
         `}
       }
@@ -209,15 +210,73 @@ class Styles {
       @media only screen 
       and (min-width: 1024px) { 
         padding-top: 5%;
-        ${props => props.active && css`
+        ${props => props.active && !props.default && css`
           animation: ${anims.menuOpenContent} 1s forwards ease-out;
         `}
 
-        ${props => !props.active && css`
+        ${props => !props.active && !props.default && css`
           animation: ${anims.menuCloseContent} 1s forwards ease-out;
         `}
       }
     `;
+
+    this.h4 = styled.h4`
+      margin: 0.25em;
+      font-size: 0.80em;
+      font-weight: 400;
+    `
+
+    this.ul = styled.ul`
+      list-style-type: none;
+      margin: auto;
+      padding: 0px;
+      font-size: 0.7em;
+    `
+
+    this.li = styled.li`
+      list-style-type: none;
+      margin: 0px 0.25em;
+      display: inline-block;
+    `
+
+    this.btnGroup = styled(ButtonGroup)`
+
+    `
+
+    this.label = styled.label`
+      margin-right: 0.25em;
+    `
+
+    this.btnSecondary = styled(Button)`
+      cursor: pointer;
+      font-size: 1em;
+      font-family: 'sans-serif';
+    `
+
+    this.btnPrimary = styled.a`
+      cursor: pointer;
+      display: inline-block;
+      border-radius: 3px;
+      padding: 0.5rem 0;
+      margin: 0.5rem 1rem;
+      width: 11rem;
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+      text-transform: uppercase;
+
+      &:hover {
+        text-decoration: none;
+        color: white;
+        background: rgba(255,255,255,0.6);
+      }
+
+      ${props => props.primary && css`
+        background: white;
+        color: black;
+      `}
+
+    `
   }
 }
 

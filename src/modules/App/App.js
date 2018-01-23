@@ -8,9 +8,6 @@ import DevTools from '../../components/DevTools';
 import Stage from '../../components/containers/Stage';
 import Menu from '../../components/containers/Menu';
 
-// Import Actions
-import { toggleMenu } from './AppActions';
-
 export class App extends Component {
   constructor(props) {
     super(props);
@@ -42,10 +39,8 @@ export class App extends Component {
             ]}
           />
 
-          <div>
-            <Menu />
-            <Stage />
-          </div>
+          <Menu />
+          <Stage />
 
         </div>
       </div>

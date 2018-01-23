@@ -88,7 +88,7 @@ module.exports = {
         CLIENT: JSON.stringify(process.env.CLIENT),
       }
     }),
-    new ExtractTextPlugin({ filename: '../css/[name].css', allChunks: true}),
+    new ExtractTextPlugin({ filename: 'css/[name].css', allChunks: true}),
     new Webpack.ProvidePlugin({
         $: 'jquery',
         jQuery: 'jquery',
