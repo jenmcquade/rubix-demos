@@ -6,7 +6,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 // const CleanWebpackPlugin = require('clean-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
-// const TARGET = process.env.npm_lifecycle_event;
+//const TARGET = process.env.;
 const ROOT_PATH = path.resolve(__dirname);
 const MODULES_PATH = path.resolve(__dirname, 'node_modules');
 const PUBLIC_PATH = path.resolve(__dirname, 'public');
@@ -82,7 +82,12 @@ module.exports = {
     new Webpack.HotModuleReplacementPlugin(),
     new Webpack.NamedModulesPlugin(),
     new Webpack.NoEmitOnErrorsPlugin(),
-
+    new Webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+        CLIENT: JSON.stringify(process.env.CLIENT),
+      }
+    }),
     new ExtractTextPlugin({ filename: '../css/[name].css', allChunks: true}),
     new Webpack.ProvidePlugin({
         $: 'jquery',

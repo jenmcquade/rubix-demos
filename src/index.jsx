@@ -2,15 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import App from './App';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
+import configureStore from './store';
+
+// Initialize store
+const store = configureStore(window.__INITIAL_STATE__);
+const mountApp = document.getElementById('root');
 
 const render = (Component) => {
   ReactDOM.render(
     <AppContainer>
-      <Component />
+      <Component store={store} />
     </AppContainer>,
-    document.getElementById('root'),
+    mountApp,
   );
 };
 

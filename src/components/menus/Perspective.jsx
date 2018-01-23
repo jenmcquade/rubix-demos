@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Styles from '../styles/Menu.styles';
+
+// Import Actions
+import { toggleMenu } from './MenuActions';
 
 const Style = new Styles();
 const Item = Style.item;
@@ -9,20 +13,16 @@ const Title = Style.title;
 const Trigger = Style.trigger;
 const Category = Style.category;
 
-export default class Perspective extends Component {
+class Perspective extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isToggleOn: false
-    };
+    this.state = props.triggers;
     this.handleClick = this.handleClick.bind(this);
+    console.log(this.props);
   }
 
   handleClick() {
-    this.setState(prevState => ({
-      isToggleOn: !prevState.isToggleOn,
-    }));
-
+    this.props.dispatch(toggleMenu());
     return true;
   }
 
@@ -30,14 +30,14 @@ export default class Perspective extends Component {
     return (
       <Item className={this.state.toggleClass}>
         <Trigger 
-          active={this.state.isToggleOn}
+          active={this.props.triggers.menuIsOpen}
           onClick={this.handleClick}
         >
           <Icon className="glyphicon glyphicon-th" />
           <Category>Perspective</Category>
         </Trigger>
         <Content
-          active={this.state.isToggleOn} 
+          active={this.props.triggers.menuIsOpen} 
           style={{ transform: this.state.inlineContentTransform }}
         >
           <Title>Perspective</Title>
@@ -51,3 +51,11 @@ export default class Perspective extends Component {
   }
 }
 
+// Retrieve data from store as props
+function mapStateToProps(store) {
+  return {
+    triggers: store.menu,
+  };
+}
+
+export default connect(mapStateToProps)(Perspective);

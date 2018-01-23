@@ -1,12 +1,19 @@
 import React from 'react';
-import Stage from './components/containers/Stage';
-import Menu from './components/containers/Menu';
+import PropTypes from 'prop-types';
+import { Provider } from 'react-redux';
+import AppWrap from './modules/App/App'
 
-const App = () => (
-  <div className="root">
-    <Menu />
-    <Stage />
-  </div>
-);
+export default function App(props) {
+  return (
+    <Provider store={props.store}>
+      <div className="root">
+        <AppWrap />
+      </div>
+    </Provider>
+  );
+};
 
-export default App;
+App.propTypes = {
+  store: PropTypes.object.isRequired,
+};
+
