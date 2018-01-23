@@ -1,6 +1,6 @@
 import React from 'react';
+import Styles from '../menus/Menu.styles';
 import Perspective from '../menus/Perspective';
-import Styles from '../styles/Menu.styles';
 
 const Style = new Styles();
 const Wrapper = Style.menu;
