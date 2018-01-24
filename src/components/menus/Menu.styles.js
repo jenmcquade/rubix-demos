@@ -19,6 +19,7 @@ class Styles {
       box-sizing: border-box;
       align-content: stretch;
       place-content: stretch;
+      z-index: 99;
 
       @media only screen
       and (min-width : 75px) 

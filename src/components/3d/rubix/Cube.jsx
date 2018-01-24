@@ -12,33 +12,24 @@ const Box = Style.cube;
 const Item = Style.item;
 const Face = Style.face;
 
-const mediaQueries = {
-  small: window.matchMedia( '(min-width: 75px) and (max-width: 667px)' ),
-  medium: window.matchMedia( '(min-width: 668px) and (max-width: 719px)' ),
-  large: window.matchMedia( '(min-width: 720px) and (max-width: 1023px)' ),
-  xlarge: window.matchMedia( '(min-width: 1024px)' ),
-}
-
 class Cube extends React.Component {
   constructor(props) {
     super(props);
-    this.state = props.object;
-
-    // Use Media queries to set initial scaling
-    this.screenSize = 'xlarge';
-    for (var q in mediaQueries) {
-      if(mediaQueries[q].matches) {
-        this.screenSize = q;
-      }
-    }
+    this.state = props;
 
     this.boxStyle = {};
   }
 
+  componentDidMount(props) {
+
+  }
+
   componentWillReceiveProps(nextProps) {
-    this.setState({wrapperStyle: {
-      transform: 'scale(' + nextProps.object.scale[this.screenSize][0] + ',' + nextProps.object.scale[this.screenSize][1] + ')',
-    } })
+    this.setState({ 
+      wrapperStyle: {
+        transform: 'scale(' + nextProps.object.scale[nextProps.app.screenSize][0] + ',' + nextProps.object.scale[nextProps.app.screenSize][1] + ')',
+      }
+    });
   }
 
   render() {
@@ -140,6 +131,7 @@ class Cube extends React.Component {
 // Retrieve data from store as props
 function mapStateToProps(store) {
   return {
+    app: store.app,
     object: store.rubix,
   };
 }

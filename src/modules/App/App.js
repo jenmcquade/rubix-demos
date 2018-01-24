@@ -8,14 +8,39 @@ import DevTools from '../../components/DevTools';
 import Stage from '../../components/containers/Stage';
 import Menu from '../../components/containers/Menu';
 
+// Import Actions
+import {
+  setIsMounted,
+  setScreenSize,
+  resize,
+} from './AppActions'
+
 export class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { isMounted: false };
+    this.state = props.app;
+  }
+
+  /**
+   * Calculate & Update state of new dimensions
+   */
+  updateDimensions() {
+    this.props.dispatch(resize());
   }
 
   componentDidMount() {
-    this.setState({isMounted: true}); // eslint-disable-line
+    this.updateDimensions();
+    window.addEventListener('resize', this.updateDimensions.bind(this));
+    this.setState({isMounted: true});
+    this.props.dispatch(setIsMounted());
+  }
+
+  componentDidUpdate() {
+    console.log(this.state);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateDimensions.bind(this));
   }
 
   render() {
@@ -55,8 +80,7 @@ App.propTypes = {
 // Retrieve data from store as props
 function mapStateToProps(store) {
   return {
-    menu: store.menu,
-    data: store.data
+    app: store.app,
   };
 }
 
