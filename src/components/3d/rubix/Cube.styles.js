@@ -16,7 +16,7 @@ class Styles {
       position: absolute;
       z-index: 10;
       transform: scale(0.4); 
-      transition: transform 0.8s;
+      transition: transform 0.5s ease-in-out;
       @media only screen 
       and (min-width : 75px) 
       and (max-width : 667px) 

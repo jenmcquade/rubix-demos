@@ -6,7 +6,7 @@ import {
 // Initial State
 const initialState = {
   menuIsOpen: false,
-  objectIsFlat: false,
+  isDefaultState: true,
 };
 
 const MenuReducer = (state = initialState, action) => {
@@ -15,6 +15,7 @@ const MenuReducer = (state = initialState, action) => {
     case TOGGLE_PERSPECTIVE:
       return {
         menuIsOpen: !state.menuIsOpen,
+        isDefaultState: false,
       };
 
     default:

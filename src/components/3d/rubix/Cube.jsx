@@ -12,26 +12,39 @@ const Box = Style.cube;
 const Item = Style.item;
 const Face = Style.face;
 
+const mediaQueries = {
+  small: window.matchMedia( '(min-width: 75px) and (max-width: 667px)' ),
+  medium: window.matchMedia( '(min-width: 668px) and (max-width: 719px)' ),
+  large: window.matchMedia( '(min-width: 720px) and (max-width: 1023px)' ),
+  xlarge: window.matchMedia( '(min-width: 1024px)' ),
+}
+
 class Cube extends React.Component {
   constructor(props) {
     super(props);
     this.state = props.object;
-    this.state.isDefaultState = true;
-    this.wrapperStyle = {
-      transform: 'scale(' + this.props.object.wrapperScale[0] + ',' + this.props.object.wrapperScale[1] + ')',
+
+    // Use Media queries to set initial scaling
+    this.screenSize = 'xlarge';
+    for (var q in mediaQueries) {
+      if(mediaQueries[q].matches) {
+        this.screenSize = q;
+      }
     }
+
+    this.boxStyle = {};
   }
 
-  componentWillUpdate(props) {
-    this.wrapperStyle = {
-      transform: 'scale(' + props.object.wrapperScale[0] + ',' + props.object.wrapperScale[1] + ')',
-    }
+  componentWillReceiveProps(nextProps) {
+    this.setState({wrapperStyle: {
+      transform: 'scale(' + nextProps.object.scale[this.screenSize][0] + ',' + nextProps.object.scale[this.screenSize][1] + ')',
+    } })
   }
 
   render() {
     return(
-      <CubeWrapper style={this.wrapperStyle}>
-        <Box flat={this.props.object.objectIsFlat}>
+      <CubeWrapper style={this.state.wrapperStyle}>
+        <Box flat={this.props.object.objectIsFlat} style={this.boxStyle}>
           <Face id="top" 
             itemBgColor="white" 
             itemColor="black" 

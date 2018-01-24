@@ -6,9 +6,7 @@ import AppWrap from './modules/App/App'
 export default function App(props) {
   return (
     <Provider store={props.store}>
-      <div className="root">
         <AppWrap />
-      </div>
     </Provider>
   );
 };

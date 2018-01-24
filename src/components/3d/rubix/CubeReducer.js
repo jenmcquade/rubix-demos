@@ -9,7 +9,12 @@ import {
 // Initial State
 const initialState = {
   objectIsFlat: false,
-  wrapperScale: [1,1],
+  scale: {
+    small: [0.6, 0.6],
+    medium: [0.8, 0.8],
+    large: [0.8, 0.8],
+    xlarge: [1, 1],
+  },
   style: {
     top: {
       transform: 'scale(1, 1) rotateX(0) rotateY(0) rotateZ(0) translateX(0) translateY(0) translateZ(0)',
@@ -33,6 +38,7 @@ const initialState = {
 };
 
 const CubeReducer = (state = initialState, action) => {
+  let newScale = {};
 
   switch (action.type) {
     case RESTORE_OBJECT:
@@ -40,7 +46,7 @@ const CubeReducer = (state = initialState, action) => {
 
     case FLATTEN_OBJECT:
       return {
-        wrapperScale: state.wrapperScale,
+        scale: state.scale,
         objectIsFlat: true,
         style: {
           top: {
@@ -65,24 +71,37 @@ const CubeReducer = (state = initialState, action) => {
       }
 
       case ZOOM_OUT:
-        var scaleHeight = state.wrapperScale[0];
-        var scaleWidth = state.wrapperScale[1];
-        scaleHeight -= 0.1;
-        scaleWidth -= 0.1;
-        return {
-          objectIsFlat: state.objectIsFlat,
-          wrapperScale: [scaleHeight, scaleWidth],
-          style: state.style,
+        for(let size in state.scale) {
+          let height = state.scale[size][0] > 0 ? state.scale[size][0] - 0.1 : state.scale[size][0] + 0.1;
+          let width = state.scale[size][1] > 0 ? state.scale[size][1] - 0.1 : state.scale[size][1] + 0.1;
+          newScale[size] = [height, width];
         }
 
-      case ZOOM_IN:
-        var scaleHeight = state.wrapperScale[0];
-        var scaleWidth = state.wrapperScale[1];
-        scaleHeight += 0.1;
-        scaleWidth += 0.1;
         return {
           objectIsFlat: state.objectIsFlat,
-          wrapperScale: [scaleHeight, scaleWidth],
+          scale: { 
+            small: newScale.small,
+            medium: newScale.medium,
+            large: newScale.large,
+            xlarge: newScale.xlarge,
+          },
+          style: state.style,
+        }
+ 
+      case ZOOM_IN:
+        for(let size in state.scale) {
+          let height = state.scale[size][0] + 0.1;
+          let width = state.scale[size][1] + 0.1;
+          newScale[size] = [height, width];
+        }
+        return {
+          objectIsFlat: state.objectIsFlat,
+          scale: {
+            small: newScale.small,
+            medium: newScale.medium,
+            large: newScale.large,
+            xlarge: newScale.xlarge,
+          },
           style: state.style,
         }
 
