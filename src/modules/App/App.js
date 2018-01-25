@@ -31,12 +31,8 @@ export class App extends Component {
   componentDidMount() {
     this.updateDimensions();
     window.addEventListener('resize', this.updateDimensions.bind(this));
-    this.setState({isMounted: true});
-    this.props.dispatch(setIsMounted());
-  }
-
-  componentDidUpdate() {
-    console.log(this.state);
+    this.setState({isMounted: true}); // For immediate state checking
+    this.props.dispatch(setIsMounted()); // For state checking in store
   }
 
   componentWillUnmount() {
