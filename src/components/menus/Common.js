@@ -12,7 +12,9 @@ import Styles from './Menu.styles';
 
 // Import Actions
 import {
-  togglePerspective,
+  toggleMenu,
+  setMobileTheme,
+  setDesktopTheme,
 } from './MenuActions'
 
 import {
@@ -57,6 +59,7 @@ export default class Common {
 
     // Bind this class's methods to the component
     this.handleTrigger = this.handleTrigger.bind(component);
+    this.setTheme = this.setTheme.bind(component);
     this.flatten = this.flatten.bind(component);
     this.restore = this.restore.bind(component);
     this.scaleIn = this.scaleIn.bind(component);
@@ -74,7 +77,19 @@ export default class Common {
     if(this.state.isDefaultState) {
       this.setState( {'isDefaultState': false });
     }
-    this.props.dispatch(togglePerspective());
+    this.props.dispatch(toggleMenu(this.id));
+  }
+
+  setTheme(props) {
+    if(props.app.screenSize === 'small' || props.app.screenSize === 'medium' ) {
+      props.dispatch(
+        setMobileTheme()
+      );
+    } else {
+      props.dispatch(
+        setDesktopTheme()
+      );
+    }
   }
 
   //

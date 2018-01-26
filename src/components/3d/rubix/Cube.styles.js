@@ -14,7 +14,7 @@ class Styles {
       top: 50%;
       left: 50%;
       position: absolute;
-      z-index: 10;
+      z-index: 5;
       transform: scale(0.4); 
       transition: transform 0.5s ease-in-out;
       @media only screen 

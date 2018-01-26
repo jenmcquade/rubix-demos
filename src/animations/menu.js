@@ -12,36 +12,42 @@ export default class Menu {
 
     this.menuTitleDrop = keyframes`
       0% { 
+        z-index:9;
         transform: rotateZ(0deg) translateY(0em);
       }
       25% {
+        z-index:9;
         transform: rotateZ(90deg) translateY(0em);
       }
-      50% {
-        transform: rotateZ(90deg) translateY(-4.5em);
+      75%{
+        z-index:99;
       }
       100% {
-        transform: rotateZ(90deg) translateY(-8.8em);
+        z-index:99;
+        transform: rotateZ(90deg) translateY(-685%);
       }
     `;
 
     this.menuTitleFlipUp = keyframes`
       0% { 
-        transform: rotateZ(90deg) translateY(-8.8em);
+        z-index:9;
+        transform: rotateZ(90deg) translateY(-650%);
       }
-      25% {
-        transform: rotateZ(90deg) translateY(-4.5em);
-      }
+
       50% {
-        transform: rotateZ(90deg) translateY(0em);
+        z-index:9;
+        transform: rotateZ(90deg) translateY(-100%);
       }
+      
       100% {
+        z-index:9;
         transform: rotateZ(0deg) translateY(0em);
       }
     `;
 
     this.menuOpenContent = keyframes`
       0% {
+        z-index:9;
         transform: translateX(-150%);  
       }
       25% {
@@ -51,12 +57,14 @@ export default class Menu {
         transform: translateX(-50%);
       }
       100% {
+        z-index:98;
         transform: translateX(0%);
       }		
     `;
 
     this.menuCloseContent = keyframes`
       0% {
+        z-index:98;
         transform: translateX(0%);
       }
 
@@ -69,7 +77,8 @@ export default class Menu {
       }
       
       100% {
-        transform: translateX(-150%); 
+        z-index:9;
+        transform: translateX(-200%); 
       }
     `;
   }

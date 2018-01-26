@@ -20,7 +20,6 @@ module.exports = {
       'babel-polyfill',
       'react-hot-loader/patch',
       'webpack-dev-server/client?http://localhost:3000/',
-      SRC_PATH,
       './src/index.jsx'
     ]
   },
