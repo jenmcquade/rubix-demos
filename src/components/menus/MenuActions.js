@@ -1,6 +1,6 @@
 // Export Constants
-export const TOGGLE_PERSPECTIVE = 'TOGGLE_PERSPECTIVE';
-export const TOGGLE_THEME = 'TOGGLE_THEME';
+export const TOGGLE_MENU_PERSPECTIVE = 'TOGGLE_MENU_PERSPECTIVE';
+export const TOGGLE_MENU_THEME = 'TOGGLE_MENU_THEME';
 export const FLATTEN_OBJECT = 'FLATTEN_OBJECT';
 export const RESTORE_OBJECT = 'RESTORE_OBJECT';
 export const ZOOM_OUT = 'ZOOM_OUT';
@@ -18,7 +18,7 @@ export function resetMenuState(menu) {
 
 export function toggleMenu(id) {
   return {
-    type: 'TOGGLE_' + id.toUpperCase(),
+    type: 'TOGGLE_MENU_' + id.toUpperCase(),
   };
 }
 

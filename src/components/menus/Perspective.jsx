@@ -59,7 +59,7 @@ class Perspective extends Component {
     let baseColor = props.triggers.menus[this.id].backgroundColor;
     let triggerColor = props.triggers.menus[this.id].triggerColor;
     this.state = {
-      isDefaultState: props.triggers.menus[this.id].isDefaultState,
+      isDefaultState: true,
       app: props.app,
       triggers: props.triggers,
       rubix: props.rubix,

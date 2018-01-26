@@ -1,7 +1,7 @@
 // Import Actions
 import { 
-  TOGGLE_PERSPECTIVE, 
-  TOGGLE_THEME,
+  TOGGLE_MENU_PERSPECTIVE, 
+  TOGGLE_MENU_THEME,
   SET_MOBILE_THEME,
   SET_DESKTOP_THEME,
   RESET_MENU_STATE,
@@ -46,9 +46,10 @@ const MenuReducer = (state = initialState, action) => {
       for(menu in newState.menus) {
         newState.menus[menu].isDefaultState = true;
       }
+      newState.isDefaultState = true;
       return newState;
 
-    case TOGGLE_PERSPECTIVE:
+    case TOGGLE_MENU_PERSPECTIVE:
       for(menu in newState.menus) {
         if (menu === 'perspective') {
           continue;
@@ -57,9 +58,10 @@ const MenuReducer = (state = initialState, action) => {
       }
       newState.menus['perspective'].menuIsOpen = !newState.menus['perspective'].menuIsOpen;
       newState.menus['perspective'].isDefaultState = false;
+      newState.isDefaultState = false;
       return newState;
 
-    case TOGGLE_THEME:
+    case TOGGLE_MENU_THEME:
       for(menu in newState.menus) {
         if (menu === 'theme') {
           continue;
@@ -68,13 +70,13 @@ const MenuReducer = (state = initialState, action) => {
       }
       newState.menus['theme'].menuIsOpen = !newState.menus['theme'].menuIsOpen;
       newState.menus['theme'].isDefaultState = false;
+      newState.isDefaultState = false;
       return newState;
 
     case SET_MOBILE_THEME:
       for(menu in newState.menus) {
         newState.menus[menu].backgroundColor = 'white';
         newState.menus[menu].triggerColor = getThemeRGBA(newState.menus[menu].baseColor);
-        newState.menus[menu].isDefaultState = true;
       }
       return newState;
 
@@ -82,7 +84,6 @@ const MenuReducer = (state = initialState, action) => {
       for(menu in newState.menus) {
         newState.menus[menu].backgroundColor = getThemeRGBA(newState.menus[menu].baseColor);
         newState.menus[menu].triggerColor = 'white';
-        newState.menus[menu].isDefaultState = true;
       }
       return newState;
 

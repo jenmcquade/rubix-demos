@@ -14,23 +14,34 @@ import {
   resize,
 } from './AppActions'
 
+// CONSTANTS
+const DURATION_RESIZE_DISPATCH = 200;
+
 export class App extends Component {
   constructor(props) {
     super(props);
-    this.state = props;
+    this.state = props.app;
+    this.shouldUpdateStoreWithNewDims = true;
   }
 
   /**
    * Calculate & Update state of new dimensions
    */
   updateDimensions() {
-    this.props.dispatch(resize());
+    if(!this.shouldUpdateStoreWithNewDims) {
+      return false;
+    }
+    this.shouldUpdateStoreWithNewDims = false;
+    setTimeout( () => {
+        console.log('dispatching resize...');
+        this.props.dispatch(resize());
+        this.shouldUpdateStoreWithNewDims = true;
+    }, DURATION_RESIZE_DISPATCH);
   }
 
   componentDidMount() {
-    this.updateDimensions();
     window.addEventListener('resize', this.updateDimensions.bind(this));
-    this.setState({app:{isMounted: true}}); // For immediate state checking
+    this.setState({isMounted: true}); // For immediate state checking
     this.props.dispatch(setIsMounted()); // For state checking in store
   }
 

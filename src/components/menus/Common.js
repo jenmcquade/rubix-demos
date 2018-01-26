@@ -12,9 +12,9 @@ import Styles from './Menu.styles';
 
 // Import Actions
 import {
-  toggleMenu,
   setMobileTheme,
   setDesktopTheme,
+  toggleMenu,
 } from './MenuActions'
 
 // Styled component exports

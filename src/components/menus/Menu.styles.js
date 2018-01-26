@@ -18,6 +18,7 @@ class Styles {
       z-index: 99;
       display: flex;
       position: absolute;
+      background-color: white;
 
       @media only screen
       and (min-width : 75px) 
@@ -26,7 +27,6 @@ class Styles {
         min-width: 100%;
         z-index: 99;
         padding: 0;
-        background-color: white;
         max-height: 100px;
       }
 
@@ -47,14 +47,9 @@ class Styles {
       display: inline-grid;
       width: min-content;
 
-      ${props => props.id && props.style && css`
-        background-color: ${props.style.backgroundColor};
-      `}
-
       @media only screen
       and (min-width : 75px) 
       and (max-width : 719px) {
-        background-color: rgba(255,255,255,1);
         display: grid;
         flex-flow: row wrap;
         cursor: pointer;
@@ -91,11 +86,6 @@ class Styles {
         color: rgba(255,255,255,0.8);
       }
 
-      ${props => props.style && css`
-        color: ${props.style.color};
-        background-color: ${props.style.backgroundColor};
-      `}
-
       ${props => !props.active && !props.default && css`
         animation: ${anims.menuTitleFlipUp} 1s forwards ease-out;
       `}
@@ -110,7 +100,6 @@ class Styles {
         animation: "";
         transform: rotateZ(0deg) translateY(0em);
         padding: 0.5em 0.1em 0 0.1em;
-        background-color: white;
         font-size: 1em;
         text-align: center;
         display: table;
