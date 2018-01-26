@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+
+//
+// Import Styled Components and React Bootstrap Components
+//
 import Common, {
   Item,
   Content,
@@ -16,38 +20,99 @@ import Common, {
   GroupButton,
 } from './Common';
 
+//
+// Import Actions
+//
+import {
+  flattenObject,
+  restoreObject,
+  zoomIn,
+  zoomOut
+} from '../3d/rubix/CubeActions'
+
+//
+// CONSTANTS
+//
 const MENU_ID = 'Perspective';
 const THEME_COLOR = [255,0,0,1];
 
+//
+// COMPONENT 
+//
 class Perspective extends Component {
+  /**
+   * Constructor
+   * 
+   * 1. Merge new Common object with this
+   * 2. Set the menu color theme
+   * 3. Set state to Redux store
+   * 4. Local properties and bindings
+   * 
+   * @param {*} props 
+   */
   constructor(props) {
     super(props);
+    this.id = MENU_ID.toLowerCase();
     Object.assign(this, new Common(this));
+    this.setTheme(this.props, true);
+
+    let baseColor = props.triggers.menus[this.id].backgroundColor;
+    let triggerColor = props.triggers.menus[this.id].triggerColor;
     this.state = {
-      isDefaultState: true,
+      isDefaultState: props.triggers.menus[this.id].isDefaultState,
       app: props.app,
       triggers: props.triggers,
-      rubix: props.rubix
+      rubix: props.rubix,
+      themeColor: baseColor,
+      triggerColor: triggerColor,
     }
 
-    this.id = MENU_ID.toLowerCase();
-    this.themeColor = props.triggers.menus[this.id].baseColor ? props.triggers.menus[this.id].baseColor : THEME_COLOR;
-    this.triggerColor = props.triggers.menus[this.id].triggerColor ? props.triggers.menus[this.id].triggerColor: 'white';
+    // Shorthand referrers
+    this.themeColor = this.state.themeColor; // string
+    this.triggerColor = this.state.triggerColor; // string
+
+    // Binders
+    this.flatten = this.flatten.bind(this);
+    this.restore = this.restore.bind(this);
+    this.scaleIn = this.scaleIn.bind(this);
+    this.scaleOut = this.scaleOut.bind(this);
+  }
+
+  //
+  // Object/Stage handlers
+  //
+  flatten() {
+    this.props.dispatch(flattenObject());
+  }
+
+  restore() {
+    this.props.dispatch(restoreObject());
+  }
+
+  scaleOut() {
+    this.props.dispatch(zoomOut());
+  }
+
+  scaleIn() {
+    this.props.dispatch(zoomIn());
+  }
+
+  //
+  // Lifecycle handlers
+  //
+  componentDidUpdate() {
     this.setTheme(this.props);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.themeColor = nextProps.triggers.menus[this.id].backgroundColor ? nextProps.triggers.menus[this.id].backgroundColor : THEME_COLOR;
-    this.triggerColor = nextProps.triggers.menus[this.id].triggerColor ? nextProps.triggers.menus[this.id].triggerColor: 'white';
-    //this.setTheme(nextProps);
-  }
-
+  //
+  // Render to the Menu container
+  //
   render() {
     return (
       <Item id={this.id} style={{backgroundColor: this.themeColor}}>
         <Trigger 
           default={this.state.isDefaultState}
-          active={this.props.triggers.menus[this.id].menuIsOpen}
+          active={this.state.triggers.menus[this.id].menuIsOpen}
           onClick={this.handleTrigger}
           style={{backgroundColor: this.themeColor, color: this.triggerColor}}
         >
@@ -56,10 +121,10 @@ class Perspective extends Component {
         </Trigger>
         <Content
           default={this.state.isDefaultState}
-          active={this.props.triggers.menus[this.id].menuIsOpen} 
-          backgroundColor={THEME_COLOR}
+          active={this.state.triggers.menus[this.id].menuIsOpen} 
+          backgroundColor={this.props.triggers.menus[this.id].baseColor}
           style={{ 
-            transform: this.props.triggers.menus[this.id].inlineContentTransform,
+            transform: this.state.triggers.menus[this.id].inlineContentTransform,
           }}
         >
           <Title>{MENU_ID}</Title>

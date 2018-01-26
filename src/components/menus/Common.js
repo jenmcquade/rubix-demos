@@ -4,7 +4,7 @@
  * THIS IS NOT A REACT COMPONENT
  * 
  * This is a library of styled components
- *  and methods, used by Menu categories like Perspective
+ *  and methods, merged by Menu categories like Perspective
  * 
  */
 
@@ -16,13 +16,6 @@ import {
   setMobileTheme,
   setDesktopTheme,
 } from './MenuActions'
-
-import {
-  flattenObject,
-  restoreObject,
-  zoomIn,
-  zoomOut
-} from '../3d/rubix/CubeActions'
 
 // Styled component exports
 //  See Menu.styles for style definitions
@@ -60,10 +53,7 @@ export default class Common {
     // Bind this class's methods to the component
     this.handleTrigger = this.handleTrigger.bind(component);
     this.setTheme = this.setTheme.bind(component);
-    this.flatten = this.flatten.bind(component);
-    this.restore = this.restore.bind(component);
-    this.scaleIn = this.scaleIn.bind(component);
-    this.scaleOut = this.scaleOut.bind(component);
+    this.getThemeRGBA = this.getThemeRGBA.bind(component);
   }
 
   //
@@ -80,35 +70,48 @@ export default class Common {
     this.props.dispatch(toggleMenu(this.id));
   }
 
-  setTheme(props) {
-    if(props.app.screenSize === 'small' || props.app.screenSize === 'medium' ) {
-      props.dispatch(
-        setMobileTheme()
-      );
-    } else {
-      props.dispatch(
-        setDesktopTheme()
-      );
+  /**
+   * Convert a theme base color array into an rgba string
+   * @param [] themeColorArray 
+   */
+  getThemeRGBA(themeColorArray) {
+    let prop = 'rgba(';
+    for(var c in themeColorArray) {
+      prop += themeColorArray[c] + ','
     }
+    let trimmedProp = prop.slice(0, -1); //remove last comma
+    trimmedProp += ')';
+    return trimmedProp;
   }
 
-  //
-  //  Object/Stage handlers
-  //
-
-  flatten() {
-    this.props.dispatch(flattenObject());
+  /**
+   * Dispatch a store change based on theme changes
+   * Or hard-reset individual properties that are used to style the menus
+   * @param {*} props 
+   */
+  setTheme(props, dispatchToStore = false) {
+    let baseColor = this.getThemeRGBA(props.triggers.menus[this.id].baseColor);
+    let screenSize = this.props.app.screenSize;
+    if (dispatchToStore) {
+      if(props.app.screenSize === 'small' || props.app.screenSize === 'medium' ) {
+        props.dispatch(
+          setMobileTheme()
+        );
+      } else {
+        props.dispatch(
+          setDesktopTheme()
+        );
+      }
+    } else {
+      if( screenSize === 'small' || screenSize === 'medium' ) {
+        this.themeColor = 'white';
+        this.triggerColor = baseColor;
+      } else {
+        this.themeColor = baseColor;
+        this.triggerColor = 'white';
+      }
+    }
+    
   }
 
-  restore() {
-    this.props.dispatch(restoreObject());
-  }
-
-  scaleOut() {
-    this.props.dispatch(zoomOut());
-  }
-
-  scaleIn() {
-    this.props.dispatch(zoomIn());
-  }
 }

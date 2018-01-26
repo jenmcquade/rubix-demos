@@ -17,7 +17,7 @@ import {
 export class App extends Component {
   constructor(props) {
     super(props);
-    this.state = props.app;
+    this.state = props;
   }
 
   /**
@@ -30,7 +30,7 @@ export class App extends Component {
   componentDidMount() {
     this.updateDimensions();
     window.addEventListener('resize', this.updateDimensions.bind(this));
-    this.setState({isMounted: true}); // For immediate state checking
+    this.setState({app:{isMounted: true}}); // For immediate state checking
     this.props.dispatch(setIsMounted()); // For state checking in store
   }
 
@@ -76,6 +76,7 @@ App.propTypes = {
 function mapStateToProps(store) {
   return {
     app: store.app,
+    menu: store.menu,
   };
 }
 

@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+//
+// Import Styled Components and React Bootstrap Components
+//
 import { DropdownButton, MenuItem, FormControl } from 'react-bootstrap';
-
 import Common, {
   Item,
   Content,
@@ -19,47 +21,87 @@ import Common, {
   GroupButton,
 } from './Common';
 
+//
+// Import Actions
+//
+
+//
+// CONSTANTS
+//
 const MENU_ID = 'Theme';
 const THEME_COLOR = [0,0,255,1];
 
 class Theme extends Component {
+  /**
+   * Constructor
+   * 
+   * 1. Merge new Common object with this
+   * 2. Set the menu color theme
+   * 3. Set state to Redux store
+   * 4. Local properties and bindings
+   * 
+   * @param {*} props 
+   */
   constructor(props) {
     super(props);
+    this.id = MENU_ID.toLowerCase();
     Object.assign(this, new Common(this));
+    this.setTheme(this.props, true);
+
+    let baseColor = props.triggers.menus[this.id].backgroundColor;
+    let triggerColor = props.triggers.menus[this.id].triggerColor;
     this.state = {
-      isDefaultState: true,
+      isDefaultState: props.triggers.menus[this.id].isDefaultState,
       app: props.app,
       triggers: props.triggers,
-      rubix: props.rubix
+      rubix: props.rubix,
+      searchType: '@',
+      themeFace: 'top',
+      themeColor: baseColor,
+      triggerColor: triggerColor,
     }
 
-    this.id = MENU_ID.toLowerCase();
-    this.searchType = '@';
-    this.themeColor = props.triggers.menus[this.id].baseColor ? props.triggers.menus[this.id].baseColor : THEME_COLOR;
-    this.triggerColor = props.triggers.menus[this.id].triggerColor ? props.triggers.menus[this.id].triggerColor: 'white';
-    this.setTheme(this.props);
+    this.themeColor = this.state.themeColor; // string
+    this.triggerColor = this.state.triggerColor; // string
+
+    // Binders
+    this.changeSearchType = this.changeSearchType.bind(this);
+    this.changeLoadFace = this.changeLoadFace.bind(this);
+
   }
 
-  componentWillReceiveProps(nextProps) {
-    //this.setTheme(nextProps);
-    this.themeColor = nextProps.triggers.menus[this.id].backgroundColor ? nextProps.triggers.menus[this.id].backgroundColor : THEME_COLOR;
-    this.triggerColor = nextProps.triggers.menus[this.id].triggerColor ? nextProps.triggers.menus[this.id].triggerColor: 'white';
-  }
-
-  changeSearchType(props) {
-    console.log(props);
+  //
+  // Form handlers
+  //
+  changeSearchType(value) {
+    this.setState({searchType: value});
   }
 
   updateSearch(props) {
-    console.log(props);
+    console.log(this);
   }
 
+  changeLoadFace(value) {
+    this.setState({themeFace: value.toLowerCase()});
+  }
+
+  //
+  // Lifecycle handlers
+  //
+  componentDidUpdate() {
+    this.setTheme(this.props);
+  }
+
+
+  //
+  // Render to the Menu container
+  //
   render() {
     return (
       <Item id={this.id} style={{backgroundColor: this.themeColor}}>
         <Trigger 
           default={this.state.isDefaultState}
-          active={this.props.triggers.menus[this.id].menuIsOpen}
+          active={this.state.triggers.menus[this.id].menuIsOpen}
           onClick={this.handleTrigger}
           style={{backgroundColor: this.themeColor, color: this.triggerColor}}
         >
@@ -68,13 +110,12 @@ class Theme extends Component {
         </Trigger>
         <Content
           default={this.state.isDefaultState}
-          active={this.props.triggers.menus[this.id].menuIsOpen} 
-          backgroundColor={THEME_COLOR}
+          active={this.state.triggers.menus[this.id].menuIsOpen} 
+          backgroundColor={this.props.triggers.menus[this.id].baseColor}
           style={{ 
-            transform: this.props.triggers.menus[this.id].inlineContentTransform,
+            transform: this.state.triggers.menus[this.id].inlineContentTransform,
           }}
         >
-          <i className="fa fa-window-close" aria-hidden="true"></i>
           <Title>{MENU_ID}</Title>
           <SubTitle>
             Instagram
@@ -82,31 +123,39 @@ class Theme extends Component {
           <Sub>
             <MenuAction>
               <DropdownButton 
+                bsSize="large"
                 id="searchType"
-                title='Search Type'
+                title={this.state.searchType}
+                onSelect={this.changeSearchType}
               >
-                <MenuItem>User Name</MenuItem>
-                <MenuItem onSelect={this.changeSearchType}>Hashtag</MenuItem>
+                <MenuItem eventKey="@">@ (user)</MenuItem>
+                <MenuItem eventKey="#"># (hashtag)</MenuItem>
               </DropdownButton>
             </MenuAction>
             <MenuAction>
               <FormControl
+                bsSize="large"
                 id="searchText"
                 type="text"
-                value={this.searchType}
-                onChange={this.updateSearch}
               >
               </FormControl>
             </MenuAction>
             <MenuAction>
               <Label>Side</Label>
-              <DropdownButton title="Top" pullRight id="side">
-                <MenuItem>Top</MenuItem>
-                <MenuItem>Bottom</MenuItem>
-                <MenuItem>Front</MenuItem>
-                <MenuItem>Back</MenuItem>
-                <MenuItem>Left</MenuItem>
-                <MenuItem>Right</MenuItem>
+              <DropdownButton 
+                bsSize="large"
+                title={this.state.themeFace}
+                pullRight
+                id="side"
+                onSelect={this.changeLoadFace}
+                style={{width: '5em'}}
+              >
+                <MenuItem eventKey="top">top</MenuItem>
+                <MenuItem eventKey="bottom">bottom</MenuItem>
+                <MenuItem eventKey="front">front</MenuItem>
+                <MenuItem eventKey="back">back</MenuItem>
+                <MenuItem eventKey="left">left</MenuItem>
+                <MenuItem eventKey="right">right</MenuItem>
               </DropdownButton>
             </MenuAction>
           </Sub>

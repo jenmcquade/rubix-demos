@@ -62,13 +62,13 @@ class Styles {
         text-align: center;
         transform-origin: top left;
         padding-top: 0px;
-        margin: 0px;
+        margin: 0 1em 0 1em;
       }
 
       @media only screen 
       and (min-width: 720px) 
       and (max-width: 1023px) { 
-        width: 6em;
+        width: 5em;
       }
     `;
 
@@ -80,8 +80,8 @@ class Styles {
       transition: color, 0.5s ease;
       transform-style: preserve-3d;
       transform: default;
-      margin: auto 0.5em;
-      width: auto;
+      width: 100%;
+      height: 100%;
       display: table-caption;
       position: relative;
       padding: 0.5em 0.5em 0.5em 0.5em;
@@ -190,6 +190,7 @@ class Styles {
       margin-top: -3em;
       transform: rotateX(-90deg);
       transition: default;
+      padding: 1em;
       z-index: 10;
 
       ${props => props.backgroundColor && css`
@@ -257,6 +258,8 @@ class Styles {
       margin: auto;
       padding: 0px;
       font-size: 0.7em;
+      display: flex;
+      align-items: flex-end;
     `
 
     this.li = styled.li`
@@ -284,7 +287,7 @@ class Styles {
       display: inline-block;
       border-radius: 3px;
       padding: 0.5rem 0;
-      margin: 0.5rem 1rem;
+      margin: 0rem 1rem;
       width: 11rem;
       background: transparent;
       color: white;
