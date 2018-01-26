@@ -4,7 +4,7 @@
   "repository": "https://github.com/jonmcquade/rubix-demos",
   "license": "MIT",
   "scripts": {
-    "start": "cross-env CLIENT=true NODE_ENV=development node ./social/insta-proxy/app.js | webpack-dev-server --progress --colors",
+    "start": "cross-env CLIENT=true NODE_ENV=development node ./social/insta-proxy/app.js | cross-env CLIENT=true NODE_ENV=development webpack-dev-server --progress --colors",
     "build": "cross-env NODE_ENV=production webpack -p",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",

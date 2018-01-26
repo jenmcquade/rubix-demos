@@ -11,7 +11,6 @@ import Menu from '../../components/containers/Menu';
 // Import Actions
 import {
   setIsMounted,
-  setScreenSize,
   resize,
 } from './AppActions'
 
