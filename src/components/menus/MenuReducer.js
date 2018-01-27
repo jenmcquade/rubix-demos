@@ -16,12 +16,14 @@ const initialState = {
       baseColor: [255,0,0,1],
       backgroundColor: 'rgba(255,0,0,1)',
       menuIsOpen: false,
+      isDefaultState: true,
     },
     theme: {
       triggerColor: 'white',
       baseColor: [0,0,255,1],
       backgroundColor: 'rgba(0,0,255,1)',
       menuIsOpen: false,
+      isDefaultState: true,
     },
   },
 };

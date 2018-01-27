@@ -24,14 +24,14 @@ export default class Menu {
       }
       100% {
         z-index:99;
-        transform: rotateZ(90deg) translateY(-700%);
+        transform: rotateZ(90deg) translateY(-715%);
       }
     `;
 
     this.menuTitleFlipUp = keyframes`
       0% { 
         z-index:9;
-        transform: rotateZ(90deg) translateY(-700%);
+        transform: rotateZ(90deg) translateY(-715%);
       }
 
       50% {

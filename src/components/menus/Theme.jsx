@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 //
 // Import Styled Components and React Bootstrap Components
 //
-import { DropdownButton, MenuItem, FormControl } from 'react-bootstrap';
 import Common, {
   Item,
   Content,
@@ -15,10 +14,11 @@ import Common, {
   SubTitle,
   Sub,
   MenuAction,
-  Button, 
-  ButtonGroup,
-  Label, 
-  GroupButton,
+  Status,
+  ScrollBar,
+  TextBox,
+  DropdownButton,
+  DropdownItem
 } from './Common';
 
 //
@@ -51,11 +51,16 @@ class Theme extends Component {
     let baseColor = props.triggers.menus[this.id].backgroundColor;
     let triggerColor = props.triggers.menus[this.id].triggerColor;
     this.state = {
+      services: {
+        ig: {
+          status: 'offline',
+        }
+      },
       isDefaultState: true,
       app: props.app,
       triggers: props.triggers,
       rubix: props.rubix,
-      searchType: '@',
+      searchType: 'rgba',
       themeFace: 'top',
       themeColor: baseColor,
       triggerColor: triggerColor,
@@ -97,6 +102,8 @@ class Theme extends Component {
   // Render to the Menu container
   //
   render() {
+    let igStatus = this.state.services.ig.status;
+
     return (
       <Item id={this.id} style={{backgroundColor: this.themeColor}}>
         <Trigger 
@@ -105,60 +112,69 @@ class Theme extends Component {
           onClick={this.handleTrigger}
           style={{backgroundColor: this.themeColor, color: this.triggerColor}}
         >
-          <Icon className="glyphicon glyphicon-th" />
+          <Icon className="fa fa-hashtag" />
           <Category>{MENU_ID}</Category>
         </Trigger>
         <Content
           default={this.state.isDefaultState}
           active={this.state.triggers.menus[this.id].menuIsOpen} 
-          backgroundColor={this.props.triggers.menus[this.id].baseColor}
+          backgroundColor={
+            this.props.triggers.menus[this.id].baseColor ? 
+            this.props.triggers.menus[this.id].baseColor :
+            THEME_COLOR
+          }
           style={{ 
             transform: this.state.triggers.menus[this.id].inlineContentTransform,
           }}
         >
           <Title>{MENU_ID}</Title>
-          <SubTitle>
-            Instagram
-          </SubTitle>
-          <Sub>
-            <MenuAction>
-              <DropdownButton 
-                bsSize="large"
-                id="searchType"
-                title={this.state.searchType}
-                onSelect={this.changeSearchType}
-              >
-                <MenuItem eventKey="@">@ (user)</MenuItem>
-                <MenuItem eventKey="#"># (hashtag)</MenuItem>
-              </DropdownButton>
-            </MenuAction>
-            <MenuAction>
-              <FormControl
-                bsSize="large"
-                id="searchText"
-                type="text"
-              >
-              </FormControl>
-            </MenuAction>
-            <MenuAction>
-              <Label>Side</Label>
-              <DropdownButton 
-                bsSize="large"
-                title={this.state.themeFace}
-                pullRight
-                id="side"
-                onSelect={this.changeLoadFace}
-                style={{width: '5em'}}
-              >
-                <MenuItem eventKey="top">top</MenuItem>
-                <MenuItem eventKey="bottom">bottom</MenuItem>
-                <MenuItem eventKey="front">front</MenuItem>
-                <MenuItem eventKey="back">back</MenuItem>
-                <MenuItem eventKey="left">left</MenuItem>
-                <MenuItem eventKey="right">right</MenuItem>
-              </DropdownButton>
-            </MenuAction>
-          </Sub>
+          <ScrollBar
+            autoHide 
+            autoHideTimeout={1000} 
+            autoHideDuration={200} 
+            autoHeight 
+            autoHeightMin={400} 
+            autoHeightMax={550}
+          >
+            <SubTitle type="heading">
+              Cube Colors and Background Images
+            </SubTitle>
+            <SubTitle>
+              Instagram API Status: <Status>{this.state.services.ig.status}</Status>
+            </SubTitle>
+            {
+              // Create theme forms based on rubix faces
+              Object.keys(this.props.rubix.style).map((face) => {
+                return <div key={face}>
+                  <Sub style={{alignItems: 'center', 'marginTop': '.2em'}}>
+                    <SubTitle>
+                      {face.toUpperCase()}
+                    </SubTitle>
+                    <MenuAction>
+                      <DropdownButton 
+                        bsSize="large"
+                        id="searchType"
+                        title={this.state.searchType}
+                        onSelect={this.changeSearchType}
+                      >
+                        <DropdownItem display={igStatus} eventKey="@">@ (user)</DropdownItem>
+                        <DropdownItem display={igStatus} eventKey="#"># (hashtag)</DropdownItem>
+                        <DropdownItem eventKey="rgba">rgba (0-255,0-255,0-255,0-1)</DropdownItem>
+                      </DropdownButton>
+                    </MenuAction>
+                    <MenuAction>
+                      <TextBox
+                        bsSize="large"
+                        id="searchText"
+                        type="text"
+                      >
+                      </TextBox>
+                    </MenuAction>
+                  </Sub>
+                </div>
+              })
+            }
+          </ScrollBar>
         </Content>
       </Item>
     );

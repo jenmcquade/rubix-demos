@@ -16,8 +16,10 @@
     "rc-slider": "^8.6.0",
     "react": "^16.2.0",
     "react-bootstrap": "^0.32.0",
+    "react-custom-scrollbars": "^4.2.1",
     "react-helmet": "^5.2.0",
     "react-scripts": "1.0.17",
+    "react-scrollbars": "0.0.5",
     "react-shortcut": "^1.0.6",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0"
@@ -50,6 +52,7 @@
     "node-sass": "^4.7.2",
     "postcss-loader": "^2.0.10",
     "prop-types": "^15.6.0",
+    "react-addons-test-utils": "^15.6.2",
     "react-dev-utils": "^4.2.1",
     "react-dom": "^16.2.0",
     "react-hot-loader": "^4.0.0-beta.14",

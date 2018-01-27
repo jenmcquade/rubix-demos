@@ -17,8 +17,12 @@ import {
   toggleMenu,
 } from './MenuActions'
 
+//
 // Styled component exports
 //  See Menu.styles for style definitions
+//  Every Component in this library refers to a styled component.
+//  This helps translate to Native, by switching out the .styles Class.
+//
 export const Style = new Styles();
 export const Item = Style.item; // A complete navigation item
 export const Content = Style.content; // Content of the nav item menu
@@ -26,13 +30,18 @@ export const Icon = Style.icon; // Icon for the nav item trigger
 export const Title = Style.title; // Title above nav item content
 export const Trigger = Style.trigger; // Nav item activation area
 export const Category = Style.category; // Nav item trigger label
-export const SubTitle = Style.h4;
+export const SubTitle = Style.h4; // Subcategory Title
 export const Sub = Style.ul; // Nav item content subcategory
 export const MenuAction = Style.li; // Nav item content button wrapper
 export const Button = Style.btnPrimary; // Nav item content buttons
-export const ButtonGroup = Style.btnGroup; // Bootstrap group of buttonsf
+export const ButtonsGroup = Style.btnGroup; // Bootstrap group of buttons
+export const ButtonInGroup = Style.btnSecondary; // Button in the ButtonGroup group
+export const DropdownButton = Style.dropdownBtn // Dropdown Button with options
+export const DropdownItem = Style.dropdownItem // Dropdown option
 export const Label = Style.label; // Button group label
-export const GroupButton = Style.btnSecondary; // Button in a group
+export const TextBox = Style.textBox; // Form Text Area
+export const ScrollBar = Style.scrollBar; // Enable Scrolling
+export const Status = Style.status;
 
 /**
  * Class Common
@@ -110,8 +119,7 @@ export default class Common {
         this.themeColor = baseColor;
         this.triggerColor = 'white';
       }
-    }
-    
+    }  
   }
 
 }

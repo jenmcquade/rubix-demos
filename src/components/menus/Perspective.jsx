@@ -15,9 +15,9 @@ import Common, {
   Sub,
   MenuAction,
   Button, 
-  ButtonGroup,
+  ButtonsGroup,
+  ButtonInGroup,
   Label, 
-  GroupButton,
 } from './Common';
 
 //
@@ -122,13 +122,17 @@ class Perspective extends Component {
         <Content
           default={this.state.isDefaultState}
           active={this.state.triggers.menus[this.id].menuIsOpen} 
-          backgroundColor={this.props.triggers.menus[this.id].baseColor}
+          backgroundColor={
+            this.props.triggers.menus[this.id].baseColor ? 
+            this.props.triggers.menus[this.id].baseColor :
+            THEME_COLOR
+          }
           style={{ 
             transform: this.state.triggers.menus[this.id].inlineContentTransform,
           }}
         >
           <Title>{MENU_ID}</Title>
-          <SubTitle>
+          <SubTitle type="heading">
             Transform
           </SubTitle>
           <Sub>
@@ -136,10 +140,10 @@ class Perspective extends Component {
             <MenuAction><Button onClick={this.restore}>Build</Button></MenuAction>
             <MenuAction>
               <Label>Zoom</Label>
-              <ButtonGroup role="group" aria-label="zoom">
-                <GroupButton onClick={this.scaleOut} type="button">-</GroupButton>
-                <GroupButton onClick={this.scaleIn} type="button">+</GroupButton>
-              </ButtonGroup>
+              <ButtonsGroup role="group" aria-label="zoom">
+                <ButtonInGroup onClick={this.scaleOut} type="button">-</ButtonInGroup>
+                <ButtonInGroup  onClick={this.scaleIn} type="button">+</ButtonInGroup>
+              </ButtonsGroup>
             </MenuAction>
           </Sub>
         </Content>

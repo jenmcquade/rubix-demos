@@ -1,16 +1,31 @@
 import styled, { css, keyframes } from 'styled-components';
 import animations from '../../animations/menu';
-import { Button, ButtonGroup } from 'react-bootstrap';
+import { Scrollbars } from 'react-custom-scrollbars';
+import { 
+  Button, 
+  ButtonGroup,
+  DropdownButton,
+  MenuItem, 
+  FormControl,
+} from 'react-bootstrap';
+
 
 const anims = new animations(keyframes);
 
 class Styles {
   constructor() {
+
+    //
+    // Root 
+    //
     this.root = styled.div`
       min-height: 100%;
       width: 100%;
     `;
 
+    //
+    // Container
+    //
     this.menu = styled.div`
       font-size: 2em;
       justify-content: center;
@@ -37,6 +52,10 @@ class Styles {
         display: grid;
       }
     `;
+
+    //
+    // Frame of a Menu category
+    //
 
     this.item = styled.div`
       text-align: center;
@@ -66,6 +85,10 @@ class Styles {
         width: 5em;
       }
     `;
+
+    //
+    // Buttons to open menu items
+    //
 
     this.trigger = styled.a`
       cursor: pointer;
@@ -123,6 +146,10 @@ class Styles {
       }
     `;
 
+    //
+    // Trigger text
+    //
+
     this.category = styled.span`
       font-size: 20pt;
       display: inline-grid;
@@ -142,23 +169,42 @@ class Styles {
       };
     `;
 
+    //
+    // Category value, but inline to the content
+    //
+
     this.title = styled.div`
-      display: inline-grid;
+      display: table-column;
+      margin: 1em;
 
       @media only screen 
+      and (min-width: 75px) 
+      and (max-width: 719px) {
+        visibility: visible;
+        display: block;
+        margin: 0.5em;
+      }
+      @media only screen 
       and (min-width: 720px) 
-      and (max-width: 1023px) { 
-        margin-top: 0%;
+      and (max-width: 1023px) {
+        display: block; 
+        visibility: visible;
+        margin: 0.5em;
       }
       @media only screen 
       and (min-width: 1024px) {
-        display: none;
+        visibility: hidden;
       };
     `;
 
+    //
+    // Trigger icon
+    //
+
     this.icon = styled.i`
-      font-size: 20pt;
+      font-size: 1em;
       display: inline-grid;
+      transform: scale(0.9,0.9);
 
       @media only screen
       and (min-width : 75px) 
@@ -173,13 +219,25 @@ class Styles {
       }
     `;
 
+    //
+    // Content scrollbar
+    //
+
+    this.scrollBar = styled(Scrollbars)`
+
+    `
+
+    //
+    // Body of the Menu Item
+    //
+
     this.content = styled.div`
       min-width: 15em;
       min-height: 18em;
       margin-top: -3em;
       transform: rotateX(-90deg);
       transition: default;
-      padding: 1em;
+      padding: 0em;
       z-index: 10;
 
       ${props => props.backgroundColor && css`
@@ -191,12 +249,11 @@ class Styles {
       and (min-width : 75px) 
       and (max-width : 719px) {
         position: absolute;
-        min-height: 18em;
+        min-height: 20em;
         min-width: 100%;
         top: 184%;
         left: 0%;
         display: table-row;
-        padding-top: 1em;
 
         ${props => props.active && !props.default && css`
           transform: rotateX(0deg);
@@ -212,8 +269,9 @@ class Styles {
       @media only screen 
       and (min-width: 720px) 
       and (max-width: 1023px) { 
-        padding-top: 5%;
+        padding: 0.25em;
         margin-top: -2.42em;
+        min-height: 22em;
         ${props => props.active && !props.default && css`
           animation: ${anims.menuOpenContent} 1s forwards ease-out;
         `}
@@ -225,7 +283,7 @@ class Styles {
 
       @media only screen 
       and (min-width: 1024px) { 
-        padding-top: 5%;
+        padding-top: 1em;
         ${props => props.active && !props.default && css`
           animation: ${anims.menuOpenContent} 1s forwards ease-out;
         `}
@@ -236,11 +294,23 @@ class Styles {
       }
     `;
 
+    //
+    // Form headings
+    //
+
     this.h4 = styled.h4`
       margin: 1em;
-      font-size: 0.80em;
+      font-size: 0.8em;
       font-weight: 400;
+      min-width: 4em;
+      ${props => props.type && props.type === 'heading' && css`
+        margin-top: 0.5em;
+      `}
     `
+
+    //
+    // Form item lists in the content
+    //
 
     this.ul = styled.ul`
       list-style-type: none;
@@ -251,26 +321,35 @@ class Styles {
       align-items: flex-end;
     `
 
+    //
+    // Form items in the form lists
+    //
+
     this.li = styled.li`
       list-style-type: none;
-      margin: 0px 0.25em;
+      margin: 0.25em;
       display: inline-block;
     `
 
-    this.btnGroup = styled(ButtonGroup)`
-
-    `
-
+    //
+    // Form label
+    //
     this.label = styled.label`
       margin-right: 0.25em;
     `
 
+    //
+    // Bootstrap Button design
+    //
     this.btnSecondary = styled(Button)`
       cursor: pointer;
       font-size: 1em;
       font-family: 'sans-serif';
     `
 
+    //
+    // Styled Components simple design button
+    //
     this.btnPrimary = styled.a`
       cursor: pointer;
       display: inline-block;
@@ -293,7 +372,38 @@ class Styles {
         background: white;
         color: black;
       `}
+    `
 
+    //
+    //  Bootstrap ButtonGroup
+    //
+    this.btnGroup = styled(ButtonGroup)`
+
+    `
+    //
+    // Bootstrap Form Control / Text Box
+    //
+    this.textBox = FormControl;
+
+    //
+    // A Button with menu options
+    //
+    this.dropdownBtn = DropdownButton;
+
+    //
+    // Dropdown menu items
+    //
+    this.dropdownItem = styled(MenuItem)`
+      ${props => props.display && props.display !=='online' && css`
+        display: none;
+      `}
+    `;
+
+    //
+    // A status message for services
+    //
+    this.status = styled.span`
+      color: red;
     `
   }
 }
