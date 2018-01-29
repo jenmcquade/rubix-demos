@@ -11,6 +11,7 @@
     "postinstall": "cd ./social/insta-proxy && npm install"
   },
   "dependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "bootstrap": "^3.3.7",
     "jquery": "^3.3.1",
     "rc-slider": "^8.6.0",

@@ -5,31 +5,29 @@ import { connect } from 'react-redux';
 // Import Styled Components and React Bootstrap Components
 //
 import Common, {
-  Item,
-  Content,
-  Icon,
-  Title,
-  Trigger,
-  Category,
-  SubTitle,
   Sub,
+  SubTitle,
   MenuAction,
   Status,
   ScrollBar,
   TextBox,
   DropdownButton,
-  DropdownItem
+  DropdownItem,
+  Form,
+  FormGroup,
+  Label,
 } from './Common';
 
 //
 // Import Actions
 //
+import {
+  setThemeRGBA,
+  setThemeTxtColor,
+  resetThemeRGBA,
+  resetThemeTxt,
+} from '../3d/rubix/CubeActions'
 
-//
-// CONSTANTS
-//
-const MENU_ID = 'Theme';
-const THEME_COLOR = [0,0,255,1];
 
 class Theme extends Component {
   /**
@@ -44,12 +42,22 @@ class Theme extends Component {
    */
   constructor(props) {
     super(props);
-    this.id = MENU_ID.toLowerCase();
     Object.assign(this, new Common(this));
-    this.setTheme(this.props, true);
+    this.faces = Object.keys(this.props.rubix.style);
+    
+    let formsState = {};
+    for(var face in this.faces) {
+      face = face.toLowerCase();
+      formsState[this.faces[face]] = {
+        text:{
+          user:{style:{display:'none',}},
+          hashTag:{style:{display:'none',}},
+          bgColor:{style:{display:'inline',}},
+          txtColor:{style:{display:'none',}}
+        }
+      }
+    }
 
-    let baseColor = props.triggers.menus[this.id].backgroundColor;
-    let triggerColor = props.triggers.menus[this.id].triggerColor;
     this.state = {
       services: {
         ig: {
@@ -58,21 +66,17 @@ class Theme extends Component {
       },
       isDefaultState: true,
       app: props.app,
-      triggers: props.triggers,
+      menu: props.menu,
       rubix: props.rubix,
-      searchType: 'rgba',
+      searchType: 'color',
       themeFace: 'top',
-      themeColor: baseColor,
-      triggerColor: triggerColor,
+      forms: formsState,
     }
-
-    this.themeColor = this.state.themeColor; // string
-    this.triggerColor = this.state.triggerColor; // string
 
     // Binders
     this.changeSearchType = this.changeSearchType.bind(this);
     this.changeLoadFace = this.changeLoadFace.bind(this);
-
+    this.changeBgColor = this.changeBgColor.bind(this);
   }
 
   //
@@ -83,11 +87,91 @@ class Theme extends Component {
   }
 
   updateSearch(props) {
-    console.log(this);
+    // console.log(this);
   }
 
   changeLoadFace(value) {
     this.setState({themeFace: value.toLowerCase()});
+  }
+
+  changeBgColor(e){
+    let faceId = e.target.id.split('-')[1];
+    if(e.target.value === '') {
+      this.props.dispatch(resetThemeRGBA(faceId));
+      return true;
+    }
+    if(!this.convertStringToThemeRGBA(e.target.value)) {
+      return false;
+    }
+    let value = {
+      id: e.target.id.split('-')[1],
+      bgColor: this.convertStringToThemeRGBA(e.target.value),
+    }
+    if(value.bgColor) {
+      this.props.dispatch(setThemeRGBA(value));
+    }
+  }
+
+  changeTxtColor(e) {
+    let faceId = e.target.id.split('-')[1];
+    if(e.target.value === '') {
+      this.props.dispatch(resetThemeTxt(faceId));
+    }
+    let value = {
+      id: faceId,
+      bgColor: this.convertStringToThemeRGBA(e.target.value),
+    }
+    if(value.bgColor) {
+      this.props.dispatch(setThemeTxtColor(value));
+    }
+  }
+
+  convertStringToThemeRGBA(value) {
+    value = value.replace(/ /g,' ');
+    let themeRGBA = 'rgba(';
+    let colorArray = value.split(',');
+    if(colorArray.length === 1 && colorArray[0].length > 2) {
+      return colorArray[0];
+    }
+    if(colorArray.length === 3) {
+      colorArray.push(1)
+    }
+    if(colorArray.length < 4 || colorArray[colorArray.length-1] === '') {
+      return false;
+    }
+    for(var color in colorArray) {
+      if(colorArray[colorArray.length-1] === colorArray[color]){
+        themeRGBA += colorArray[color]
+      }else{
+        themeRGBA += colorArray[color] + ','
+      }
+    }
+    themeRGBA += ')';
+    return themeRGBA;
+  }
+
+  convertRGBAToString(value) {
+    let leftPar = value.indexOf('(');
+    let rightPar = value.indexOf(')');
+    if(leftPar === -1 && rightPar === -1 && value[0].length > 2) {
+      return value[0];
+    }
+    let colorString = value.substring(leftPar+1, rightPar);
+    let colorArray = colorString.split(',');
+    if(colorArray.length === 3) {
+      colorArray.push(1);
+    }
+    if(colorArray.length < 4 || colorArray[colorArray.length-1] === '') {
+      return false;
+    }
+    for(var color in colorArray) {
+      if(colorArray[colorArray.length-1] === colorArray[color]){
+        colorArray[color] = parseFloat(colorArray[color]).toFixed(1);
+      } else {
+        colorArray[color] = parseInt(colorArray[color], 10);
+      }
+    }
+    return colorArray.join(', ');
   }
 
   //
@@ -97,86 +181,93 @@ class Theme extends Component {
     this.setTheme(this.props);
   }
 
-
   //
   // Render to the Menu container
   //
   render() {
     let igStatus = this.state.services.ig.status;
-
     return (
-      <Item id={this.id} style={{backgroundColor: this.themeColor}}>
-        <Trigger 
-          default={this.state.isDefaultState}
-          active={this.state.triggers.menus[this.id].menuIsOpen}
-          onClick={this.handleTrigger}
-          style={{backgroundColor: this.themeColor, color: this.triggerColor}}
-        >
-          <Icon className="fa fa-hashtag" />
-          <Category>{MENU_ID}</Category>
-        </Trigger>
-        <Content
-          default={this.state.isDefaultState}
-          active={this.state.triggers.menus[this.id].menuIsOpen} 
-          backgroundColor={
-            this.props.triggers.menus[this.id].baseColor ? 
-            this.props.triggers.menus[this.id].baseColor :
-            THEME_COLOR
-          }
-          style={{ 
-            transform: this.state.triggers.menus[this.id].inlineContentTransform,
-          }}
-        >
-          <Title>{MENU_ID}</Title>
-          <ScrollBar
-            autoHide 
-            autoHideTimeout={1000} 
-            autoHideDuration={200} 
-            autoHeight 
-            autoHeightMin={400} 
-            autoHeightMax={550}
-          >
-            <SubTitle type="heading">
-              Cube Colors and Background Images
-            </SubTitle>
-            <SubTitle>
-              Instagram API Status: <Status>{this.state.services.ig.status}</Status>
-            </SubTitle>
-            {
-              // Create theme forms based on rubix faces
-              Object.keys(this.props.rubix.style).map((face) => {
-                return <div key={face}>
-                  <Sub style={{alignItems: 'center', 'marginTop': '.2em'}}>
-                    <SubTitle>
-                      {face.toUpperCase()}
-                    </SubTitle>
-                    <MenuAction>
-                      <DropdownButton 
-                        bsSize="large"
-                        id="searchType"
-                        title={this.state.searchType}
-                        onSelect={this.changeSearchType}
-                      >
-                        <DropdownItem display={igStatus} eventKey="@">@ (user)</DropdownItem>
-                        <DropdownItem display={igStatus} eventKey="#"># (hashtag)</DropdownItem>
-                        <DropdownItem eventKey="rgba">rgba (0-255,0-255,0-255,0-1)</DropdownItem>
-                      </DropdownButton>
-                    </MenuAction>
-                    <MenuAction>
-                      <TextBox
-                        bsSize="large"
-                        id="searchText"
-                        type="text"
-                      >
-                      </TextBox>
-                    </MenuAction>
-                  </Sub>
-                </div>
-              })
+      <ScrollBar
+        autoHide 
+        autoHideTimeout={1000} 
+        autoHideDuration={200} 
+        autoHeight 
+        autoHeightMin={400} 
+        autoHeightMax={550}
+      >
+        <SubTitle type="heading">
+          Cube Colors and Background Images
+        </SubTitle>
+        <SubTitle>
+          Instagram API Status: <Status>{this.state.services.ig.status}</Status>
+        </SubTitle>
+        <Sub style={{alignItems: 'center', 'marginTop': '.2em'}}>
+        {
+          // Create theme forms based on rubix faces
+          Object.keys(this.state.forms).map((face, i) => {
+            // Use dropup styling if this is the last form set
+            let dropupEnabled = false;
+            if (Object.keys(this.state.forms).length === i + 1) {
+               dropupEnabled = true;
             }
-          </ScrollBar>
-        </Content>
-      </Item>
+            const themeColor = this.state.rubix.theme[face].bgColor;
+            return <MenuAction key={face}>
+              <Form inline>
+                <FormGroup>
+                  <Label>
+                    {face.toUpperCase()}
+                  </Label>
+                  <DropdownButton 
+                    bsSize="large"
+                    id="searchType"
+                    title={this.state.searchType}
+                    onSelect={this.changeSearchType}
+                    dropup={dropupEnabled}
+                  >
+                    <DropdownItem display={igStatus} eventKey="@">@ (user)</DropdownItem>
+                    <DropdownItem display={igStatus} eventKey="#"># (hashtag)</DropdownItem>
+                    <DropdownItem eventKey="color">Background Color (0-255,0-255,0-255,0-1)</DropdownItem>
+                    <DropdownItem eventKey="text">Text Color</DropdownItem>
+                  </DropdownButton>
+                  <TextBox
+                    bsSize="large"
+                    id="searchTextUser"
+                    type="text"
+                    style={this.state.forms[face].text.user.style}
+                  />
+                  <TextBox
+                    bsSize="large"
+                    id="searchTextHashtag"
+                    type="text"
+                    style={this.state.forms[face].text.hashTag.style}
+                  />
+                  { 
+                    //1/28: Use Style for backgroundColor, not to hide
+                    // Use a different property to show active state
+                  }
+                  <TextBox
+                    bsSize="large"
+                    id={'searchTextBgColor-' + face}
+                    type="text"
+                    style={this.state.forms[face].text.bgColor.style}
+                    placeholder={this.convertRGBAToString(themeColor) ? this.convertRGBAToString(themeColor) : 'Array or color string'}
+                    onChange={this.changeBgColor}
+                  />
+                  <TextBox
+                    bsSize="large"
+                    id={'searchTextColor-' + face}
+                    type="text"
+                    style={this.state.forms[face.toLowerCase()].text.txtColor.style}
+                    placeholder={this.state.rubix.theme[face].txtColor}
+                    onChange={this.changeTxtColor}
+                  />
+                </FormGroup>
+              </Form>
+            </MenuAction>
+          })
+        }
+        </Sub>
+      </ScrollBar>
     );
   }
 }
@@ -185,8 +276,8 @@ class Theme extends Component {
 function mapStateToProps(store) {
   return {
     app: store.app,
-    triggers: store.menu,
-    rubix: store.rubix
+    menu: store.menu,
+    rubix: store.rubix,
   };
 }
 

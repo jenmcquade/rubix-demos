@@ -24,13 +24,15 @@ import {
 //  This helps translate to Native, by switching out the .styles Class.
 //
 export const Style = new Styles();
+export const MenuWrapper = Style.menu; // The wrapper div for the entire Menu
+export const Root = Style.root; // A container div with 100% width and height
 export const Item = Style.item; // A complete navigation item
 export const Content = Style.content; // Content of the nav item menu
 export const Icon = Style.icon; // Icon for the nav item trigger
 export const Title = Style.title; // Title above nav item content
 export const Trigger = Style.trigger; // Nav item activation area
-export const Category = Style.category; // Nav item trigger label
-export const SubTitle = Style.h4; // Subcategory Title
+export const CategoryLabel = Style.category; // Nav item trigger label
+export const SubTitle = Style.h4; // Subcategory TitleMenuAc
 export const Sub = Style.ul; // Nav item content subcategory
 export const MenuAction = Style.li; // Nav item content button wrapper
 export const Button = Style.btnPrimary; // Nav item content buttons
@@ -39,7 +41,10 @@ export const ButtonInGroup = Style.btnSecondary; // Button in the ButtonGroup gr
 export const DropdownButton = Style.dropdownBtn // Dropdown Button with options
 export const DropdownItem = Style.dropdownItem // Dropdown option
 export const Label = Style.label; // Button group label
-export const TextBox = Style.textBox; // Form Text Area
+export const Form = Style.form; // Bootstrap Form Wrapper
+export const FormGroup = Style.formGroup // Bootstrap Form Group
+export const InputGroup = Style.inputGroup // Bootstrap Input Grouping w/ addons
+export const TextBox = Style.textBox; // Bootstrap Form Text Area
 export const ScrollBar = Style.scrollBar; // Enable Scrolling
 export const Status = Style.status;
 
@@ -99,7 +104,11 @@ export default class Common {
    * @param {*} props 
    */
   setTheme(props, dispatchToStore = false) {
-    let baseColor = this.getThemeRGBA(props.triggers.menus[this.id].baseColor);
+    if(!props.id) {
+      return false;
+    }
+    var category = props.menu.categories[this.id];
+    let baseColor = this.getThemeRGBA(category.baseColor);
     let screenSize = this.props.app.screenSize;
     if (dispatchToStore) {
       if(props.app.screenSize === 'small' || props.app.screenSize === 'medium' ) {

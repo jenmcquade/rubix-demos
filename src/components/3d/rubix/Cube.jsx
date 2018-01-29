@@ -16,8 +16,7 @@ class Cube extends React.Component {
   constructor(props) {
     super(props);
     this.state = props;
-
-    this.boxStyle = {};
+    this.faces = Object.keys(this.props.object.style);
   }
 
   componentDidMount(props) {
@@ -35,93 +34,26 @@ class Cube extends React.Component {
   render() {
     return(
       <CubeWrapper style={this.state.wrapperStyle}>
-        <Box flat={this.props.object.objectIsFlat} style={this.boxStyle}>
-          <Face id="top" 
-            itemBgColor="white" 
-            itemColor="black" 
-            style={this.props.object.style['top']}
-          >
-            <Item position="top-left" type="corner">top left</Item>
-            <Item position="top" type="side">top</Item>
-            <Item position="top-right" type="corner">top right</Item>
-            <Item position="left" type="side">left</Item>
-            <Item position="center" type="middle">center</Item>
-            <Item position="right" type="side">right</Item>
-            <Item position="bottom-left" type="corner">bot left</Item>
-            <Item position="bottom" type="side">bottom</Item>
-            <Item position="bottom-right" type="corner">bot right</Item>
-          </Face>
-          <Face id="front" 
-            itemBgColor="blue" 
-            style={this.props.object.style['front']}
-          >
-            <Item position="top-left" type="corner">top left</Item>
-            <Item position="top" type="side">top</Item>
-            <Item position="top-right" type="corner">top right</Item>
-            <Item position="left" type="side">left</Item>
-            <Item position="center" type="middle">center</Item>
-            <Item position="right" type="side">right</Item>
-            <Item position="bottom-left" type="corner">bot left</Item>
-            <Item position="bottom" type="side">bottom</Item>
-            <Item position="bottom-right" type="corner">bot right</Item>
-          </Face>
-          <Face id="bottom" 
-            itemBgColor="yellow" 
-            itemColor="black" 
-            style={this.props.object.style['bottom']}
-          >
-            <Item position="top-left" type="corner">top left</Item>
-            <Item position="top" type="side">top</Item>
-            <Item position="top-right" type="corner">top right</Item>
-            <Item position="left" type="side">left</Item>
-            <Item position="center" type="middle">center</Item>
-            <Item position="right" type="side">right</Item>
-            <Item position="bottom-left" type="corner">bot left</Item>
-            <Item position="bottom" type="side">bottom</Item>
-            <Item position="bottom-right" type="corner">bot right</Item>
-          </Face>
-          <Face id="back" 
-            itemBgColor="green" 
-            style={this.props.object.style['back']}
-          >
-            <Item position="top-left" type="corner">top left</Item>
-            <Item position="top" type="side">top</Item>
-            <Item position="top-right" type="corner">top right</Item>
-            <Item position="left" type="side">left</Item>
-            <Item position="center" type="middle">center</Item>
-            <Item position="right" type="side">right</Item>
-            <Item position="bottom-left" type="corner">bot left</Item>
-            <Item position="bottom" type="side">bottom</Item>
-            <Item position="bottom-right" type="corner">bot right</Item>
-          </Face>
-          <Face id="right" 
-            itemBgColor="orange" 
-            style={this.props.object.style['right']}
-          >
-            <Item position="top-left" type="corner">top left</Item>
-            <Item position="top" type="side">top</Item>
-            <Item position="top-right" type="corner">top right</Item>
-            <Item position="left" type="side">left</Item>
-            <Item position="center" type="middle">center</Item>
-            <Item position="right" type="side">right</Item>
-            <Item position="bottom-left" type="corner">bot left</Item>
-            <Item position="bottom" type="side">bottom</Item>
-            <Item position="bottom-right" type="corner">bot right</Item>
-          </Face>
-          <Face id="left" 
-            itemBgColor="red" 
-            style={this.props.object.style['left']}
-          >
-            <Item position="top-left" type="corner">top left</Item>
-            <Item position="top" type="side">top</Item>
-            <Item position="top-right" type="corner">top right</Item>
-            <Item position="left" type="side">left</Item>
-            <Item position="center" type="middle">center</Item>
-            <Item position="right" type="side">right</Item>
-            <Item position="bottom-left" type="corner">bot left</Item>
-            <Item position="bottom" type="side">bottom</Item>
-            <Item position="bottom-right" type="corner">bot right</Item>
-          </Face>
+        <Box flat={this.props.object.objectIsFlat}>
+          { 
+            this.faces.map((face) => {
+              return <Face id={face} key={face}
+                  itemBgColor={this.state.object.theme[face].bgColor}
+                  itemColor={this.state.object.theme[face].txtColor}
+                  style={this.props.object.style[face]}
+                >
+                <Item position="top-left" type="corner">top left</Item>
+                <Item position="top" type="side">top</Item>
+                <Item position="top-right" type="corner">top right</Item>
+                <Item position="left" type="side">left</Item>
+                <Item position="center" type="middle">center</Item>
+                <Item position="right" type="side">right</Item>
+                <Item position="bottom-left" type="corner">bot left</Item>
+                <Item position="bottom" type="side">bottom</Item>
+                <Item position="bottom-right" type="corner">bot right</Item>
+              </Face>
+            })
+          }
         </Box>
       </CubeWrapper>
     );

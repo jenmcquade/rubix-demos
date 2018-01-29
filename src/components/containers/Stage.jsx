@@ -1,7 +1,7 @@
 import React from 'react';
 import Cube from '../3d/rubix/Cube';
 
-class Stage extends React.Component {
+export default class Stage extends React.Component {
   render() {
     return(
       <div id="stage" className="stage" role="main">
@@ -11,4 +11,3 @@ class Stage extends React.Component {
   }
 }
 
-export default Stage;

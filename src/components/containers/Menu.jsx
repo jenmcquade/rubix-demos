@@ -1,18 +1,35 @@
 import React from 'react';
-import Styles from '../menus/Menu.styles';
+import { connect } from 'react-redux';
+
+import { MenuWrapper } from '../menus/Common'
+import Category from './Category';
 import Perspective from '../menus/Perspective';
-import Theme from '../menus/Theme'
+import Theme from '../menus/Theme';
 
-const Style = new Styles();
-const Wrapper = Style.menu;
-
-export default class Menu extends React.Component {
+class Menu extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = props.menu;
+  }
   render() {
     return( 
-      <Wrapper role="navigation">
-        <Perspective />
-        <Theme />
-      </Wrapper>
+      <MenuWrapper role="navigation">
+        <Category label="Perspective" id="perspective" iconType="glyphicon glyphicon-th">
+          <Perspective />
+        </Category>
+        <Category label="Theme" id="theme" iconType="fa fa-hashtag">
+          <Theme />
+        </Category>
+      </MenuWrapper>
      );
   }
 };
+
+// Retrieve data from store as props
+function mapStateToProps(store) {
+  return {
+    menu: store.menu,
+  };
+}
+
+export default connect(mapStateToProps)(Menu);

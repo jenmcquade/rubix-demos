@@ -10,13 +10,14 @@ import {
 // Initial State
 const initialState = {
   isDefaultState: true,
-  menus: {
+  categories: {
     perspective: {
       triggerColor: 'white',
       baseColor: [255,0,0,1],
       backgroundColor: 'rgba(255,0,0,1)',
       menuIsOpen: false,
       isDefaultState: true,
+      inlineContentTransform: {},
     },
     theme: {
       triggerColor: 'white',
@@ -24,6 +25,7 @@ const initialState = {
       backgroundColor: 'rgba(0,0,255,1)',
       menuIsOpen: false,
       isDefaultState: true,
+      inlineContentTransform: {},
     },
   },
 };
@@ -45,47 +47,47 @@ const MenuReducer = (state = initialState, action) => {
   switch (action.type) {
 
     case RESET_MENU_STATE:
-      for(menu in newState.menus) {
-        newState.menus[menu].isDefaultState = true;
+      for(menu in newState.categories) {
+        newState.categories[menu].isDefaultState = true;
       }
       newState.isDefaultState = true;
       return newState;
 
     case TOGGLE_MENU_PERSPECTIVE:
-      for(menu in newState.menus) {
+      for(menu in newState.categories) {
         if (menu === 'perspective') {
           continue;
         }
-        newState.menus[menu].menuIsOpen = false;
+        newState.categories[menu].menuIsOpen = false;
       }
-      newState.menus['perspective'].menuIsOpen = !newState.menus['perspective'].menuIsOpen;
-      newState.menus['perspective'].isDefaultState = false;
+      newState.categories['perspective'].menuIsOpen = !newState.categories['perspective'].menuIsOpen;
+      newState.categories['perspective'].isDefaultState = false;
       newState.isDefaultState = false;
       return newState;
 
     case TOGGLE_MENU_THEME:
-      for(menu in newState.menus) {
+      for(menu in newState.categories) {
         if (menu === 'theme') {
           continue;
         }
-        newState.menus[menu].menuIsOpen = false;
+        newState.categories[menu].menuIsOpen = false;
       }
-      newState.menus['theme'].menuIsOpen = !newState.menus['theme'].menuIsOpen;
-      newState.menus['theme'].isDefaultState = false;
+      newState.categories['theme'].menuIsOpen = !newState.categories['theme'].menuIsOpen;
+      newState.categories['theme'].isDefaultState = false;
       newState.isDefaultState = false;
       return newState;
 
     case SET_MOBILE_THEME:
-      for(menu in newState.menus) {
-        newState.menus[menu].backgroundColor = 'white';
-        newState.menus[menu].triggerColor = getThemeRGBA(newState.menus[menu].baseColor);
+      for(menu in newState.categories) {
+        newState.categories[menu].backgroundColor = 'white';
+        newState.categories[menu].triggerColor = getThemeRGBA(newState.categories[menu].baseColor);
       }
       return newState;
 
     case SET_DESKTOP_THEME:
-      for(menu in newState.menus) {
-        newState.menus[menu].backgroundColor = getThemeRGBA(newState.menus[menu].baseColor);
-        newState.menus[menu].triggerColor = 'white';
+      for(menu in newState.categories) {
+        newState.categories[menu].backgroundColor = getThemeRGBA(newState.categories[menu].baseColor);
+        newState.categories[menu].triggerColor = 'white';
       }
       return newState;
 
@@ -97,8 +99,8 @@ const MenuReducer = (state = initialState, action) => {
 /* Selectors */
 
 // Get isMenuOpen
-export const getIsPerspectiveOpen = state => state.perspective.menuIsOpen;
-export const getIsThemeOpen = state => state.theme.menuIsOpen;
+export const getIsPerspectiveOpen = state => state.categories.perspective.menuIsOpen;
+export const getIsThemeOpen = state => state.categories.theme.menuIsOpen;
 
 // Export Reducer
 export default MenuReducer;

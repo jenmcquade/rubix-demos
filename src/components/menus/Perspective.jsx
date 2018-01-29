@@ -5,12 +5,7 @@ import { connect } from 'react-redux';
 // Import Styled Components and React Bootstrap Components
 //
 import Common, {
-  Item,
-  Content,
-  Icon,
-  Title,
-  Trigger,
-  Category,
+  ScrollBar,
   SubTitle,
   Sub,
   MenuAction,
@@ -31,12 +26,6 @@ import {
 } from '../3d/rubix/CubeActions'
 
 //
-// CONSTANTS
-//
-const MENU_ID = 'Perspective';
-const THEME_COLOR = [255,0,0,1];
-
-//
 // COMPONENT 
 //
 class Perspective extends Component {
@@ -52,24 +41,14 @@ class Perspective extends Component {
    */
   constructor(props) {
     super(props);
-    this.id = MENU_ID.toLowerCase();
     Object.assign(this, new Common(this));
-    this.setTheme(this.props, true);
-
-    let baseColor = props.triggers.menus[this.id].backgroundColor;
-    let triggerColor = props.triggers.menus[this.id].triggerColor;
+    
     this.state = {
       isDefaultState: true,
       app: props.app,
-      triggers: props.triggers,
+      menu: props.menu,
       rubix: props.rubix,
-      themeColor: baseColor,
-      triggerColor: triggerColor,
     }
-
-    // Shorthand referrers
-    this.themeColor = this.state.themeColor; // string
-    this.triggerColor = this.state.triggerColor; // string
 
     // Binders
     this.flatten = this.flatten.bind(this);
@@ -109,45 +88,29 @@ class Perspective extends Component {
   //
   render() {
     return (
-      <Item id={this.id} style={{backgroundColor: this.themeColor}}>
-        <Trigger 
-          default={this.state.isDefaultState}
-          active={this.state.triggers.menus[this.id].menuIsOpen}
-          onClick={this.handleTrigger}
-          style={{backgroundColor: this.themeColor, color: this.triggerColor}}
-        >
-          <Icon className="glyphicon glyphicon-th" />
-          <Category>{MENU_ID}</Category>
-        </Trigger>
-        <Content
-          default={this.state.isDefaultState}
-          active={this.state.triggers.menus[this.id].menuIsOpen} 
-          backgroundColor={
-            this.props.triggers.menus[this.id].baseColor ? 
-            this.props.triggers.menus[this.id].baseColor :
-            THEME_COLOR
-          }
-          style={{ 
-            transform: this.state.triggers.menus[this.id].inlineContentTransform,
-          }}
-        >
-          <Title>{MENU_ID}</Title>
-          <SubTitle type="heading">
-            Transform
-          </SubTitle>
-          <Sub>
-            <MenuAction><Button onClick={this.flatten}>Flatten</Button></MenuAction>
-            <MenuAction><Button onClick={this.restore}>Build</Button></MenuAction>
-            <MenuAction>
-              <Label>Zoom</Label>
-              <ButtonsGroup role="group" aria-label="zoom">
-                <ButtonInGroup onClick={this.scaleOut} type="button">-</ButtonInGroup>
-                <ButtonInGroup  onClick={this.scaleIn} type="button">+</ButtonInGroup>
-              </ButtonsGroup>
-            </MenuAction>
-          </Sub>
-        </Content>
-      </Item>
+      <ScrollBar
+        autoHide 
+        autoHideTimeout={1000} 
+        autoHideDuration={200} 
+        autoHeight 
+        autoHeightMin={400} 
+        autoHeightMax={550}
+      >
+        <SubTitle type="heading">
+          Transform
+        </SubTitle>
+        <Sub>
+          <MenuAction><Button onClick={this.flatten}>Flatten</Button></MenuAction>
+          <MenuAction><Button onClick={this.restore}>Build</Button></MenuAction>
+          <MenuAction>
+            <Label>Zoom</Label>
+            <ButtonsGroup role="group" aria-label="zoom">
+              <ButtonInGroup onClick={this.scaleOut} type="button">-</ButtonInGroup>
+              <ButtonInGroup onClick={this.scaleIn} type="button">+</ButtonInGroup>
+            </ButtonsGroup>
+          </MenuAction>
+        </Sub>
+      </ScrollBar>
     );
   }
 }
@@ -156,8 +119,8 @@ class Perspective extends Component {
 function mapStateToProps(store) {
   return {
     app: store.app,
-    triggers: store.menu,
-    rubix: store.rubix
+    menu: store.menu,
+    rubix: store.rubix,
   };
 }
 

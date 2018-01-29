@@ -136,6 +136,7 @@ class Styles {
       position: relative;
       text-transform: uppercase;
       font-size: 0.8em;
+      transition: background 0.8s;
     `;
   }
 }

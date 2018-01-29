@@ -6,7 +6,10 @@ import {
   ButtonGroup,
   DropdownButton,
   MenuItem, 
+  Form,
+  FormGroup,
   FormControl,
+  InputGroup,
 } from 'react-bootstrap';
 
 
@@ -302,7 +305,7 @@ class Styles {
       margin: 1em;
       font-size: 0.8em;
       font-weight: 400;
-      min-width: 4em;
+      min-width: 3em;
       ${props => props.type && props.type === 'heading' && css`
         margin-top: 0.5em;
       `}
@@ -317,7 +320,7 @@ class Styles {
       margin: auto;
       padding: 0px;
       font-size: 0.7em;
-      display: flex;
+      display: inline-block;
       align-items: flex-end;
     `
 
@@ -327,7 +330,7 @@ class Styles {
 
     this.li = styled.li`
       list-style-type: none;
-      margin: 0.25em;
+      margin-bottom: 0.75em;
       display: inline-block;
     `
 
@@ -336,6 +339,8 @@ class Styles {
     //
     this.label = styled.label`
       margin-right: 0.25em;
+      font-weight: 400;
+      min-width: 4em;
     `
 
     //
@@ -379,7 +384,23 @@ class Styles {
     //
     this.btnGroup = styled(ButtonGroup)`
 
-    `
+    `;
+
+    //
+    //  Bootstrap Form
+    //
+    this.form = Form;
+
+    //
+    //  Bootstrap FormGroup
+    //
+    this.formGroup = FormGroup;
+    
+    //
+    //  Bootstrap InputGroup
+    //
+    this.inputGroup = InputGroup;
+
     //
     // Bootstrap Form Control / Text Box
     //
@@ -388,7 +409,9 @@ class Styles {
     //
     // A Button with menu options
     //
-    this.dropdownBtn = DropdownButton;
+    this.dropdownBtn = styled(DropdownButton)`
+      margin: 0 0.25em;
+    `;
 
     //
     // Dropdown menu items
