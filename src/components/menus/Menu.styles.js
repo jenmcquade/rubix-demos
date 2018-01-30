@@ -266,7 +266,6 @@ class Styles {
           bgColor = props.backgroundColor;
           background-color: rgba(${props.backgroundColor[0]},${props.backgroundColor[1]},${props.backgroundColor[2]},0.7);
         `}
-
       }
 
       @media only screen 
@@ -286,7 +285,7 @@ class Styles {
 
       @media only screen 
       and (min-width: 1024px) { 
-        padding-top: 1em;
+        padding: 1em 0.25em 1em 0;
         ${props => props.active && !props.default && css`
           animation: ${anims.menuOpenContent} 1s forwards ease-out;
         `}
@@ -411,6 +410,8 @@ class Styles {
     //
     this.dropdownBtn = styled(DropdownButton)`
       margin: 0 0.25em;
+      transition: background 0.8s;
+      width: 4.5em;
     `;
 
     //

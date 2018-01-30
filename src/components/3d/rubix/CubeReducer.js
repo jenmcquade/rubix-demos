@@ -67,12 +67,12 @@ const initialState = {
   }
 };
 
-const backupStateRestoreObject = JSON.parse(JSON.stringify(initialState));
+const backupState = JSON.parse(JSON.stringify(initialState));
 const backupStateFaceRGBA = JSON.parse(JSON.stringify(initialState));
 const backupStateFaceTxtColor = JSON.parse(JSON.stringify(initialState));
 
 const CubeReducer = (state = initialState, action) => {
-  let newState = Object.assign({}, state);;
+  let newState = Object.assign({}, state);
   switch (action.type) {
     case RESTORE_OBJECT:
       return {...state, ...initialState};
@@ -122,28 +122,28 @@ const CubeReducer = (state = initialState, action) => {
         return state;
       }
       newState.theme[action.value.face].bgColor = action.value.bgColor;
-      return {...newState, ...state};
+      return {...state, ...newState};
     
     case SET_FACE_TXT:
       if(!action.value) {
         return state;
       }
       newState.theme[action.value.face].txtColor = action.value.txtColor;
-      return {...newState, ...state};
+      return {...state, ...newState};
 
     case RESET_FACE_RGBA:
       if(!action.value) {
         return state;
       }
       newState.theme[action.value.face].bgColor = backupStateFaceRGBA.theme[action.value.face].bgColor;
-      return {...newState, state};
+      return {...state, ...newState};
     
     case RESET_FACE_TXT:
       if(!action.value) {
         return state;
       }
       newState.theme[action.value.face].txtColor = backupStateFaceTxtColor.theme[action.value.face].txtColor;
-      return {...newState, state};
+      return {...state, ...newState};
 
     default:
       return state;

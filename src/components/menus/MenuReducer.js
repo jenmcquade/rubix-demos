@@ -51,7 +51,7 @@ const MenuReducer = (state = initialState, action) => {
         newState.categories[menu].isDefaultState = true;
       }
       newState.isDefaultState = true;
-      return newState;
+      return {...newState, state};
 
     case TOGGLE_MENU_PERSPECTIVE:
       for(menu in newState.categories) {
@@ -63,7 +63,7 @@ const MenuReducer = (state = initialState, action) => {
       newState.categories['perspective'].menuIsOpen = !newState.categories['perspective'].menuIsOpen;
       newState.categories['perspective'].isDefaultState = false;
       newState.isDefaultState = false;
-      return newState;
+      return {...newState, state};
 
     case TOGGLE_MENU_THEME:
       for(menu in newState.categories) {
@@ -75,7 +75,7 @@ const MenuReducer = (state = initialState, action) => {
       newState.categories['theme'].menuIsOpen = !newState.categories['theme'].menuIsOpen;
       newState.categories['theme'].isDefaultState = false;
       newState.isDefaultState = false;
-      return newState;
+      return {...newState, state};
 
     case SET_MOBILE_THEME:
       for(menu in newState.categories) {
@@ -89,7 +89,7 @@ const MenuReducer = (state = initialState, action) => {
         newState.categories[menu].backgroundColor = getThemeRGBA(newState.categories[menu].baseColor);
         newState.categories[menu].triggerColor = 'white';
       }
-      return newState;
+      return {...newState, state};
 
     default:
       return state;

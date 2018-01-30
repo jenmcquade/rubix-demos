@@ -45,10 +45,11 @@ class Theme extends Component {
     Object.assign(this, new Common(this));
     this.faces = Object.keys(this.props.rubix.style);
     
-    let formsState = {};
+    this.formsState = {};
     for(var face in this.faces) {
       face = face.toLowerCase();
-      formsState[this.faces[face]] = {
+      this.formsState[this.faces[face]] = {
+        searchType: 'color',
         text:{
           user:{style:{display:'none',}},
           hashTag:{style:{display:'none',}},
@@ -70,20 +71,49 @@ class Theme extends Component {
       rubix: props.rubix,
       searchType: 'color',
       themeFace: 'top',
-      forms: formsState,
+      forms: this.formsState,
     }
 
     // Binders
     this.changeSearchType = this.changeSearchType.bind(this);
     this.changeLoadFace = this.changeLoadFace.bind(this);
     this.changeBgColor = this.changeBgColor.bind(this);
+    this.changeTxtColor = this.changeTxtColor.bind(this);
   }
 
   //
   // Form handlers
   //
-  changeSearchType(value) {
-    this.setState({searchType: value});
+  changeSearchType(e) {
+    let face = e.split('-')[0];
+    let type = e.split('-')[1];
+    let newState = JSON.parse(JSON.stringify(this.state.forms));
+    let friendlyType = 'color';
+
+    switch (type) {
+      case 'bgColor':
+        friendlyType = 'color';
+        break;
+      
+      case 'txtColor':
+        friendlyType = 'text';
+        break;
+
+      default:
+        friendlyType = 'color';
+    }
+
+    // Initially, change search type and set display to none for all
+    newState[face].searchType = friendlyType;
+
+    let textBoxes = Object.keys(this.state.forms[face].text);
+    for(var box in textBoxes) {
+      newState[face].text[textBoxes[box]].style.display = 'none';
+    }
+    newState[face].text[type].style.display = 'inline';
+
+    this.setState({forms: newState});
+
   }
 
   updateSearch(props) {
@@ -119,9 +149,9 @@ class Theme extends Component {
     }
     let value = {
       id: faceId,
-      bgColor: this.convertStringToThemeRGBA(e.target.value),
+      txtColor: e.target.value,
     }
-    if(value.bgColor) {
+    if(value.txtColor) {
       this.props.dispatch(setThemeTxtColor(value));
     }
   }
@@ -210,7 +240,8 @@ class Theme extends Component {
             if (Object.keys(this.state.forms).length === i + 1) {
                dropupEnabled = true;
             }
-            const themeColor = this.state.rubix.theme[face].bgColor;
+            let themeColor = this.state.rubix.theme[face].bgColor;
+            let txtColor = this.state.rubix.theme[face].txtColor;
             return <MenuAction key={face}>
               <Form inline>
                 <FormGroup>
@@ -219,15 +250,19 @@ class Theme extends Component {
                   </Label>
                   <DropdownButton 
                     bsSize="large"
-                    id="searchType"
-                    title={this.state.searchType}
+                    id={'searchType-' + face}
+                    title={this.state.forms[face].searchType}
                     onSelect={this.changeSearchType}
                     dropup={dropupEnabled}
+                    style={{
+                      backgroundColor: this.state.rubix.theme[face].bgColor, 
+                      color: this.state.rubix.theme[face].txtColor
+                    }}
                   >
                     <DropdownItem display={igStatus} eventKey="@">@ (user)</DropdownItem>
                     <DropdownItem display={igStatus} eventKey="#"># (hashtag)</DropdownItem>
-                    <DropdownItem eventKey="color">Background Color (0-255,0-255,0-255,0-1)</DropdownItem>
-                    <DropdownItem eventKey="text">Text Color</DropdownItem>
+                    <DropdownItem eventKey={face + '-bgColor'}>Background Color (0-255,0-255,0-255,0-1)</DropdownItem>
+                    <DropdownItem eventKey={face + '-txtColor'}>Text Color</DropdownItem>
                   </DropdownButton>
                   <TextBox
                     bsSize="large"
