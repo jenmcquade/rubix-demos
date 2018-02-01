@@ -1,11 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import InstaProxy, { 
-  getLatestData, 
-  setIgSearchValue, 
-  lockIgSearch, 
-  unlockIgSearch 
-} from '../../modules/InstaProxy/InstaProxy';
 
 //
 // Import Styled Components and React Bootstrap Components
@@ -38,15 +32,22 @@ import {
   toggleMenuSetup,
 } from './MenuActions'
 
-import {
-  updateData,
-  setIgSearchType,
-  SEARCH_RETURN_COUNT,
-  SEARCH_DEFAULT_TYPE,
-  SEARCH_DEFAULT_USER,
-  SEARCH_DEFAULT_HASHTAG,
-} from '../../modules/InstaProxy/InstaProxyActions'
+import InstaProxy, 
+  { setIgSearchType } 
+  from '../../modules/InstaProxy/InstaProxy';
 
+//
+// IG Service functions
+//
+function searchByUser() {
+  const { value, dispatch } = this.props;
+  dispatch({type: 'IG_USER_FETCH', value: {searchType: 'user', searchValue: value}});
+}
+
+function searchByHashTag() {
+  const { value, dispatch } = this.props;
+  dispatch({type: 'IG_HASHTAG_FETCH', value: {searchType: 'hashTag', searchValue: value}});
+}
 
 class Theme extends Component {
   /**
@@ -84,27 +85,10 @@ class Theme extends Component {
     this.changeBgColor = changeBgColor.bind(this);
     this.changeTxtColor = changeTxtColor.bind(this);
     this.convertRGBAToString = convertRGBAToString.bind(this);
-    this.getLatestData = getLatestData.bind(this);
-    this.updateData = updateData.bind(this);
     this.searchByUser = searchByUser.bind(this);
     this.searchByHashTag = searchByHashTag.bind(this);
-    this.lockIgSearch = lockIgSearch.bind(this);
-    this.unlockIgSearch = unlockIgSearch.bind(this);
   }
 
-  //
-  // Lifecycle handlers
-  //
-  componentDidMount() {
-    this.getLatestData(
-      {
-        searchType: SEARCH_DEFAULT_TYPE,
-        searchValue: SEARCH_DEFAULT_USER,
-        returnCount: 1, 
-        component: this
-      }
-    );
-  }
 
   /**
    * componentWillReceiveProps
@@ -119,6 +103,7 @@ class Theme extends Component {
       if(!nextProps.menu.isInSetup) {
         return true;
       }
+      
       this.props.dispatch(toggleMenuSetup());
       let formsState = {};
       for(var face in this.faces) {
@@ -136,7 +121,7 @@ class Theme extends Component {
       this.setState({forms: formsState});
     } else {
       this.formsState = {};
-      for(var face in this.faces) {
+      for(face in this.faces) {
         face = face.toLowerCase();
       }
     }
@@ -244,6 +229,9 @@ class Theme extends Component {
   }
 }
 
+//
+// Templating
+//
 function getInitialFormsState(faces) {
   let formsState = {};
   for(var face in faces) {
@@ -389,17 +377,6 @@ export function convertRGBAToString(value) {
   return colorArray.join(', ');
 }
 
-
-//
-// IG Service functions
-//
-function searchByUser(e) {
-  setIgSearchValue(this, e.target.value);
-}
-
-function searchByHashTag(e) {
-  setIgSearchValue(this, e.target.value);
-}
 
 // Retrieve data from store as props
 function mapStateToProps(store) {

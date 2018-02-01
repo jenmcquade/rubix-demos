@@ -8,8 +8,8 @@ import {
   SET_ERROR,
   SET_SEARCH_TYPE,
   SET_SEARCH_VALUE,
-  LOCK_SEARCH,
-  UNLOCK_SEARCH,
+  NULL_REQUEST,
+  SEARCH_RETURN_COUNT,
 } from './InstaProxyActions';
 
 // Constants
@@ -27,7 +27,7 @@ const initialState = {
   lastPayload: {},
   error: {},
   status: false,
-  returnCount: 9,
+  returnCount: SEARCH_RETURN_COUNT,
   inProcess: false,
 };
 
@@ -54,23 +54,11 @@ const InstaProxyReducer = (state = initialState, action) => {
       return {...state, ...newState};
 
     case SET_SEARCH_VALUE:
-      if(newState.inProcess) {
-        return {...state};
-      }
-      newState.inProcess = true;
       newState.searchValue = action.value;
       return {...state, ...newState};
 
     case SET_SEARCH_TYPE:
       newState.searchType = action.value;
-      return {...state, ...newState};
-
-    case LOCK_SEARCH:
-      newState.inProcess = true;
-      return {...state, ...newState};
-
-    case UNLOCK_SEARCH:
-      newState.inProcess = false;
       return {...state, ...newState};
 
     case UPDATE_IG_DATA:
@@ -81,6 +69,9 @@ const InstaProxyReducer = (state = initialState, action) => {
       newState.inProcess = false;
       newState.lastPayload = action.value.data;
       return {...state, ...newState};
+
+    case NULL_REQUEST:
+      return {...state}
 
     default:
       return state;

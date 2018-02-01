@@ -8,14 +8,17 @@ export const SET_ERROR = 'INSTAPROXY_ERROR';
 export const SET_SEARCH_VALUE = 'SET_SEARCH_VALUE';
 export const SET_SEARCH_TYPE = 'SET_SEARCH_TYPE';
 export const UPDATE_IG_DATA = 'UPDATE_IG_DATA';
-export const LOCK_SEARCH = 'LOCK_SEARCH';
-export const UNLOCK_SEARCH = 'UNLOCK_SEARCH';
-export const SEARCH_RETURN_COUNT = 9;
+export const SEARCH_RETURN_COUNT = 1;
 export const SEARCH_DEFAULT_TYPE = 'user';
-export const SEARCH_DEFAULT_USER = 'jonorjen';
+export const SEARCH_DEFAULT_VALUE = 'jonorjen';
 export const SEARCH_DEFAULT_HASHTAG = 'reactjs';
-export const DURATION_SEARCH_DISPATCH = 800;
-
+export const DURATION_SEARCH_DISPATCH = 1500;
+export const NULL_REQUEST = 'NULL_REQUEST';
+export const PROXY_SERVER = 'http://jonmcquade.from-wa.com:3003';
+export const PATH_USER = '/';
+export const PATH_HASHTAG = '/explore/tags/';
+export const URL_BASE_USER = PROXY_SERVER + PATH_USER;
+export const URL_BASE_HASHTAG = PROXY_SERVER + PATH_HASHTAG;
 
 export function setIsMounted() {
   return {
@@ -55,36 +58,9 @@ export function setServerError(data) {
   }
 }
 
-export function setIgSearchType(type) {
-  return {
-    type: SET_SEARCH_TYPE,
-    value: type,
-  }
-}
 
-export function setSearchValue({...props}) {
-  props.component.getLatestData(
-    {
-      component: props.component, 
-      searchType: props.searchType ? props.searchType : SEARCH_DEFAULT_TYPE, 
-      returnCount: props.returnCount ? props.returnCount : SEARCH_RETURN_COUNT,
-      searchValue: props.searchValue ? props.searchValue : SEARCH_DEFAULT_USER,
-    }
-  );
-  return {
-    type: SET_SEARCH_VALUE,
-    value: props.searchType,
-  }
-}
 
-export function lockSearch() {
-  return {
-    type: LOCK_SEARCH,
-  }
-}
 
-export function unlockSearch() {
-  return {
-    type: UNLOCK_SEARCH,
-  }
-}
+
+
+

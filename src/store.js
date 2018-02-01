@@ -3,12 +3,16 @@
  */
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
+import createSagaMiddleware from 'redux-saga';
 import DevTools from './components/DevTools';
 import rootReducer from './reducers';
+import rootSaga from './sagas';
+import instaProxySaga from './modules/InstaProxy/sagas';
 
 // Middleware and store enhancers
+const sagaMiddleware = createSagaMiddleware();
 const enhancers = [
-  applyMiddleware(thunk),
+  applyMiddleware(sagaMiddleware),
 ];
 
 export default function configureStore(initialState = {}) {
@@ -19,6 +23,9 @@ export default function configureStore(initialState = {}) {
   }
 
   const store = createStore(rootReducer, initialState, compose(...enhancers));
+
+  sagaMiddleware.run(rootSaga);
+  sagaMiddleware.run(instaProxySaga);
 
   // For hot reloading reducers
   if (module.hot) {

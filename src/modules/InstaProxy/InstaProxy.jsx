@@ -1,40 +1,44 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import ReduxThunk from 'redux-thunk';
 
 // Import Actions
 import {
   setIsMounted,
-  setup,
-  updateData,
   setStatus,
-  setSearchValue,
-  setServerError,
-  lockSearch,
-  unlockSearch,
-  DURATION_SEARCH_DISPATCH,
+  SET_SEARCH_TYPE,
+  SET_SEARCH_VALUE,
+  SEARCH_DEFAULT_TYPE,
+  SEARCH_DEFAULT_VALUE,
+  SEARCH_RETURN_COUNT,
+  URL_BASE_USER,
+  URL_BASE_HASHTAG,
 } from './InstaProxyActions'
 
 // CONSTANTS
-
-
 export class InstaProxy extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      inProcess: false,
       isMounted: false,
       ...props.ig,
     };
     this.getLatestData = getLatestData.bind(this);
     this.setIgStatus = setStatus.bind(this);
     this.setIgSearchValue = setIgSearchValue.bind(this);
-    this.lockIgSearch = lockIgSearch.bind(this);
-    this.unlockIgSearch = unlockIgSearch.bind(this);
+    this.callIg = callIg.bind(this);
   }
 
   componentDidMount() {
     this.setState({isMounted: true}); // For immediate state checking
+    this.props.dispatch({
+      type: 'USER_FETCH_REQUESTED', 
+      value: {
+        searchType: SEARCH_DEFAULT_TYPE,
+        searchValue: SEARCH_DEFAULT_VALUE, 
+      }
+    });
     this.props.dispatch(setIsMounted()); // For state checking in store
   }
 
@@ -45,61 +49,61 @@ export class InstaProxy extends Component {
   }
 }
 
-export function getLatestData({...props}) {
+export function setIgSearchType(value) {
+  this.dispatch({
+    type: SET_SEARCH_TYPE,
+    value: value,
+  });
+}
 
-  if(props.ignoreRequest) {
-    return false;
-  }
+export function setIgSearchValue(value) {
+  this.dispatch({
+    type: SET_SEARCH_VALUE,
+    value: value,
+  });
+}
 
-  let queryPath = props.searchType === 'user' 
-    ? props.component.state.ig.urlBaseUser 
-    : props.component.state.ig.urlBaseHashtag;
-  let path = '';
+export function callIg({...props}) {
+  return getLatestData({
+    searchType: props.searchType,
+    searchValue: props.searchValue,
+  });
+}
+
+/**
+ * Take search value and use Redux state
+ *  To dispatch query to InstaProxy server
+ */
+function getLatestData({...props}) {
+  let returnCount = props.returnCount ? props.returnCount : SEARCH_RETURN_COUNT;
+  let searchType = props.searchType ? props.searchType : SEARCH_DEFAULT_TYPE;
+  let searchValue = props.searchValue ? props.searchValue : SEARCH_DEFAULT_VALUE;
+  // Set our request configurations
+  let queryPath = searchType === 'user' 
+    ? URL_BASE_USER 
+    : URL_BASE_HASHTAG;
   var initConfig = { 
     method: 'GET',
     mode: 'cors',
     cache: 'default',
   };
 
-  ////THIS IS WHERE YOU ARE
-  path = queryPath + props.searchValue + '/media/?count=' + props.returnCount;
-  fetch(path, initConfig)
+  // Build URL
+  let path = queryPath + searchValue + '/media/?count=' + returnCount;
+
+  // Send request using fetch
+  return fetch(path, initConfig) 
   .then( response => {
     if (response.ok) {
-      this.unlockIgSearch();
       return response.json().then( thisData => {
-        this.props.dispatch(setStatus(true));
-        return this.props.dispatch(updateData(thisData));
-      })
+        return thisData;
+      });
     }
-  }).catch(error => {
-    this.unlockIgSearch();
-    if(this.props) {
-      this.props.dispatch(setServerError(error));
-      return this.props.dispatch(setStatus(false));
-    }
+  })
+  .then((jsonData) => { return jsonData })
+  .catch(error => {
+    return error
   });
-}
-
-export function setIgSearchValue(c, value) {
-  let ignoreRequest = c.state.ig.inProcess;
-
-  setTimeout( () => {
-    if(!ignoreRequest) {
-      c.lockIgSearch(); // In Process
-    }
-    return c.props.dispatch(setSearchValue({component: c, searchValue: value, ignoreRequest: ignoreRequest}));
-  }, DURATION_SEARCH_DISPATCH);
-}
-
-export function lockIgSearch() {
-  if(!this.state.inProcess) {
-    this.props.dispatch(lockSearch());
-  }
-}
-
-export function unlockIgSearch() {
-  this.props.dispatch(unlockSearch());
 }
 
 InstaProxy.propTypes = {

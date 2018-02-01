@@ -35,7 +35,6 @@ const initialState = {
 };
 
 const AppReducer = (state = initialState, action) => {
-  let screenSize = 'xlarge';
   switch (action.type) {
 
     case SET_IS_MOUNTED:
