@@ -5,6 +5,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 // const CleanWebpackPlugin = require('clean-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+const StyleExtHtmlWebpackPlugin = require('style-ext-html-webpack-plugin');
 
 //const TARGET = process.env.;
 const ROOT_PATH = path.resolve(__dirname);
@@ -20,7 +21,7 @@ module.exports = {
       'babel-polyfill',
       'react-hot-loader/patch',
       'webpack-dev-server/client?http://localhost:3000/',
-      './src/index.js'
+      './src/index.js',
     ]
   },
 
@@ -47,7 +48,7 @@ module.exports = {
 
   output: {
     path: BUNDLE_PATH,
-    publicPath: '/',
+    publicPath: './',
     filename: '[name].js',
   },
 
@@ -88,6 +89,7 @@ module.exports = {
       }
     }),
     new ExtractTextPlugin({ filename: 'css/[name].css', allChunks: true}),
+    //new StyleExtHtmlWebpackPlugin()
   ],
 
   module: {
@@ -103,18 +105,15 @@ module.exports = {
       {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
           use: 'css-loader'
         })
       },
-      { test: /\.inline.svg$/, loader: 'babel-loader!svg-react-loader' },
       {
         test: /\.jpe?g$|\.gif$|\.png$|^(?!.*\.inline\.svg$).*\.svg$/,
-        loader: 'url-loader'
+        loader: 'url-loader?name=images/[name].[ext]',
       },
-      {
-        test: /\.(eot|svg|ttf|woff|woff2)$/,
-        loader: 'file-loader?name=../css/fonts/[name].[ext]'
-      }
+      { test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' }
     ]
   }
 };

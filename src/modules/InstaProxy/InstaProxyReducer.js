@@ -1,73 +1,86 @@
 // Import Actions
 import { 
-  RESIZE,
   SET_IS_MOUNTED,
-  SET_SCREEN_SIZE,
-} from './AppActions';
+  SETUP,
+  UPDATE_IG_DATA,
+  SET_IS_ONLINE,
+  SET_IS_OFFLINE,
+  SET_ERROR,
+  SET_SEARCH_TYPE,
+  SET_SEARCH_VALUE,
+  LOCK_SEARCH,
+  UNLOCK_SEARCH,
+} from './InstaProxyActions';
 
-let updateWidth = window.innerWidth
-  || document.documentElement.clientWidth
-  || document.body.clientWidth;
-
-let updateHeight = window.innerHeight
-  || document.documentElement.clientHeight
-  || document.body.clientHeight;
-
-let mediaQueries = {
-  small: window.matchMedia( '(min-width: 75px) and (max-width: 667px)' ),
-  medium: window.matchMedia( '(min-width: 668px) and (max-width: 719px)' ),
-  large: window.matchMedia( '(min-width: 720px) and (max-width: 1023px)' ),
-  xlarge: window.matchMedia( '(min-width: 1024px)' ),
-}
-
-for (var q in mediaQueries) {
-  if(mediaQueries[q].matches) {
-    var screenSize = q;
-  }
-}
+// Constants
+const PROXY_SERVER = 'http://jonmcquade.from-wa.com:3003';
+const PATH_USER = '/';
+const PATH_HASHTAG = '/explore/tags/';
 
 // Initial State
 const initialState = {
   isMounted: false,
-  screenSize: screenSize,
-  width: updateWidth,
-  height: updateHeight,
+  searchType: 'user',
+  searchValue: 'jonorjen',
+  urlBaseUser: PROXY_SERVER + PATH_USER,
+  urlBaseHashtag: PROXY_SERVER + PATH_HASHTAG, 
+  lastPayload: {},
+  error: {},
+  status: false,
+  returnCount: 9,
+  inProcess: false,
 };
 
-const AppReducer = (state = initialState, action) => {
-  let screenSize = 'xlarge';
+const InstaProxyReducer = (state = initialState, action) => {
+  let newState = Object.assign({}, state);
   switch (action.type) {
-
     case SET_IS_MOUNTED:
-      return {
-        isMounted: true,
-        width: state.width,
-        height: state.height,
-        screenSize: state.screenSize,
-      }
+      newState.isMounted = true;
+      return {...state, ...newState};
 
-    case RESIZE:
-      let screenSize = 'xlarge';
-      for (var q in mediaQueries) {
-        if(mediaQueries[q].matches) {
-          screenSize = q;
-        }
-      }
+    case SETUP:
+      return {state, ...newState};
 
-      let updateWidth = window.innerWidth
-      || document.documentElement.clientWidth
-      || document.body.clientWidth;
-      
-      let updateHeight = window.innerHeight
-      || document.documentElement.clientHeight
-      || document.body.clientHeight;
-      
-      return {
-        isMounted: state.isMounted,
-        width: updateWidth,
-        height: updateHeight,
-        screenSize: screenSize,
-      };
+    case SET_IS_ONLINE:
+      newState.status = true;
+      return {...state, ...newState};
+
+    case SET_IS_OFFLINE:
+      newState.status = false;
+      return {...state, ...newState};
+
+    case SET_ERROR:
+      newState.error = state.error;
+      return {...state, ...newState};
+
+    case SET_SEARCH_VALUE:
+      if(newState.inProcess) {
+        return {...state};
+      }
+      newState.inProcess = true;
+      newState.searchValue = action.value;
+      return {...state, ...newState};
+
+    case SET_SEARCH_TYPE:
+      newState.searchType = action.value;
+      return {...state, ...newState};
+
+    case LOCK_SEARCH:
+      newState.inProcess = true;
+      return {...state, ...newState};
+
+    case UNLOCK_SEARCH:
+      newState.inProcess = false;
+      return {...state, ...newState};
+
+    case UPDATE_IG_DATA:
+      if(!action.value.data || state.inProcess) {
+        return {...state};
+      }
+      newState.status = true;
+      newState.inProcess = false;
+      newState.lastPayload = action.value.data;
+      return {...state, ...newState};
 
     default:
       return state;
@@ -77,9 +90,8 @@ const AppReducer = (state = initialState, action) => {
 /* Selectors */
 
 // Getters
-export const getWidth = state => state.width;
-export const getHeight = state => state.height;
+
 
 // Export Reducer
-export default AppReducer;
+export default InstaProxyReducer;
 

@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+// Additional Modules
+import InstaProxy from '../InstaProxy/InstaProxy';
+
 // Import Components
 import Helmet from 'react-helmet';
 import DevTools from '../../components/DevTools';
@@ -33,10 +36,13 @@ export class App extends Component {
     }
     this.shouldUpdateStoreWithNewDims = false;
     setTimeout( () => {
-        console.log('dispatching resize...');
         this.props.dispatch(resize());
         this.shouldUpdateStoreWithNewDims = true;
     }, DURATION_RESIZE_DISPATCH);
+  }
+
+  componentWillMount() {
+    document.querySelector('#loadingSpinner').style.display = 'none';
   }
 
   componentDidMount() {

@@ -6,19 +6,26 @@ export const RESTORE_OBJECT = 'RESTORE_OBJECT';
 export const ZOOM_OUT = 'ZOOM_OUT';
 export const ZOOM_IN = 'ZOOM_IN';
 export const RESET_MENU_STATE = 'RESET_MENU_STATE';
-export const SET_MOBILE_THEME = 'SET_MOBILE_THEME';
-export const SET_DESKTOP_THEME = 'SET_DESKTOP_THEME';
+export const SET_MOBILE_THEME = 'SET_MENU_MOBILE_THEME';
+export const SET_DESKTOP_THEME = 'SET_MENU_DESKTOP_THEME';
+export const TOGGLE_SETUP = 'MENU_SETUP';
 
 // Export Actions
 export function resetMenuState(menu) {
   return {
-    type: 'RESET_MENU_STATE'
+    type: RESET_MENU_STATE
   };
 }
 
 export function toggleMenu(id) {
   return {
     type: 'TOGGLE_MENU_' + id.toUpperCase(),
+  };
+}
+
+export function toggleMenuSetup() {
+  return {
+    type: TOGGLE_SETUP,
   };
 }
 

@@ -66,7 +66,7 @@ class Category extends Component {
     let menuIsOpen = this.category.menuIsOpen; 
     let iconType = this.props.iconType;
     let inlineContentTransform = this.category.inlineContentTransform;
-
+    let screenSize = this.state.app.screenSize;
     return (
       <Item id={this.id} style={{backgroundColor: this.themeColor}}>
         <Trigger 

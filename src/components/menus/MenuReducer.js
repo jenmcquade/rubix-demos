@@ -5,11 +5,13 @@ import {
   SET_MOBILE_THEME,
   SET_DESKTOP_THEME,
   RESET_MENU_STATE,
+  TOGGLE_SETUP,
 } from './MenuActions';
 
 // Initial State
 const initialState = {
   isDefaultState: true,
+  isInSetup: true,
   categories: {
     perspective: {
       triggerColor: 'white',
@@ -51,6 +53,10 @@ const MenuReducer = (state = initialState, action) => {
         newState.categories[menu].isDefaultState = true;
       }
       newState.isDefaultState = true;
+      return {...newState, state};
+
+    case TOGGLE_SETUP:
+      newState.isInSetup = !newState.isInSetup;
       return {...newState, state};
 
     case TOGGLE_MENU_PERSPECTIVE:

@@ -29,7 +29,8 @@ const InstaProxy = {
   GRAPH_USER_QUERY_ID: '17888483320059182',
   GRAPH_TAG_QUERY_ID: '17875800862117404',
   GITHUB_REPO: 'https://github.com/whizzzkid/instagram-reverse-proxy',
-  SERVER_PORT: 3003
+  SERVER_PORT: 3003,
+  TIMEOUT: 2000,
 };
 
 /**
@@ -131,6 +132,12 @@ InstaProxy.instagramFetcher = function (callback) {
   return function (serverResponse) {
     serverResponse.setEncoding('utf8');
     let body = '';
+    serverResponse.on('socket', function (socket) {
+      serverResponse.setTimeout(InstaProxy.TIMEOUT);  
+      serverResponse.on('timeout', function() {
+        callback.abort();
+      });
+    });
     serverResponse.on('data', function (chunk) {
       body += chunk;
     });
@@ -148,7 +155,7 @@ InstaProxy.instagramFetcher = function (callback) {
  * @this
  */
 InstaProxy.fetchFromInstagram = function (path, query, callback) {
-  Https.get(
+   return Https.get(
     this.constructURL(
       'https', 'www.instagram.com', path, query),
     this.instagramFetcher(callback.bind(this))

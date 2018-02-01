@@ -418,8 +418,9 @@ class Styles {
     // Dropdown menu items
     //
     this.dropdownItem = styled(MenuItem)`
-      ${props => props.display && props.display !=='online' && css`
-        display: none;
+      display: none;
+      ${props => props.display && props.display === 'true' && css`
+        display: block;
       `}
     `;
 
@@ -428,6 +429,13 @@ class Styles {
     //
     this.status = styled.span`
       color: red;
+      padding: 0.25em;
+      border: 1px solid white;
+      background-color: rgba(255,255,255,0.8);
+      margin-left: 1em;
+      ${props => props.className && props.className === 'true' && css`
+        color: green;
+      `}
     `
   }
 }
