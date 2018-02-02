@@ -78,6 +78,7 @@ export class App extends Component {
 
           <Menu />
           <Stage />
+          <InstaProxy fetchOnLoad={true} />
 
         </div>
       </div>

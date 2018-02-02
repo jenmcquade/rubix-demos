@@ -188,7 +188,11 @@ InstaProxy.fetchFromInstagramGQL = function (param, request, response) {
       if (param.id != null) {
         json = json.user.edge_owner_to_timeline_media;
       } else {
-        json = json.hashtag.edge_hashtag_to_media;
+        if(json.hashtag) {
+          json = json.hashtag.edge_hashtag_to_media;
+        } else {
+          json = {error: 'error in fetchFromInstagramGQL'}
+        }
       }
       let response = {};
       let query;

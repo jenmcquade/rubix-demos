@@ -121,7 +121,7 @@ const CubeReducer = (state = initialState, action) => {
           transform: 'scale(1, 1) rotateX(0deg) rotateY(0) rotateZ(0) translateX(0) translateY(0%) translateZ(0)',
         }
       }
-      return {...newState, state};
+      return {...state, ...newState};
       
     case ZOOM_OUT:
       for(let size in state.scale) {
@@ -129,7 +129,7 @@ const CubeReducer = (state = initialState, action) => {
         let width = state.scale[size][1] > 0 ? state.scale[size][1] - 0.1 : state.scale[size][1] + 0.1;
         newState.scale[size] = [height, width];
       }
-      return {...newState, state};
+      return {newState, ...state};
  
     case ZOOM_IN:
       for(let size in state.scale) {
@@ -137,7 +137,7 @@ const CubeReducer = (state = initialState, action) => {
         let width = state.scale[size][1] + 0.1;
         newState.scale[size] = [height, width];
       }
-      return {...newState, state};
+      return {newState, ...state};
 
     case SET_FACE_RGBA:
       if(!action.value) {
@@ -188,13 +188,6 @@ const CubeReducer = (state = initialState, action) => {
         return state;
       }
       newState.theme[action.value.face].txtColor = backupStateFaceTxtColor.theme[action.value.face].txtColor;
-      return {...state, ...newState};
-
-    case SET_IMAGES_TO_LOADING:
-      let face = action.value.face;
-      for(let i=0; i<9; i++) {
-        newState.theme[face].images[i] = './image-spinner.gif';
-      }
       return {...state, ...newState};
 
     default:

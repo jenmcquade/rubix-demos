@@ -5,7 +5,7 @@ export default class Stage extends React.Component {
   render() {
     return(
       <div id="stage" className="stage" role="main">
-        <Cube />
+        <Cube hasImages="true" />
       </div>
     );
   }

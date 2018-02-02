@@ -68,7 +68,8 @@ function searchByHashTag(e) {
         searchValue: e.target.value, 
         returnCount: 9
       }
-  });}
+  });
+}
 
 class Theme extends Component {
   /**
@@ -110,7 +111,6 @@ class Theme extends Component {
     this.searchByHashTag = searchByHashTag.bind(this);
     this.setIgSearchType = setIgSearchType.bind(this);
   }
-
 
   /**
    * componentWillReceiveProps
@@ -167,7 +167,6 @@ class Theme extends Component {
         autoHeightMin={400} 
         autoHeightMax={550}
       >
-        <InstaProxy fetchOnLoad={true} />
         <SubTitle type="heading">
           Cube Colors and Background Images
         </SubTitle>
@@ -183,7 +182,8 @@ class Theme extends Component {
           Object.keys(this.state.forms).map((face, i) => {
             // Use dropup styling if this is the last form set
             let dropupEnabled = false;
-            if (Object.keys(this.state.forms).length === i + 1) {
+            let size = Object.keys(this.state.forms).length;
+            if ( i === size - 1 || i === size - 2) {
                dropupEnabled = true;
             }
             let themeColor = this.state.rubix.theme[face].bgColor;
@@ -325,12 +325,12 @@ function changeBgColor(e){
     this.props.dispatch(resetThemeRGBA(faceId));
     return true;
   }
-  if(!this.convertStringToThemeRGBA(e.target.value)) {
+  if(!convertStringToThemeRGBA(e.target.value)) {
     return false;
   }
   let value = {
     id: e.target.id.split('-')[1],
-    bgColor: this.convertStringToThemeRGBA(e.target.value),
+    bgColor: convertStringToThemeRGBA(e.target.value),
   }
   if(value.bgColor) {
     this.props.dispatch(setThemeRGBA(value));
