@@ -7,6 +7,9 @@ export const SET_FACE_RGBA = 'SET_FACE_RGBA';
 export const SET_FACE_TXT = 'SET_FACE_TXT';
 export const RESET_FACE_RGBA = 'RESET_FACE_RGBA';
 export const RESET_FACE_TXT = 'RESET_FACE_TXT';
+export const SET_THEME_FACE_IMAGES = 'SET_THEME_FACE_IMAGES';
+export const SET_THEME_CUBE_IMAGES = 'SET_THEME_CUBE_IMAGES';
+export const SET_IMAGES_TO_LOADING = 'SET_IMAGES_TO_LOADING';
 
 export function restoreObject() {
   return {
@@ -46,6 +49,20 @@ export function setThemeTxtColor(face) {
   }
 }
 
+export function setThemeFaceImages(images) {
+  return {
+    type: SET_THEME_FACE_IMAGES,
+    value: images,
+  }
+}
+
+export function setThemeCubeImages(images) {
+  return {
+    type: SET_THEME_CUBE_IMAGES,
+    value: images,
+  }
+}
+
 export function resetThemeRGBA(faceId) {
   return {
     type: RESET_FACE_RGBA,
@@ -57,6 +74,13 @@ export function resetThemeTxt(faceId) {
   return {
     type: RESET_FACE_TXT,
     value: {face: faceId},
+  }
+}
+
+export function resetThemeImages(faceId) {
+  return {
+    type: SET_IMAGES_TO_LOADING,
+    value: faceId
   }
 }
 

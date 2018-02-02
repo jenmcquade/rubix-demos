@@ -6,9 +6,11 @@ export const SET_IS_OFFLINE = 'INSTAPROXY_IS_OFFLINE';
 export const SET_IS_ONLINE = 'INSTAPROXY_IS_ONLINE';
 export const SET_ERROR = 'INSTAPROXY_ERROR';
 export const SET_SEARCH_VALUE = 'SET_SEARCH_VALUE';
+export const SET_IG_SEARCH_TYPE = 'SET_IG_SEARCH_TYPE';
+export const SET_IG_SEARCH_VALUE = 'SET_IG_SEARCH_VALUE';
 export const SET_SEARCH_TYPE = 'SET_SEARCH_TYPE';
 export const UPDATE_IG_DATA = 'UPDATE_IG_DATA';
-export const SEARCH_RETURN_COUNT = 1;
+export const SEARCH_RETURN_COUNT = 54;
 export const SEARCH_DEFAULT_TYPE = 'user';
 export const SEARCH_DEFAULT_VALUE = 'jonorjen';
 export const SEARCH_DEFAULT_HASHTAG = 'reactjs';
@@ -41,6 +43,18 @@ export function setStatus(status) {
     return {
       type: SET_IS_OFFLINE,
     }
+  }
+}
+
+export function setSearchType(searchType) {
+  return {
+    type: SET_IG_SEARCH_TYPE,
+  }
+}
+
+export function setSearchValue(searchType) {
+  return {
+    type: SET_IG_SEARCH_VALUE,
   }
 }
 

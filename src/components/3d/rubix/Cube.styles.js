@@ -138,6 +138,7 @@ class Styles {
       font-size: 0.8em;
       transition: background 0.8s;
     `;
+
   }
 }
 

@@ -6,16 +6,17 @@ import {
   SET_IS_ONLINE,
   SET_IS_OFFLINE,
   SET_ERROR,
-  SET_SEARCH_TYPE,
-  SET_SEARCH_VALUE,
+  SET_IG_SEARCH_TYPE,
+  SET_IG_SEARCH_VALUE,
   NULL_REQUEST,
   SEARCH_RETURN_COUNT,
+  PROXY_SERVER, 
+  PATH_USER,
+  PATH_HASHTAG,
 } from './InstaProxyActions';
 
 // Constants
-const PROXY_SERVER = 'http://jonmcquade.from-wa.com:3003';
-const PATH_USER = '/';
-const PATH_HASHTAG = '/explore/tags/';
+
 
 // Initial State
 const initialState = {
@@ -53,11 +54,11 @@ const InstaProxyReducer = (state = initialState, action) => {
       newState.error = state.error;
       return {...state, ...newState};
 
-    case SET_SEARCH_VALUE:
+    case SET_IG_SEARCH_VALUE:
       newState.searchValue = action.value;
       return {...state, ...newState};
 
-    case SET_SEARCH_TYPE:
+    case SET_IG_SEARCH_TYPE:
       newState.searchType = action.value;
       return {...state, ...newState};
 

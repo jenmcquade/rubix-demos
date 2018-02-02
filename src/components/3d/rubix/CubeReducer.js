@@ -8,7 +8,24 @@ import {
   SET_FACE_TXT,
   RESET_FACE_RGBA,
   RESET_FACE_TXT,
+  SET_THEME_FACE_IMAGES,
+  SET_THEME_CUBE_IMAGES,
+  SET_IMAGES_TO_LOADING,
 } from './CubeActions';
+
+const DEFAULT_IMG = './image-spinner.gif'
+const IMAGE_COUNT = 9;
+
+//
+// Theming template
+//
+function getDefaultImagesArray (){
+  let images = [];
+  for(let i=0; i < IMAGE_COUNT; i++) {
+    images.push(DEFAULT_IMG);
+  }
+  return images;
+}
 
 // Initial State
 const initialState = {
@@ -23,26 +40,32 @@ const initialState = {
     top:{
       bgColor: 'rgba(255,255,255,1)',
       txtColor: 'black',
+      images: getDefaultImagesArray(),
     },
     bottom: {
       bgColor: 'rgba(255,255,0,1)',
       txtColor: 'black',
+      images: getDefaultImagesArray(),
     },
     front: {
       bgColor: 'rgba(0,0,255,1)',
       txtColor: 'white',
+      images: getDefaultImagesArray(),
     },
     back: {
       bgColor: 'rgba(0,128,0,1)',
       txtColor: 'white',
+      images: getDefaultImagesArray(),
     },
     left: {
       bgColor: 'rgba(255,0,0,1)',
       txtColor: 'white',
+      images: getDefaultImagesArray(),
     },
     right: {
       bgColor: 'rgba(255,165,0,1)',
       txtColor: 'white',
+      images: getDefaultImagesArray(),
     }
   },
   style: {
@@ -67,7 +90,6 @@ const initialState = {
   }
 };
 
-const backupState = JSON.parse(JSON.stringify(initialState));
 const backupStateFaceRGBA = JSON.parse(JSON.stringify(initialState));
 const backupStateFaceTxtColor = JSON.parse(JSON.stringify(initialState));
 
@@ -131,6 +153,29 @@ const CubeReducer = (state = initialState, action) => {
       newState.theme[action.value.face].txtColor = action.value.txtColor;
       return {...state, ...newState};
 
+    case SET_THEME_FACE_IMAGES:
+      if(!action.value) {
+        return state;
+      }
+      newState.theme[action.value.face].images = action.value.images;
+      return {...state, ...newState};
+
+    case SET_THEME_CUBE_IMAGES:
+      if(!action.value.faces) {
+        return state;
+      }
+      let pagingCount = 0;
+      let i = 0;
+      action.value.faces.map((face, pagingcount) => {
+        let faces = action.value.faces;
+        for(i = 0; i < 9; i++) {
+          newState.theme[face].images[i] = action.value.images[pagingCount+i];
+        } 
+        pagingCount=pagingCount+9;
+        return newState;
+      })
+      return {...state, ...newState};
+
     case RESET_FACE_RGBA:
       if(!action.value) {
         return state;
@@ -143,6 +188,13 @@ const CubeReducer = (state = initialState, action) => {
         return state;
       }
       newState.theme[action.value.face].txtColor = backupStateFaceTxtColor.theme[action.value.face].txtColor;
+      return {...state, ...newState};
+
+    case SET_IMAGES_TO_LOADING:
+      let face = action.value.face;
+      for(let i=0; i<9; i++) {
+        newState.theme[face].images[i] = './image-spinner.gif';
+      }
       return {...state, ...newState};
 
     default:

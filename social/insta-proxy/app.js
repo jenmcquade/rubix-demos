@@ -24,7 +24,7 @@ const InstaProxy = {
   DEBUG_MODE: false || (process.env.NODE_ENV === 'development'),
   ERROR_LOG_SEVERITY: 2,
   ENABLE_REFERER_CHECK: true,
-  FETCH_COUNT_LIMIT: 25,
+  FETCH_COUNT_LIMIT: 55,
   GRAPH_PATH: '/graphql/query/',
   GRAPH_USER_QUERY_ID: '17888483320059182',
   GRAPH_TAG_QUERY_ID: '17875800862117404',

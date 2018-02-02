@@ -6,8 +6,10 @@ import { connect } from 'react-redux';
 import {
   setIsMounted,
   setStatus,
-  SET_SEARCH_TYPE,
-  SET_SEARCH_VALUE,
+  setSearchType,
+  setSearchValue,
+  SET_IG_SEARCH_TYPE,
+  SET_IG_SEARCH_VALUE,
   SEARCH_DEFAULT_TYPE,
   SEARCH_DEFAULT_VALUE,
   SEARCH_RETURN_COUNT,
@@ -26,6 +28,7 @@ export class InstaProxy extends Component {
     };
     this.getLatestData = getLatestData.bind(this);
     this.setIgStatus = setStatus.bind(this);
+    this.setIgSearchType = setIgSearchType.bind(this);
     this.setIgSearchValue = setIgSearchValue.bind(this);
     this.callIg = callIg.bind(this);
   }
@@ -37,6 +40,7 @@ export class InstaProxy extends Component {
       value: {
         searchType: SEARCH_DEFAULT_TYPE,
         searchValue: SEARCH_DEFAULT_VALUE, 
+        faces: true,
       }
     });
     this.props.dispatch(setIsMounted()); // For state checking in store
@@ -50,23 +54,24 @@ export class InstaProxy extends Component {
 }
 
 export function setIgSearchType(value) {
-  this.dispatch({
-    type: SET_SEARCH_TYPE,
-    value: value,
-  });
+  (dispatch) => {
+    dispatch(setSearchType(value));
+  }
+  return value;
 }
 
 export function setIgSearchValue(value) {
-  this.dispatch({
-    type: SET_SEARCH_VALUE,
-    value: value,
-  });
+  (dispatch) => {
+    dispatch(setSearchValue(value));
+  }
+  return value;
 }
 
 export function callIg({...props}) {
   return getLatestData({
     searchType: props.searchType,
     searchValue: props.searchValue,
+    returnCount: props.returnCount ? props.returnCount : SEARCH_RETURN_COUNT,
   });
 }
 

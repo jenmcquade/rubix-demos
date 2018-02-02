@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import InstaProxy from '../../modules/InstaProxy/InstaProxy'
 
 //
 // Import Styled Components and React Bootstrap Components
@@ -32,22 +33,42 @@ import {
   toggleMenuSetup,
 } from './MenuActions'
 
-import InstaProxy, 
-  { setIgSearchType } 
-  from '../../modules/InstaProxy/InstaProxy';
-
 //
 // IG Service functions
 //
-function searchByUser() {
-  const { value, dispatch } = this.props;
-  dispatch({type: 'IG_USER_FETCH', value: {searchType: 'user', searchValue: value}});
+function setIgSearchType(type) {
+  const { dispatch } = this.props;
+  dispatch({type: 'CHANGE_SEARCH_TYPE', value: {searchType: type}});
 }
 
-function searchByHashTag() {
-  const { value, dispatch } = this.props;
-  dispatch({type: 'IG_HASHTAG_FETCH', value: {searchType: 'hashTag', searchValue: value}});
+function searchByUser(e) {
+  const { dispatch } = this.props;
+  let face = e.target.id.split('-')[1];
+  dispatch({
+    type: 'USER_FETCH_REQUESTED', 
+    value: 
+      {
+        face: face,
+        searchType: 'user', 
+        searchValue: e.target.value, 
+        returnCount: 9
+      }
+  });
 }
+
+function searchByHashTag(e) {
+  const { dispatch } = this.props;
+  let face = e.target.id.split('-')[1];
+  dispatch({
+    type: 'HASHTAG_FETCH_REQUESTED', 
+    value: 
+      {
+        face: face,
+        searchType: 'hashTag', 
+        searchValue: e.target.value, 
+        returnCount: 9
+      }
+  });}
 
 class Theme extends Component {
   /**
@@ -87,6 +108,7 @@ class Theme extends Component {
     this.convertRGBAToString = convertRGBAToString.bind(this);
     this.searchByUser = searchByUser.bind(this);
     this.searchByHashTag = searchByHashTag.bind(this);
+    this.setIgSearchType = setIgSearchType.bind(this);
   }
 
 
@@ -258,7 +280,7 @@ function changeSearchType(e) {
   let newState = JSON.parse(JSON.stringify(this.state.forms));
   let friendlyType = 'color';
 
-  this.props.dispatch(setIgSearchType(type));
+  this.setIgSearchType(type);
 
   switch (type) {
     case 'bgColor':
