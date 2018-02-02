@@ -94,7 +94,7 @@ function getLatestData({...props}) {
   };
   // Build URL
   let path = queryPath + searchValue.toLowerCase() + '/media/?count=' + returnCount;
-alert(path)
+
   // Send request using fetch
   return fetch(path, initConfig) 
   .then( response => {
