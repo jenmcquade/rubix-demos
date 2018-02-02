@@ -37,8 +37,10 @@ import {
 // IG Service functions
 //
 function setIgSearchType(type) {
+  /*
   const { dispatch } = this.props;
   dispatch({type: 'CHANGE_SEARCH_TYPE', value: {searchType: type}});
+  */
 }
 
 function searchByUser(e) {

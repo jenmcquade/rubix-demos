@@ -60,7 +60,6 @@ class Cube extends React.Component {
   }
 
   render() {
-    console.log(this.props.object.style)
     return(
       <CubeWrapper style={this.state.wrapperStyle}>
         <Box flat={this.props.object.objectIsFlat}>

@@ -92,10 +92,9 @@ function getLatestData({...props}) {
     mode: 'cors',
     cache: 'default',
   };
-
   // Build URL
-  let path = queryPath + searchValue + '/media/?count=' + returnCount;
-
+  let path = queryPath + searchValue.toLowerCase() + '/media/?count=' + returnCount;
+alert(path)
   // Send request using fetch
   return fetch(path, initConfig) 
   .then( response => {

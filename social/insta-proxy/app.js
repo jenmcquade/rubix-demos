@@ -30,7 +30,7 @@ const InstaProxy = {
   GRAPH_TAG_QUERY_ID: '17875800862117404',
   GITHUB_REPO: 'https://github.com/whizzzkid/instagram-reverse-proxy',
   SERVER_PORT: 3003,
-  TIMEOUT: 2000,
+  TIMEOUT: 15000,
 };
 
 /**
