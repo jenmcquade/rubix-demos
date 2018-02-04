@@ -285,7 +285,6 @@ function searchByUserPaging(e) {
         searchType: 'user',
         searchValue: e.target.value, 
         returnCount: SEARCH_RETURN_COUNT,
-        searchUri: this.props.ig.url,
         pages: getCubeFaces().length,
       }
     });
@@ -333,7 +332,6 @@ function searchByHashTagPaging(e) {
         searchType: 'hashTag',
         searchValue: e.target.value, 
         returnCount: SEARCH_RETURN_COUNT,
-        searchUri: this.props.ig.url,
         pages: getCubeFaces().length,
       }
     });

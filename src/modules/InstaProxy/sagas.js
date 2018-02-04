@@ -29,9 +29,6 @@ function* fetchData(action) {
     }
 
     let data = yield call(callIg, action.value);
-    if(data.next) {
-      images.nextPage = data.next;
-    }
 
     // Some additional flight checks before departure back to the store...
     if(data.posts && data.posts.length > 0) {
@@ -40,6 +37,11 @@ function* fetchData(action) {
       // We didn't get return data, so reveal the old images and return
       yield showCubeImages(action.value);
       return false;
+    }
+
+    if(data.next) {
+      images.nextPage = data.next;
+      yield put({type: 'SET_IG_SEARCH_URL', value: data.next});
     }
 
     // Post image assignment
@@ -59,14 +61,14 @@ function* fetchData(action) {
           images: images.urls, 
         }});
         yield showCubeImages(action.value);
-        return data.next;
+        return images.nextPage;
     } else if(action.value.faces) {
       yield put({type: 'SET_THEME_CUBE_IMAGES', value: {
         faces: getCubeFaces(),
         images: images,
       }});
       yield showCubeImages(action.value);
-      return data.next;
+      return images.nextPage;
     }
 
    } catch (e) {
@@ -89,11 +91,12 @@ function* fetchPages(action) {
 
   let faces = getCubeFaces();
   let nextPage = '';
-  // THIS IS WHERE YOU ARE NOW
+
   for(i = 0; i < action.value.pages; i++) {
     let newAction = {...action};
     newAction.value.face = faces[i];
     if(nextPage === '') {
+      newAction.value.first = true;
       nextPage = yield fetchData(newAction);
     } else {
       newAction.value.searchUri = yield nextPage;
@@ -112,7 +115,7 @@ function* getNextImages(newAction) {
 // worker Saga: will be fired on change of search type
 function* setSearchType(action) {
    try {
-      yield put({type: 'SET_IG_SEARCH_TYPE', value: action.value.type});
+      yield put({type: 'SET_IG_SEARCH_TYPE', value: action.value.searchType});
    } catch (e) {
       yield put({type: 'SET_IG_SEARCH_TYPE_FAILED', message: e.message});
    }

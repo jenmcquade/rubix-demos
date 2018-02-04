@@ -111,7 +111,7 @@ function getLatestData({...props}) {
 
   // If we are passed a searchUrl property, 
   //   use the full uri that we can override for paging.
-  if(props.searchUri) {
+  if(props.searchUri && !props.first) {
     path = props.searchUri;
   }
 
