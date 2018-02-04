@@ -14,6 +14,9 @@ const Express = require('express');
 const Https = require('https');
 const ResponseTime = require('response-time');
 const Url = require('url');
+var pretty = require('express-prettify');
+
+Express().use(pretty({ query: 'pretty' }));;
 
 /**
  * App Namespace
@@ -204,6 +207,7 @@ InstaProxy.fetchFromInstagramGQL = function (param, request, response) {
         query.cursor = json.page_info.end_cursor;
         response.next = this.constructURL(
           request.protocol, request.get('host'), request.path, query);
+        
       }
 
       response.posts = [];

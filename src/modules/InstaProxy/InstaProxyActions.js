@@ -1,4 +1,3 @@
-
 // Export Constants
 export const SET_IS_MOUNTED = 'INSTAPROXY_IS_MOUNTED';
 export const SETUP = 'INSTAPROXY_SETUP';
@@ -8,9 +7,10 @@ export const SET_ERROR = 'INSTAPROXY_ERROR';
 export const SET_SEARCH_VALUE = 'SET_SEARCH_VALUE';
 export const SET_IG_SEARCH_TYPE = 'SET_IG_SEARCH_TYPE';
 export const SET_IG_SEARCH_VALUE = 'SET_IG_SEARCH_VALUE';
+export const SET_IG_SEARCH_URL = 'SET_IG_SEARCH_URL';
 export const SET_SEARCH_TYPE = 'SET_SEARCH_TYPE';
 export const UPDATE_IG_DATA = 'UPDATE_IG_DATA';
-export const SEARCH_RETURN_COUNT = 54;
+export const SEARCH_RETURN_COUNT = 9;
 export const SEARCH_DEFAULT_TYPE = 'user';
 export const SEARCH_DEFAULT_VALUE = 'jonorjen';
 export const SEARCH_DEFAULT_HASHTAG = 'reactjs';
@@ -21,6 +21,7 @@ export const PATH_USER = '/';
 export const PATH_HASHTAG = '/explore/tags/';
 export const URL_BASE_USER = PROXY_SERVER + PATH_USER;
 export const URL_BASE_HASHTAG = PROXY_SERVER + PATH_HASHTAG;
+export const URL_DEFAULT_SEARCH_URL = PROXY_SERVER + PATH_USER + SEARCH_DEFAULT_VALUE + '/media/?count=' + SEARCH_RETURN_COUNT;
 
 export function setIsMounted() {
   return {
@@ -46,15 +47,23 @@ export function setStatus(status) {
   }
 }
 
+export function setSearchUrl(url) {
+  return {
+    type: SET_IG_SEARCH_URL,
+    value: url,
+  }
+}
+
 export function setSearchType(searchType) {
   return {
     type: SET_IG_SEARCH_TYPE,
   }
 }
 
-export function setSearchValue(searchType) {
+export function setSearchValue(searchValue) {
   return {
     type: SET_IG_SEARCH_VALUE,
+    value: searchValue,
   }
 }
 

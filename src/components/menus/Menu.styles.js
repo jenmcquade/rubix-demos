@@ -329,7 +329,7 @@ class Styles {
 
     this.li = styled.li`
       list-style-type: none;
-      margin-bottom: 0.75em;
+      margin-bottom: 0.55em;
       display: inline-block;
     `
 

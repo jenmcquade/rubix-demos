@@ -143,6 +143,7 @@ const CubeReducer = (state = initialState, action) => {
       if(!action.value) {
         return state;
       }
+
       newState.theme[action.value.face].bgColor = action.value.bgColor;
       return {...state, ...newState};
     

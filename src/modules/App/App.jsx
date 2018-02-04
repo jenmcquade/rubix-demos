@@ -10,6 +10,9 @@ import Helmet from 'react-helmet';
 import DevTools from '../../components/DevTools';
 import Stage from '../../components/containers/Stage';
 import Menu from '../../components/containers/Menu';
+import {
+  SubTitle, Status,
+} from '../../components/menus/Common';
 
 // Import Actions
 import {
@@ -17,13 +20,18 @@ import {
   resize,
 } from './AppActions'
 
+
 // CONSTANTS
 const DURATION_RESIZE_DISPATCH = 200;
 
 export class App extends Component {
   constructor(props) {
     super(props);
-    this.state = props.app;
+    this.state = {
+      ig: props.ig,
+      app: props.app,
+      igProxyIsOnline: false,
+    }
     this.shouldUpdateStoreWithNewDims = true;
   }
 
@@ -51,11 +59,16 @@ export class App extends Component {
     this.props.dispatch(setIsMounted()); // For state checking in store
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({igProxyIsOnline: nextProps.ig.status})
+  }
+
   componentWillUnmount() {
     window.removeEventListener('resize', this.updateDimensions.bind(this));
   }
 
   render() {
+    let proxyIsOnline = this.state.igProxyIsOnline;
     return (
       <div>
         {this.state.isMounted && !window.devToolsExtension && process.env.NODE_ENV === 'development' && <DevTools />}
@@ -80,6 +93,13 @@ export class App extends Component {
           <Stage />
           <InstaProxy fetchOnLoad={true} />
 
+          <SubTitle style={{fontSize: '2em', position: 'absolute', bottom: '0px' }}>
+            Instagram API Status: 
+            <Status className={proxyIsOnline.toString()}>
+              {proxyIsOnline ? 'Online' : 'Offline'}
+            </Status>
+          </SubTitle>
+
         </div>
       </div>
     );
@@ -95,6 +115,7 @@ function mapStateToProps(store) {
   return {
     app: store.app,
     menu: store.menu,
+    ig: store.instaProxy,
   };
 }
 

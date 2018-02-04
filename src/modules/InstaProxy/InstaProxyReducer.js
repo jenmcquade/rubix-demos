@@ -13,6 +13,9 @@ import {
   PROXY_SERVER, 
   PATH_USER,
   PATH_HASHTAG,
+  SET_IG_SEARCH_URL,
+  SEARCH_DEFAULT_VALUE,
+  URL_DEFAULT_SEARCH_URL
 } from './InstaProxyActions';
 
 // Constants
@@ -25,6 +28,7 @@ const initialState = {
   searchValue: 'jonorjen',
   urlBaseUser: PROXY_SERVER + PATH_USER,
   urlBaseHashtag: PROXY_SERVER + PATH_HASHTAG, 
+  url: URL_DEFAULT_SEARCH_URL,
   lastPayload: {},
   error: {},
   status: false,
@@ -52,6 +56,10 @@ const InstaProxyReducer = (state = initialState, action) => {
 
     case SET_ERROR:
       newState.error = state.error;
+      return {...state, ...newState};
+
+    case SET_IG_SEARCH_URL:
+      newState.url = action.value;
       return {...state, ...newState};
 
     case SET_IG_SEARCH_VALUE:

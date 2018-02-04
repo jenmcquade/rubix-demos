@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import InstaProxy from '../../modules/InstaProxy/InstaProxy'
+import { SEARCH_RETURN_COUNT } from '../../modules/InstaProxy/InstaProxyActions'
+
+import { getCubeFaces } from '../3d/rubix/Cube'
 
 //
 // Import Styled Components and React Bootstrap Components
@@ -9,7 +11,6 @@ import Common, {
   Sub,
   SubTitle,
   MenuAction,
-  Status,
   ScrollBar,
   TextBox,
   DropdownButton,
@@ -43,36 +44,6 @@ function setIgSearchType(type) {
   */
 }
 
-function searchByUser(e) {
-  const { dispatch } = this.props;
-  let face = e.target.id.split('-')[1];
-  dispatch({
-    type: 'USER_FETCH_REQUESTED', 
-    value: 
-      {
-        face: face,
-        searchType: 'user', 
-        searchValue: e.target.value, 
-        returnCount: 9
-      }
-  });
-}
-
-function searchByHashTag(e) {
-  const { dispatch } = this.props;
-  let face = e.target.id.split('-')[1];
-  dispatch({
-    type: 'HASHTAG_FETCH_REQUESTED', 
-    value: 
-      {
-        face: face,
-        searchType: 'hashTag', 
-        searchValue: e.target.value, 
-        returnCount: 9
-      }
-  });
-}
-
 class Theme extends Component {
   /**
    * Constructor
@@ -87,7 +58,8 @@ class Theme extends Component {
   constructor(props) {
     super(props);
     Object.assign(this, new Common(this));
-    this.faces = Object.keys(this.props.rubix.style);
+    this.faces = getCubeFaces();
+    this.faces.unshift('all'); // add an additional 'all' face to the top of the array
     this.formsState = getInitialFormsState(this.faces);
 
     this.state = {
@@ -102,15 +74,21 @@ class Theme extends Component {
       igProxyIsOnline: false,
     }
 
+    this.searchIsUnlocked = true;
+
     // Binders
     this.getInitialFormsState = getInitialFormsState.bind(this);
     this.changeSearchType = changeSearchType.bind(this);
     this.changeLoadFace = changeLoadFace.bind(this);
     this.changeBgColor = changeBgColor.bind(this);
+    this.changeAllBgColor = changeAllBgColor.bind(this);
+    this.changeAllTxtColor = changeAllTxtColor.bind(this);
     this.changeTxtColor = changeTxtColor.bind(this);
     this.convertRGBAToString = convertRGBAToString.bind(this);
     this.searchByUser = searchByUser.bind(this);
     this.searchByHashTag = searchByHashTag.bind(this);
+    this.searchByUserPaging = searchByUserPaging.bind(this);
+    this.searchByHashTagPaging = searchByHashTagPaging.bind(this);
     this.setIgSearchType = setIgSearchType.bind(this);
   }
 
@@ -132,14 +110,17 @@ class Theme extends Component {
       let formsState = {};
       for(var face in this.faces) {
         face = face.toLowerCase();
+        let searchType = this.faces[face] === 'all' ? 'color' : 'user';
+        let userStyle = this.faces[face] === 'all' ? {display:'none'} : {display:'inline'};
+        let bgColorStyle = this.faces[face] === 'all' ? {display:'inline'} : {display:'none'};
         formsState[this.faces[face]] = {
-            searchType: 'user',
-            text:{
-              user:{value: '', style:{display:'inline',}},
-              hashTag:{value: '', style:{display:'none',}},
-              bgColor:{value: '', style:{display:'none',}},
-              txtColor:{value: '', style:{display:'none',}}
-            }
+          searchType: searchType,
+          text:{
+            user: {value: '', style: userStyle},
+            hashTag: {value: '', style:{display:'none'}},
+            bgColor: {value: '', style: bgColorStyle},
+            txtColor: {value: '', style:{display:'none'}}
+          }
         }
       }
       this.setState({forms: formsState});
@@ -166,30 +147,40 @@ class Theme extends Component {
         autoHideTimeout={1000} 
         autoHideDuration={200} 
         autoHeight 
-        autoHeightMin={400} 
-        autoHeightMax={550}
+        autoHeightMin={420} 
+        autoHeightMax={650}
       >
         <SubTitle type="heading">
           Cube Colors and Background Images
         </SubTitle>
-        <SubTitle>
-          Instagram API Status: 
-            <Status className={proxyIsOnline.toString()}>
-              {proxyIsOnline ? 'Online' : 'Offline'}
-            </Status>
-        </SubTitle>
+
         <Sub style={{alignItems: 'center', 'marginTop': '.2em'}}>
         {
           // Create theme forms based on rubix faces
           Object.keys(this.state.forms).map((face, i) => {
+            let themeColor = 'default';
+            let txtColor = 'default';
+            let isAll = face === 'all' ? true : false;
+    
             // Use dropup styling if this is the last form set
             let dropupEnabled = false;
             let size = Object.keys(this.state.forms).length;
             if ( i === size - 1 || i === size - 2) {
                dropupEnabled = true;
             }
-            let themeColor = this.state.rubix.theme[face].bgColor;
-            let txtColor = this.state.rubix.theme[face].txtColor;
+
+            try {
+              themeColor = this.state.rubix.theme[face].bgColor 
+                ? this.state.rubix.theme[face].bgColor
+                : 'black';
+              txtColor = this.state.rubix.theme[face].txtColor
+                ? this.state.rubix.theme[face].txtColor 
+                : 'white';
+            } catch (e) {
+              themeColor = 'black';
+              txtColor = 'white';
+            }
+
             return <MenuAction key={face}>
               <Form inline>
                 <FormGroup>
@@ -203,8 +194,8 @@ class Theme extends Component {
                     onSelect={this.changeSearchType}
                     dropup={dropupEnabled}
                     style={{
-                      backgroundColor: this.state.rubix.theme[face].bgColor, 
-                      color: this.state.rubix.theme[face].txtColor
+                      backgroundColor: themeColor, 
+                      color: txtColor
                     }}
                   >
                     <DropdownItem display={proxyIsOnline.toString()} eventKey={face + '-user'}>@ (user)</DropdownItem>
@@ -217,14 +208,14 @@ class Theme extends Component {
                     id={'searchTextUser-' + face}
                     type="text"
                     style={this.state.forms[face].text.user.style}
-                    onChange={this.searchByUser}
+                    onChange={isAll ? this.searchByUserPaging : this.searchByUser}
                   />
                   <TextBox
                     bsSize="large"
                     id={'searchTextHashtag-' + face}
                     type="text"
                     style={this.state.forms[face].text.hashTag.style}
-                    onChange={this.searchByHashTag}
+                    onChange={isAll ? this.searchByHashTagPaging : this.searchByHashTag}
                   />
                   <TextBox
                     bsSize="large"
@@ -232,15 +223,15 @@ class Theme extends Component {
                     type="text"
                     style={this.state.forms[face].text.bgColor.style}
                     placeholder={this.convertRGBAToString(themeColor) ? this.convertRGBAToString(themeColor) : 'Array or color string'}
-                    onChange={this.changeBgColor}
+                    onChange={isAll ? this.changeAllBgColor : this.changeBgColor}
                   />
                   <TextBox
                     bsSize="large"
                     id={'searchTextColor-' + face}
                     type="text"
                     style={this.state.forms[face.toLowerCase()].text.txtColor.style}
-                    placeholder={this.state.rubix.theme[face].txtColor}
-                    onChange={this.changeTxtColor}
+                    placeholder={txtColor}
+                    onChange={isAll ? this.changeAllTxtColor : this.changeTxtColor}
                   />
                 </FormGroup>
               </Form>
@@ -251,6 +242,102 @@ class Theme extends Component {
       </ScrollBar>
     );
   }
+}
+
+function searchByUser(e) {
+  e.persist();
+  if(!this.searchIsUnlocked) {
+    return false;
+  }
+  const { dispatch } = this.props;
+  let face = e.target.id.split('-')[1];
+  this.searchIsUnlocked = false;
+
+  setTimeout(() => {
+    this.searchIsUnlocked = true;
+    dispatch({
+      type: 'USER_FETCH_REQUESTED', 
+      value: 
+        {
+          face: face,
+          searchType: 'user', 
+          searchValue: e.target.value, 
+          returnCount: SEARCH_RETURN_COUNT
+        }
+    });
+  }, 1500)
+}
+
+function searchByUserPaging(e) {
+  e.persist();
+  if(!this.searchIsUnlocked) {
+    return false;
+  }
+  const { dispatch } = this.props;
+
+  this.searchIsUnlocked = false;
+
+  setTimeout(() => {
+    this.searchIsUnlocked = true;
+    dispatch({
+      type: 'USER_FETCH_PAGING_REQUESTED', 
+      value: {
+        searchType: 'user',
+        searchValue: e.target.value, 
+        returnCount: SEARCH_RETURN_COUNT,
+        searchUri: this.props.ig.url,
+        pages: getCubeFaces().length,
+      }
+    });
+  }, 1500);
+}
+
+function searchByHashTag(e) {
+  e.persist();
+  if(!this.searchIsUnlocked) {
+    return false;
+  }
+  const { dispatch } = this.props;
+  let face = e.target.id.split('-')[1];
+  this.searchIsUnlocked = false;
+
+  setTimeout(() => {
+    this.searchIsUnlocked = true;
+    dispatch({
+      type: 'HASHTAG_FETCH_REQUESTED', 
+      value: 
+        {
+          face: face,
+          searchType: 'hashTag', 
+          searchValue: e.target.value, 
+          returnCount: SEARCH_RETURN_COUNT
+        }
+    });
+  }, 1500)
+}
+
+function searchByHashTagPaging(e) {
+  e.persist();
+  if(!this.searchIsUnlocked) {
+    return false;
+  }
+  const { dispatch } = this.props;
+
+  this.searchIsUnlocked = false;
+
+  setTimeout(() => {
+    this.searchIsUnlocked = true;
+    dispatch({
+      type: 'HASHTAG_FETCH_PAGING_REQUESTED', 
+      value: {
+        searchType: 'hashTag',
+        searchValue: e.target.value, 
+        returnCount: SEARCH_RETURN_COUNT,
+        searchUri: this.props.ig.url,
+        pages: getCubeFaces().length,
+      }
+    });
+  }, 1500);
 }
 
 //
@@ -322,6 +409,7 @@ function changeLoadFace(value) {
 }
 
 function changeBgColor(e){
+  e.persist();
   let faceId = e.target.id.split('-')[1];
   if(e.target.value === '') {
     this.props.dispatch(resetThemeRGBA(faceId));
@@ -339,7 +427,18 @@ function changeBgColor(e){
   }
 }
 
+function changeAllBgColor(e) {
+  e.persist();
+  let faces = getCubeFaces();
+  let face = 0;
+  for(face in faces) {
+    e.target.id = 'searchTextBgColor-' + faces[face]
+    this.changeBgColor(e);
+  }
+}
+
 function changeTxtColor(e) {
+  e.persist();
   let faceId = e.target.id.split('-')[1];
   if(e.target.value === '') {
     this.props.dispatch(resetThemeTxt(faceId));
@@ -350,6 +449,19 @@ function changeTxtColor(e) {
   }
   if(value.txtColor) {
     this.props.dispatch(setThemeTxtColor(value));
+  }
+}
+
+function changeAllTxtColor(e) {
+  e.persist();
+  let faces = getCubeFaces();
+  let face = 0;
+  for(face in faces) {
+    if (face === 'all') {
+      continue;
+    }
+    e.target.id = 'searchTextColor-' + faces[face]
+    this.changeTxtColor(e);
   }
 }
 

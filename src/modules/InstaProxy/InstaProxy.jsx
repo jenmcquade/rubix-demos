@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { getCubeFaces } from '../../components/3d/rubix/Cube';
 
 // Import Actions
 import {
@@ -8,6 +9,7 @@ import {
   setStatus,
   setSearchType,
   setSearchValue,
+  setSearchUrl,
   SET_IG_SEARCH_TYPE,
   SET_IG_SEARCH_VALUE,
   SEARCH_DEFAULT_TYPE,
@@ -15,6 +17,8 @@ import {
   SEARCH_RETURN_COUNT,
   URL_BASE_USER,
   URL_BASE_HASHTAG,
+  PROXY_SERVER,
+  PATH_USER,
 } from './InstaProxyActions'
 
 // CONSTANTS
@@ -31,16 +35,18 @@ export class InstaProxy extends Component {
     this.setIgSearchType = setIgSearchType.bind(this);
     this.setIgSearchValue = setIgSearchValue.bind(this);
     this.callIg = callIg.bind(this);
+    this.setIgSearchUrl = setIgSearchUrl.bind(this);
   }
 
   componentDidMount() {
     this.setState({isMounted: true}); // For immediate state checking
     this.props.dispatch({
-      type: 'USER_FETCH_REQUESTED', 
+      type: 'USER_FETCH_PAGING_REQUESTED', 
       value: {
         searchType: SEARCH_DEFAULT_TYPE,
-        searchValue: SEARCH_DEFAULT_VALUE, 
-        faces: true,
+        searchValue: SEARCH_DEFAULT_VALUE,
+        searchUri: this.props.ig.url,
+        pages: getCubeFaces().length,
       }
     });
     this.props.dispatch(setIsMounted()); // For state checking in store
@@ -51,6 +57,14 @@ export class InstaProxy extends Component {
       <div id="instaProxy"></div>
     );
   }
+}
+
+export function setIgSearchUrl(value) {
+  return false;
+  (dispatch) => {
+    dispatch(setSearchUrl(value));
+  }
+  return value;
 }
 
 export function setIgSearchType(value) {
@@ -72,6 +86,7 @@ export function callIg({...props}) {
     searchType: props.searchType,
     searchValue: props.searchValue,
     returnCount: props.returnCount ? props.returnCount : SEARCH_RETURN_COUNT,
+    searchUri: props.searchUri,
   });
 }
 
@@ -80,20 +95,25 @@ export function callIg({...props}) {
  *  To dispatch query to InstaProxy server
  */
 function getLatestData({...props}) {
-  let returnCount = props.returnCount ? props.returnCount : SEARCH_RETURN_COUNT;
-  let searchType = props.searchType ? props.searchType : SEARCH_DEFAULT_TYPE;
-  let searchValue = props.searchValue ? props.searchValue : SEARCH_DEFAULT_VALUE;
+
   // Set our request configurations
-  let queryPath = searchType === 'user' 
+  let queryPath = props.searchType === 'user' 
     ? URL_BASE_USER 
     : URL_BASE_HASHTAG;
+  
   var initConfig = { 
     method: 'GET',
     mode: 'cors',
     cache: 'default',
   };
   // Build URL
-  let path = queryPath + searchValue.toLowerCase() + '/media/?count=' + returnCount;
+  let path = queryPath + props.searchValue.toLowerCase() + '/media/?count=' + props.returnCount;
+
+  // If we are passed a searchUrl property, 
+  //   use the full uri that we can override for paging.
+  if(props.searchUri) {
+    path = props.searchUri;
+  }
 
   // Send request using fetch
   return fetch(path, initConfig) 

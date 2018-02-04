@@ -20,6 +20,7 @@ class Cube extends React.Component {
       ...props,
       igProxyIsOnline: false,
       wrapperStyle: {},
+      hasImagesOnLoad: props.hasImagesOnLoad,
     };
     this.faces = Object.keys(this.props.object.style);
 
@@ -27,29 +28,34 @@ class Cube extends React.Component {
       opacity: '0.50',
       width: '100%',
       height: '100%',
-      display: 'flex',
+      display: 'default',
       borderRadius: '25%',
       margin: '10px',
     }
 
     this.getCubeFaces = getCubeFaces.bind(this);
-    this.setAllImagesToLoading = setAllImagesToLoading.bind(this);
+    //this.setAllImagesToLoading = setAllImagesToLoading.bind(this);
+    this.showImages = showImages.bind(this);
+    this.hideImages = hideImages.bind(this);
+    this.popInImages = popInImages.bind(this);
+    this.popOutImages = popOutImages.bind(this);
   }
 
   componentDidMount() {
-    setAllImagesToLoading();
+    let faces = getCubeFaces();
+    for(let face in faces) {
+      setImagesToLoading(faces[face]);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
+
     if(nextProps.ig.status) {
       this.setState({igProxyIsOnline: true });
-    }
-
-    if(this.state.igProxyIsOnline) {
-      let faces = getCubeFaces();
-      for(let face in faces) {
-        setImagesToLoading(faces[face]);
-      }
+      this.showImages();
+      this.popInImages();
+    } else {
+      this.hideImages();
     }
 
     this.setState({ 
@@ -65,7 +71,7 @@ class Cube extends React.Component {
         <Box flat={this.props.object.objectIsFlat}>
           { 
             this.faces.map((face) => {
-              let hasImages = this.props.hasImages;
+              let hasImages = this.state.hasImagesOnLoad;
               return <Face id={face} key={face}
                   itemBgColor={this.props.object.theme[face].bgColor}
                   itemColor={this.props.object.theme[face].txtColor}
@@ -146,23 +152,24 @@ export function setImagesToLoading(face) {
   for(let i=1; i<10; i++) {
     let img = document.getElementById(face + '-' + i + '-image');
     if(img){
-      img.style.src = './image-spinner.gif';
+      img.src = './image-spinner.gif';
     }
   }
 }
 
+/*
 export function setAllImagesToLoading() {
   let i = 0;
   let faces = getCubeFaces();
   faces.map((face) => {
     for(i = 0; i < 9; i++) {
-      let img = document.getElementById(face + '-' + i + '-image');
-      if(img) {
-        img.src = './image-spinner.gif';
+      let item = document.getElementById(face + '-' + i);
+      if(item) {
+        item.style = 'background-image: ./image-spinner.gif';
       }
     }
   })
-}
+*/
 
 export function popOutImages(face) {
   let i = 0;
@@ -170,7 +177,7 @@ export function popOutImages(face) {
   for(i = 0; i < 10; i++) {
     let img = document.getElementById(face + '-' + i);
     if(img) {
-      img.style = 'transform: scale(0,0)';
+      img.style.transform = 'scale(0,0)';
     }
   }
 }
@@ -178,11 +185,37 @@ export function popOutImages(face) {
 export function popInImages(face) {
   let i = 0;
   for(i = 0; i < 10; i++) {
-    let img = document.getElementById(face + '-' + i);
-    if(img) {
-      img.style = 'transform: scale(1,1)';
+    let item = document.getElementById(face + '-' + i);
+    if(item) {
+      item.style.transform = 'scale(1,1)';
     }
   }
+}
+
+function hideImages() {
+  let faces = getCubeFaces();
+  for(let face in faces) {
+    for(let i = 0; i < 10; i++) {
+      let img = document.getElementById(faces[face] + '-' + i + '-image');
+      if(img) {
+        img.style.display = 'none';
+      }
+    }
+  }
+  this.setState({hasImagesOnLoad: false});
+}
+
+function showImages() {
+  let faces = getCubeFaces();
+  for(let face in faces) {
+    for(let i = 0; i < 10; i++) {
+      let img = document.getElementById(faces[face] + '-' + i + '-image');
+      if(img) {
+        img.style.display = 'default';
+      }
+    }
+  }
+  this.setState({hasImagesOnLoad: true});
 }
 
 // Retrieve data from store as props
