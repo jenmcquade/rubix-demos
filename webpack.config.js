@@ -88,7 +88,7 @@ module.exports = {
         CLIENT: JSON.stringify(process.env.CLIENT),
       }
     }),
-    new ExtractTextPlugin({ filename: 'css/[name].css', allChunks: true}),
+    new ExtractTextPlugin({ filename: 'public/css/[name].css', allChunks: true}),
     //new StyleExtHtmlWebpackPlugin()
   ],
 
@@ -104,16 +104,20 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: 'css-loader'
-        })
+        loaders: [
+          'style-loader',
+          'css-loader?importLoaders=1',
+          'font-loader?format[]=truetype&format[]=woff&format[]=embedded-opentype'
+        ]
       },
       {
         test: /\.jpe?g$|\.gif$|\.png$|^(?!.*\.inline\.svg$).*\.svg$/,
-        loader: 'url-loader?name=images/[name].[ext]',
+        loader: 'url-loader?name=public/images/[name].[ext]',
       },
-      { test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' }
+      {
+        test: /\.(eot|svg|ttf|woff|woff2)$/,
+        loader: 'file-loader?name=public/fonts/[name].[ext]'
+    }
     ]
   }
 };

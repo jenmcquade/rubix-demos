@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { callIg, setIgSearchUrl } from './InstaProxy';
-import { URL_DEFAULT_SEARCH_URL } from './InstaProxyActions';
+import { URL_DEFAULT_SEARCH_URL, SEARCH_RETURN_COUNT } from './InstaProxyActions';
 import { getCubeFaces, popOutImages, popInImages, getFetchSettings } from '../../components/3d/rubix/Cube';
 
 // worker Saga: will be fired on USER_FETCH_REQUESTED actions
@@ -31,12 +31,13 @@ function* fetchData(action) {
     let data = yield call(callIg, action.value);
 
     // Some additional flight checks before departure back to the store...
-    if(data.posts && data.posts.length > 0) {
-      yield put({type: 'UPDATE_IG_DATA', value: {data: data}});
-    } else {
-      // We didn't get return data, so reveal the old images and return
-      yield showCubeImages(action.value);
-      return false;
+    if (data.posts) {
+      if(data.posts.length < SEARCH_RETURN_COUNT) {
+        yield put({type: 'UPDATE_IG_DATA_LIMITED_RETURN'});
+        yield put({type: 'UPDATE_IG_DATA', value: {data: data}});
+      } else if (data.posts.length === SEARCH_RETURN_COUNT) {
+        yield put({type: 'UPDATE_IG_DATA', value: {data: data}});
+      }
     }
 
     if(data.next) {
@@ -60,14 +61,14 @@ function* fetchData(action) {
           face: action.value.face, 
           images: images.urls, 
         }});
-        yield showCubeImages(action.value);
+        showCubeImages(action.value);
         return images.nextPage;
     } else if(action.value.faces) {
       yield put({type: 'SET_THEME_CUBE_IMAGES', value: {
         faces: getCubeFaces(),
         images: images,
       }});
-      yield showCubeImages(action.value);
+      showCubeImages(action.value);
       return images.nextPage;
     }
 
@@ -99,7 +100,9 @@ function* fetchPages(action) {
       newAction.value.first = true;
       nextPage = yield fetchData(newAction);
     } else {
+      newAction.value.first = false;
       newAction.value.searchUri = yield nextPage;
+      newAction.value.searchUri = newAction.value.searchUri.replace(/^http:\/\//i, 'https://');
       nextPage = yield getNextImages(newAction);
     }
   }
