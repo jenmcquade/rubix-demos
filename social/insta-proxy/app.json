@@ -14,5 +14,5 @@
     "data",
     "heroku"
   ],
-  "success_url": "/instagram/media?count=3"
+  "success_url": "/instagram/media?count=9"
 }

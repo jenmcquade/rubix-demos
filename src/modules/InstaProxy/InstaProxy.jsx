@@ -56,24 +56,20 @@ export class InstaProxy extends Component {
 }
 
 export function setIgSearchUrl(value) {
-  return false;
-  (dispatch) => {
-    dispatch(setSearchUrl(value));
-  }
+  const { dispatch } = this.props;
+  dispatch(setSearchUrl(value));
   return value;
 }
 
 export function setIgSearchType(value) {
-  (dispatch) => {
-    dispatch(setSearchType(value));
-  }
+  const { dispatch } = this.props;
+  dispatch(setSearchType(value));
   return value;
 }
 
 export function setIgSearchValue(value) {
-  (dispatch) => {
-    dispatch(setSearchValue(value));
-  }
+  const { dispatch } = this.props;
+  dispatch(setSearchValue(value));
   return value;
 }
 

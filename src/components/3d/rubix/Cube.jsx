@@ -160,7 +160,6 @@ export function setImagesToLoading(face) {
 
 export function popOutImages(face) {
   let i = 0;
-  let img = document.getElementById(face + '-' + i);
   for(i = 0; i < 10; i++) {
     let img = document.getElementById(face + '-' + i);
     if(img) {

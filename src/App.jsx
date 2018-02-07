@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import AppWrap from './modules/App/App';
 import loader from './assets/loader.gif';
-import icon from './assets/icon.png';
+import './assets/icon.png';
 
 export default function App(props) {
   return (

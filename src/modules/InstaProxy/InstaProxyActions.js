@@ -1,3 +1,5 @@
+import { PROXY_DOMAIN } from '../../env.js'
+
 // Export Constants
 export const SET_IS_MOUNTED = 'INSTAPROXY_IS_MOUNTED';
 export const SETUP = 'INSTAPROXY_SETUP';
@@ -16,7 +18,8 @@ export const SEARCH_DEFAULT_VALUE = 'jonorjen';
 export const SEARCH_DEFAULT_HASHTAG = 'reactjs';
 export const DURATION_SEARCH_DISPATCH = 1500;
 export const NULL_REQUEST = 'NULL_REQUEST';
-export const PROXY_SERVER = process.env.NODE_ENV === 'production' ? 'https://jonmcquade.herokuapp.com' : 'http://localhost:3003';
+export const PROD_PROXY_URL = process.env.NODE_ENV === 'production' && PROXY_DOMAIN ? '//' + PROXY_DOMAIN : false;
+export const PROXY_SERVER =  PROD_PROXY_URL ? PROD_PROXY_URL : '//localhost:3000';
 export const PATH_USER = '/';
 export const PATH_HASHTAG = '/explore/tags/';
 export const URL_BASE_USER = PROXY_SERVER + PATH_USER;

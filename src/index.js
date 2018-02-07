@@ -7,7 +7,6 @@ import configureStore from './store';
 import Bootstrap from 'bootstrap/dist/css/bootstrap.css'; // eslint-disable-line no-unused-vars
 import FontAwesome from 'font-awesome/css/font-awesome.css'; // eslint-disable-line no-unused-vars
 
-
 // Initialize store
 const store = configureStore(window.__INITIAL_STATE__);
 const mountApp = document.getElementById('root');

@@ -2,7 +2,6 @@
  * Main store function
  */
 import { createStore, applyMiddleware, compose } from 'redux';
-import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
 import DevTools from './components/DevTools';
 import rootReducer from './reducers';

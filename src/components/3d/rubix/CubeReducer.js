@@ -167,7 +167,6 @@ const CubeReducer = (state = initialState, action) => {
       let pagingCount = 0;
       let i = 0;
       action.value.faces.map((face, pagingcount) => {
-        let faces = action.value.faces;
         for(i = 0; i < 9; i++) {
           newState.theme[face].images[i] = action.value.images[pagingCount+i];
         } 

@@ -1,13 +1,9 @@
 const path = require('path');
-// const merge = require('webpack-merge');
 const Webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-// const CleanWebpackPlugin = require('clean-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const StyleExtHtmlWebpackPlugin = require('style-ext-html-webpack-plugin');
 
-//const TARGET = process.env.;
 const ROOT_PATH = path.resolve(__dirname);
 const MODULES_PATH = path.resolve(__dirname, 'node_modules');
 const PUBLIC_PATH = path.resolve(__dirname, 'public');
@@ -20,7 +16,7 @@ module.exports = {
     'app': [
       'babel-polyfill',
       'react-hot-loader/patch',
-      'webpack-dev-server/client?http://localhost:3000/',
+      'webpack-dev-server/client?http://localhost:3002/',
       './src/index.js',
     ]
   },
@@ -31,7 +27,7 @@ module.exports = {
 
   devServer: {
     contentBase: 'public',
-    port: 3000,
+    port: 3002,
     inline: true,
     hot: true,
     progress: true,
@@ -43,7 +39,7 @@ module.exports = {
       warnings: true,
       errors: true,
     },
-    publicPath: 'http://0.0.0.0:3000/'
+    publicPath: 'http://0.0.0.0:3002/'
   },
 
   output: {
@@ -60,9 +56,9 @@ module.exports = {
         host: '0.0.0.0',
         port: 8080,
         // proxy the Webpack Dev Server endpoint 
-        // (which should be serving on http://localhost:3000/) 
+        // (which should be serving on http://localhost:3002/) 
         // through BrowserSync 
-        proxy: 'http://localhost:3000'
+        proxy: 'http://localhost:3002'
       },
       // plugin options 
       {
@@ -85,11 +81,11 @@ module.exports = {
     new Webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+        PROD_DOMAIN: JSON.stringify(process.env.PROD_DOMAIN),
         CLIENT: JSON.stringify(process.env.CLIENT),
       }
     }),
     new ExtractTextPlugin({ filename: 'public/css/[name].css', allChunks: true}),
-    //new StyleExtHtmlWebpackPlugin()
   ],
 
   module: {
