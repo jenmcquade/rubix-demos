@@ -10,15 +10,11 @@ import {
   setSearchType,
   setSearchValue,
   setSearchUrl,
-  SET_IG_SEARCH_TYPE,
-  SET_IG_SEARCH_VALUE,
   SEARCH_DEFAULT_TYPE,
   SEARCH_DEFAULT_VALUE,
   SEARCH_RETURN_COUNT,
   URL_BASE_USER,
   URL_BASE_HASHTAG,
-  PROXY_SERVER,
-  PATH_USER,
 } from './InstaProxyActions'
 
 // CONSTANTS

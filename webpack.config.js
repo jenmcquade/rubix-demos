@@ -111,13 +111,17 @@ module.exports = {
         ]
       },
       {
+        test: /\.ico$/,
+        loader: 'file-loader?name=./[name].[ext]',
+      },
+      {
         test: /\.jpe?g$|\.gif$|\.png$|^(?!.*\.inline\.svg$).*\.svg$/,
-        loader: 'url-loader?name=public/images/[name].[ext]',
+        loader: 'file-loader?name=./static/media/[name].[ext]',
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2)$/,
-        loader: 'file-loader?name=public/fonts/[name].[ext]'
-    }
+        loader: 'file-loader?name=./static/media/[name].[ext]'
+      }
     ]
   }
 };

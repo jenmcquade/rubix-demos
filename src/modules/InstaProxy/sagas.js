@@ -1,7 +1,7 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { callIg, setIgSearchUrl } from './InstaProxy';
-import { URL_DEFAULT_SEARCH_URL, SEARCH_RETURN_COUNT } from './InstaProxyActions';
-import { getCubeFaces, popOutImages, popInImages, getFetchSettings } from '../../components/3d/rubix/Cube';
+import { callIg } from './InstaProxy';
+import { URL_DEFAULT_SEARCH_URL, SEARCH_RETURN_COUNT, PROXY_SERVER } from './InstaProxyActions';
+import { getCubeFaces, popOutImages, popInImages } from '../../components/3d/rubix/Cube';
 
 // worker Saga: will be fired on USER_FETCH_REQUESTED actions
 function* fetchData(action) {
@@ -74,6 +74,7 @@ function* fetchData(action) {
 
    } catch (e) {
       // We crashed somewhere mid-flight...
+      showCubeImages(action.value);
       let msg = action.value.searchType.toUpperCase() + '_FETCH_FAILED';
       yield put({type: msg});
       return false;
@@ -85,26 +86,33 @@ function* fetchData(action) {
  *    then dispatch each returned set back to the store 
  */
 function* fetchPages(action) {
-  let i = 0;
-  if(!action.value.pages) {
-    return false;
-  }
-
-  let faces = getCubeFaces();
-  let nextPage = '';
-
-  for(i = 0; i < action.value.pages; i++) {
-    let newAction = {...action};
-    newAction.value.face = faces[i];
-    if(nextPage === '') {
-      newAction.value.first = true;
-      nextPage = yield fetchData(newAction);
-    } else {
-      newAction.value.first = false;
-      newAction.value.searchUri = yield nextPage;
-      newAction.value.searchUri = newAction.value.searchUri.replace(/^http:\/\//i, 'https://');
-      nextPage = yield getNextImages(newAction);
+  try {
+    let i = 0;
+    if(!action.value.pages) {
+      return false;
     }
+  
+    let faces = getCubeFaces(action.value);
+    let nextPage = '';
+  
+    for(i = 0; i < action.value.pages; i++) {
+      let newAction = {...action};
+      newAction.value.face = faces[i];
+      if(nextPage === '') {
+        newAction.value.first = true;
+        nextPage = yield fetchData(newAction);
+      } else {
+        newAction.value.first = false;
+        newAction.value.searchUri = yield nextPage;
+        if(PROXY_SERVER.indexOf('https') !== -1) {
+          newAction.value.searchUri = newAction.value.searchUri.replace(/^http:\/\//i, 'https://');
+        }
+
+        nextPage = yield getNextImages(newAction);
+      }
+    }
+  } catch (e) {
+    showCubeImages(action.value);
   }
 }
 

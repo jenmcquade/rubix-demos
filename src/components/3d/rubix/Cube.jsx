@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Styles from './Cube.styles';
-import { resetThemeImages } from './CubeActions';
+
+import spinner from '../../../assets/image-spinner.gif'
 
 const Style = new Styles();
 
@@ -34,7 +35,6 @@ class Cube extends React.Component {
     }
 
     this.getCubeFaces = getCubeFaces.bind(this);
-    //this.setAllImagesToLoading = setAllImagesToLoading.bind(this);
     this.showImages = showImages.bind(this);
     this.hideImages = hideImages.bind(this);
     this.popInImages = popInImages.bind(this);
@@ -152,24 +152,11 @@ export function setImagesToLoading(face) {
   for(let i=1; i<10; i++) {
     let img = document.getElementById(face + '-' + i + '-image');
     if(img){
-      img.src = './image-spinner.gif';
+      img = { spinner };
+      img.src = './static/media/' + img.src;
     }
   }
 }
-
-/*
-export function setAllImagesToLoading() {
-  let i = 0;
-  let faces = getCubeFaces();
-  faces.map((face) => {
-    for(i = 0; i < 9; i++) {
-      let item = document.getElementById(face + '-' + i);
-      if(item) {
-        item.style = 'background-image: ./image-spinner.gif';
-      }
-    }
-  })
-*/
 
 export function popOutImages(face) {
   let i = 0;

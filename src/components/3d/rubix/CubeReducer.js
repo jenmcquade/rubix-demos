@@ -10,10 +10,9 @@ import {
   RESET_FACE_TXT,
   SET_THEME_FACE_IMAGES,
   SET_THEME_CUBE_IMAGES,
-  SET_IMAGES_TO_LOADING,
 } from './CubeActions';
 
-const DEFAULT_IMG = './image-spinner.gif'
+const DEFAULT_IMG = './static/media/image-spinner.gif'
 const IMAGE_COUNT = 9;
 
 //

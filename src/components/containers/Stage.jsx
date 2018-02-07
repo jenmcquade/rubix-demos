@@ -1,7 +1,6 @@
 import React from 'react';
 import Cube from '../3d/rubix/Cube';
 
-
 export default class Stage extends React.Component {
   render() {
     return(

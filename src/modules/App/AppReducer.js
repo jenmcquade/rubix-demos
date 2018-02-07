@@ -2,7 +2,6 @@
 import { 
   RESIZE,
   SET_IS_MOUNTED,
-  SET_SCREEN_SIZE,
 } from './AppActions';
 
 let updateWidth = window.innerWidth

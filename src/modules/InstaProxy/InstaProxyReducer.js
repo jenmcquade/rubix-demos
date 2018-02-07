@@ -14,7 +14,6 @@ import {
   PATH_USER,
   PATH_HASHTAG,
   SET_IG_SEARCH_URL,
-  SEARCH_DEFAULT_VALUE,
   URL_DEFAULT_SEARCH_URL
 } from './InstaProxyActions';
 

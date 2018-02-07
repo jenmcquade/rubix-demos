@@ -50,7 +50,10 @@ export class App extends Component {
   }
 
   componentWillMount() {
-    document.querySelector('#loadingSpinner').style.display = 'none';
+    let loadingImg = document.querySelector('#loadingSpinner');
+    if(loadingImg) {
+      loadingImg.style.display = 'none';
+    }
   }
 
   componentDidMount() {

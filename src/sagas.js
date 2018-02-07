@@ -1,4 +1,4 @@
-import { call, put, takeEvery, takeLatest } from 'redux-saga/effects'
+import { put, takeEvery, takeLatest } from 'redux-saga/effects'
 
 function* returnNull(action) {
   yield put({type: 'APP_SAGA_NULL_ACTION'});

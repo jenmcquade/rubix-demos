@@ -14,7 +14,8 @@ const Express = require('express');
 const Https = require('https');
 const ResponseTime = require('response-time');
 const Url = require('url');
-var pretty = require('express-prettify');
+const compression = require('compression')
+const pretty = require('express-prettify');
 
 Express().use(pretty({ query: 'pretty' }));;
 
@@ -339,25 +340,6 @@ InstaProxy.processAdvanceParams = function (request, response) {
         request.query,
         this.callbackWrapper(
           response, this.generateCallBackForWrapper(callback, response)));
-  }
-};
-
-/**
- * Processes IG's GQL Queries.
- * @param {Object} request
- * @param {Object} response
- * @this
- */
-InstaProxy.processGQL = function (request, response) {
-  // if request has user id
-  if (request.query.user_id) {
-    this.fetchFromInstagramGQL(
-      { id: request.query.user_id }, request, response);
-  }
-
-  if (request.query.tag) {
-    this.fetchFromInstagramGQL(
-      { tag_name: request.query.tag }, request, response);
   }
 };
 
