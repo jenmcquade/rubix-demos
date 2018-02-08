@@ -2,21 +2,19 @@ const path = require('path');
 const Webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
 const ROOT_PATH = path.resolve(__dirname);
 const MODULES_PATH = path.resolve(__dirname, 'node_modules');
 const PUBLIC_PATH = path.resolve(__dirname, 'public');
-const BUNDLE_PATH = path.join(PUBLIC_PATH, '');
 const SRC_PATH = path.join(ROOT_PATH, 'src');
+const ASSETS_PATH = path.join(SRC_PATH, 'assets', '/');
 
 module.exports = {
-  devtool: 'eval-source-map',
+  devtool: 'inline-source-map',
   entry: {
     'app': [
       'babel-polyfill',
-      'react-hot-loader/patch',
-      'webpack-dev-server/client?http://localhost:3002/',
+      'webpack-hot-middleware/client?path=/__hmr',
       './src/index.js',
     ]
   },
@@ -25,53 +23,13 @@ module.exports = {
     extensions: ['.js', '.jsx']
   },
 
-  devServer: {
-    contentBase: 'public',
-    port: 3002,
-    inline: true,
-    hot: true,
-    progress: true,
-    host: '0.0.0.0',
-    disableHostCheck: true,
-    useLocalIp: true,
-    compress: true,
-    overlay: {
-      warnings: true,
-      errors: true,
-    },
-    watchOptions: {
-      poll: true,
-    },
-    publicPath: 'http://0.0.0.0:3002/'
-  },
-
   output: {
-    path: BUNDLE_PATH,
-    publicPath: './',
+    path: PUBLIC_PATH,
+    publicPath: '/',
     filename: '[name].js',
   },
 
   plugins: [
-    new BrowserSyncPlugin(
-      // BrowserSync options 
-      {
-        // browse to http://localhost:8080/ during development 
-        host: 'localhost',
-        port: 8080,
-        // proxy the Webpack Dev Server endpoint 
-        // (which should be serving on http://localhost:3002/) 
-        // through BrowserSync 
-        proxy: 'http://localhost:3002',
-      },
-      // plugin options 
-      {
-        // prevent BrowserSync from reloading the page 
-        // and let Webpack Dev Server take care of this 
-        reload: false,
-        inline: false,
-        open: false
-      }
-    ),
     new HtmlWebpackPlugin({
       title: 'Open 3D Object Viewer',
       filename: 'index.html',
@@ -85,11 +43,10 @@ module.exports = {
     new Webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-        PROD_DOMAIN: JSON.stringify(process.env.PROD_DOMAIN),
         CLIENT: JSON.stringify(process.env.CLIENT),
       }
     }),
-    new ExtractTextPlugin({ filename: 'public/css/[name].css', allChunks: true}),
+    new ExtractTextPlugin({ filename: 'css/[name].css', allChunks: true}),
   ],
 
   module: {

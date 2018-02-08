@@ -26,12 +26,14 @@ RUN apk update && \
     g++ \
     file \
     nasm \
-    make && \
-    npm install -g webpack cross-env && \
+    make
+
+RUN npm install -g webpack cross-env && \
     cd / && \
-    npm install && \
-    webpack -p --config webpack.production.config.js && \
-    node ./node_modules/react-scripts/scripts/build.js
+    npm install
+
+RUN if [ "$BUILD_TYPE" == "production" ]; then webpack -p --config webpack.production.config.js && \
+    node ./node_modules/react-scripts/scripts/build.js; fi;
 
 ENTRYPOINT ["entrypoint"]
 

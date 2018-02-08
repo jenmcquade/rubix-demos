@@ -134,20 +134,24 @@ InstaProxy.constructURL = function (protocol, host, path, query) {
  */
 InstaProxy.instagramFetcher = function (callback) {
   return function (serverResponse) {
-    serverResponse.setEncoding('utf8');
-    let body = '';
-    serverResponse.on('socket', function (socket) {
-      serverResponse.setTimeout(InstaProxy.TIMEOUT);  
-      serverResponse.on('timeout', function() {
-        callback.abort();
+    try {
+      serverResponse.setEncoding('utf8');
+      let body = '';
+      serverResponse.on('socket', function (socket) {
+        serverResponse.setTimeout(InstaProxy.TIMEOUT);  
+        serverResponse.on('timeout', function() {
+          callback.abort();
+        });
       });
-    });
-    serverResponse.on('data', function (chunk) {
-      body += chunk;
-    });
-    serverResponse.on('end', function () {
-      callback(body);
-    });
+      serverResponse.on('data', function (chunk) {
+        body += chunk;
+      });
+      serverResponse.on('end', function () {
+        callback(body);
+      });
+    } catch(error) {
+      callback();
+    }
   };
 };
 

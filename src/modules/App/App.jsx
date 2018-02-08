@@ -20,7 +20,6 @@ import {
   resize,
 } from './AppActions'
 
-
 // CONSTANTS
 const DURATION_RESIZE_DISPATCH = 200;
 
@@ -123,3 +122,4 @@ function mapStateToProps(store) {
 }
 
 export default connect(mapStateToProps)(App);
+

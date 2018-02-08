@@ -1,8 +1,25 @@
 version: '3'
       
 services:
+  # Reverse Proxy provided by traefik  
+  traefik:
+    container_name: app_proxy
+    image: traefik
+    command: -c /dev/null --web --docker --logLevel=INFO
+    ports:
+      - '80:80'
+      - '8444:443'
+      - '8081:8080' # Dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - app 
   instaproxy:
     image: instaproxy_dev
+    labels:
+      - 'traefik.backend=proxy'
+      - 'traefik.port=80'
+      - 'traefik.frontend.rule=Host:igproxy.docker.localhost'
     environment: 
       - NODE_ENV=dev
     build: 
@@ -17,6 +34,10 @@ services:
      - app
   o3dv:
     image: o3dv_dev
+    labels:
+      - 'traefik.backend=app'
+      - 'traefik.port=8080'
+      - 'traefik.frontend.rule=Host:o3dv.docker.localhost'
     build: 
       context: .
       dockerfile: Dockerfile
