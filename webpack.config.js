@@ -39,6 +39,9 @@ module.exports = {
       warnings: true,
       errors: true,
     },
+    watchOptions: {
+      poll: true,
+    },
     publicPath: 'http://0.0.0.0:3002/'
   },
 
@@ -53,19 +56,20 @@ module.exports = {
       // BrowserSync options 
       {
         // browse to http://localhost:8080/ during development 
-        host: '0.0.0.0',
+        host: 'localhost',
         port: 8080,
         // proxy the Webpack Dev Server endpoint 
         // (which should be serving on http://localhost:3002/) 
         // through BrowserSync 
-        proxy: 'http://localhost:3002'
+        proxy: 'http://localhost:3002',
       },
       // plugin options 
       {
         // prevent BrowserSync from reloading the page 
         // and let Webpack Dev Server take care of this 
         reload: false,
-        inline: false
+        inline: false,
+        open: false
       }
     ),
     new HtmlWebpackPlugin({

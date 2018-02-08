@@ -1,0 +1,40 @@
+version: '3'
+      
+services:
+  instaproxy:
+    image: instaproxy_dev
+    environment: 
+      - NODE_ENV=dev
+    build: 
+      context: ./social/insta-proxy
+      dockerfile:  Dockerfile
+      args: 
+        build_type: development
+    container_name: instaproxy
+    ports: 
+     - "3000:3000"
+    networks:
+     - app
+  o3dv:
+    image: o3dv_dev
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      args: 
+        build_type: development
+    container_name: o3dv
+    volumes:
+      - ./src:/src
+    ports:
+     - "8080:8080"
+     - "3001:3001"
+     - "3002:3002"
+    links:
+     - instaproxy
+    depends_on:
+     - instaproxy
+    networks:
+     - app
+     
+networks:
+  app:  
