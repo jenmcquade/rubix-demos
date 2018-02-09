@@ -13,9 +13,9 @@ module.exports = {
   devtool: 'inline-source-map',
   entry: {
     'app': [
-      'babel-polyfill',
-      'webpack-hot-middleware/client?path=/__hmr',
-      './src/index.js',
+      path.resolve(MODULES_PATH, 'babel-polyfill'),
+      path.resolve(MODULES_PATH, 'webpack-hot-middleware/client?path=/__hmr'),
+      path.resolve(SRC_PATH, 'index.js')
     ]
   },
 
@@ -34,7 +34,7 @@ module.exports = {
       title: 'Open 3D Object Viewer',
       filename: 'index.html',
       showErrors: true,
-      template: './src/index.html'
+      template: path.resolve(SRC_PATH, 'index.html'),
     }),
     new Webpack.optimize.OccurrenceOrderPlugin(),
     new Webpack.HotModuleReplacementPlugin(),
@@ -53,7 +53,7 @@ module.exports = {
     loaders: [
       { 
         test: /\.js$|\.jsx$/, 
-        loaders: ['babel-loader'], 
+        loaders: [path.resolve(MODULES_PATH, 'babel-loader')], 
         include: [
           SRC_PATH
         ],
@@ -62,22 +62,23 @@ module.exports = {
       {
         test: /\.css$/,
         loaders: [
-          'style-loader',
-          'css-loader?importLoaders=1',
-          'font-loader?format[]=truetype&format[]=woff&format[]=embedded-opentype'
+          path.resolve(MODULES_PATH, 'babel-loader'), 
+          path.resolve(MODULES_PATH, 'style-loader'), 
+          path.resolve(MODULES_PATH, 'css-loader?importLoaders=1'), 
+          path.resolve(MODULES_PATH, 'font-loader?format[]=truetype&format[]=woff&format[]=embedded-opentype'),
         ]
       },
       {
         test: /\.ico$/,
-        loader: 'file-loader?name=./[name].[ext]',
+        loader: path.resolve(MODULES_PATH, 'file-loader?name=./[name].[ext]'),
       },
       {
         test: /\.jpe?g$|\.gif$|\.png$|^(?!.*\.inline\.svg$).*\.svg$/,
-        loader: 'file-loader?name=./static/media/[name].[ext]',
+        loader: path.resolve(MODULES_PATH, 'file-loader?name=./static/media/[name].[ext]'),
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2)$/,
-        loader: 'file-loader?name=./static/media/[name].[ext]'
+        loader: path.resolve(MODULES_PATH, 'file-loader?name=./static/media/[name].[ext]'),
       }
     ]
   }

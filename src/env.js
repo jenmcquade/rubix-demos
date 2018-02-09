@@ -1,1 +1,1 @@
-export const PROXY_DOMAIN = 'jonmcquade.herokuapp.com';
+export const PROXY_DOMAIN = 'igdata.herokuapp.com';

@@ -1,14 +1,6 @@
-const webpack = require('webpack');
-const webpackDevMid = require('webpack-dev-middleware');
-const webpackHotMid = require('webpack-hot-middleware');
-const webpackConfig = require('./webpack.config');
-const compiler = webpack(webpackConfig);
 const express = require('express');
 const Path = require('path');
-require('react-hot-loader/patch');
-require('dotenv').config();
 
-const browserSync = require('browser-sync').create();
 const LOCAL_HOST = 'http://localhost:3002';
 
 const app = express();
@@ -21,7 +13,14 @@ app.use(function(req, res, next) {
 /**
 * Run Browsersync and use middleware for Hot Module Replacement
 */
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV === 'development') {
+  const browserSync = require('browser-sync').create();
+  const webpack = require('webpack');
+  const webpackDevMid = require('webpack-dev-middleware');
+  const webpackHotMid = require('webpack-hot-middleware');
+  const webpackConfig = require('./webpack.config');
+  const compiler = webpack(webpackConfig);
+  require('react-hot-loader/patch');
   browserSync.init({
     port: 8080,
     proxy: {
@@ -65,10 +64,12 @@ if (process.env.NODE_ENV !== 'production') {
   });
 }
 
-if (process.env.NODE_ENV !== 'production') {
-  app.listen(3002, () => console.log('Now serving with WebPack Middleware on port 3002!'))
+let buildDir = express.static(Path.resolve(__dirname, 'build'));
+
+if (process.env.NODE_ENV === 'development') {
+  app.listen(process.env.PORT ? process.env.PORT : 3002, () => console.log('Now serving with WebPack Middleware on port 3002!'))
 } else {
-  app.use('/', express.static('build'));
-  app.listen(80, () => console.log('Now serving the ./build directory on port 80!'))
+  app.use('/', buildDir);
+  app.listen(process.env.PORT ? process.env.PORT : 80, () => console.log('Now serving ' + buildDir +  ' directory on port 80!'))
 }
 

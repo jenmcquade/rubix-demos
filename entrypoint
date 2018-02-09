@@ -8,10 +8,11 @@
 set -e
 echo $BUILD_TYPE
 
-set -- npm run start "$@"
-
-if [ "$BUILD_TYPE" == "production" ]; then
-    set -- npm run start:prod "$@"
+if [ "$BUILD_TYPE" == "development" ]; then    
+    set -- npm run start "$@"
+else    
+    cd / && npm install express path cross-env && \
+    set -- node server.js "$@"
 fi
 
 exec "$@"

@@ -1,6 +1,6 @@
 FROM node:alpine
 
-ARG build_type="production"
+ARG build_type
 ENV BUILD_TYPE=$build_type
 
 RUN echo $BUILD_TYPE
@@ -16,7 +16,7 @@ RUN apk update && \
     cd / && \
     npm install 
 
-ENTRYPOINT ["entrypoint"]
+CMD node /app.js NODE_ENV=production --bind 0.0.0.0:$PORT
 
 WORKDIR /
 

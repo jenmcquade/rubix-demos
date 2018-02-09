@@ -18,7 +18,7 @@ export const SEARCH_DEFAULT_VALUE = 'jonorjen';
 export const SEARCH_DEFAULT_HASHTAG = 'reactjs';
 export const DURATION_SEARCH_DISPATCH = 1500;
 export const NULL_REQUEST = 'NULL_REQUEST';
-export const PROD_PROXY_URL = process.env.NODE_ENV === 'production' && PROXY_DOMAIN ? '//' + PROXY_DOMAIN : false;
+export const PROD_PROXY_URL = process.env.NODE_ENV === 'production' && PROXY_DOMAIN ? 'https://' + PROXY_DOMAIN : false;
 export const PROXY_SERVER =  PROD_PROXY_URL ? PROD_PROXY_URL : '//localhost:3000';
 export const PATH_USER = '/';
 export const PATH_HASHTAG = '/explore/tags/';
