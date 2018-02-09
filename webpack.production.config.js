@@ -3,9 +3,6 @@ const path = require('path');
 const Webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-// const CleanWebpackPlugin = require('clean-webpack-plugin');
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const StyleExtHtmlWebpackPlugin = require('style-ext-html-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 
 //const TARGET = process.env.;
@@ -20,31 +17,7 @@ module.exports = {
   entry: {
     'app': [
       'babel-polyfill',
-      './src/index.js',
-      ASSETS_PATH + 'loader.gif',
-      ASSETS_PATH + 'android-icon-36x36.png',
-      ASSETS_PATH + 'android-icon-48x48.png',
-      ASSETS_PATH + 'android-icon-72x72.png',
-      ASSETS_PATH + 'android-icon-96x96.png',
-      ASSETS_PATH + 'android-icon-144x144.png',
-      ASSETS_PATH + 'android-icon-192x192.png',
-      ASSETS_PATH + 'apple-icon.png',
-      ASSETS_PATH + 'apple-icon-60x60.png',
-      ASSETS_PATH + 'apple-icon-72x72.png',
-      ASSETS_PATH + 'apple-icon-76x76.png',
-      ASSETS_PATH + 'apple-icon-114x114.png',
-      ASSETS_PATH + 'apple-icon-120x120.png',
-      ASSETS_PATH + 'apple-icon-144x144.png',
-      ASSETS_PATH + 'apple-icon-152x152.png',
-      ASSETS_PATH + 'apple-icon-180x180.png',
-      ASSETS_PATH + 'favicon.ico',
-      ASSETS_PATH + 'favicon-16x16.png',
-      ASSETS_PATH + 'favicon-32x32.png',
-      ASSETS_PATH + 'favicon-96x96.png',
-      ASSETS_PATH + 'ms-icon-70x70.png',
-      ASSETS_PATH + 'ms-icon-144x144.png',
-      ASSETS_PATH + 'ms-icon-150x150.png',
-      ASSETS_PATH + 'ms-icon-310x310.png'
+      './src/index.js'
     ]
   },
 

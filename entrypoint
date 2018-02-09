@@ -11,8 +11,6 @@ echo $BUILD_TYPE
 set -- npm run start "$@"
 
 if [ "$BUILD_TYPE" == "production" ]; then
-    rm -rf /node_modules
-    npm install --save express forever
     set -- npm run start:prod "$@"
 fi
 

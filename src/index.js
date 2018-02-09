@@ -52,7 +52,6 @@ render(App);
 // Webpack Hot Module Replacement API
 if (module.hot) {
   module.hot.accept('./App', () => {
-    alert('test')
     render(App);
   });
 }

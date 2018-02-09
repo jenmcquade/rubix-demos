@@ -15,13 +15,13 @@ services:
     networks:
       - app 
   instaproxy:
-    image: instaproxy_dev
+    image: jonmcquade/instaproxy:dev
     labels:
       - 'traefik.backend=proxy'
-      - 'traefik.port=80'
+      - 'traefik.port=3000'
       - 'traefik.frontend.rule=Host:igproxy.docker.localhost'
     environment: 
-      - NODE_ENV=dev
+      - NODE_ENV=development
     build: 
       context: ./social/insta-proxy
       dockerfile:  Dockerfile
@@ -33,11 +33,13 @@ services:
     networks:
      - app
   o3dv:
-    image: o3dv_dev
+    image: jonmcquade/open3dviewer:dev
     labels:
       - 'traefik.backend=app'
       - 'traefik.port=8080'
       - 'traefik.frontend.rule=Host:o3dv.docker.localhost'
+    environment: 
+      - NODE_ENV=production
     build: 
       context: .
       dockerfile: Dockerfile

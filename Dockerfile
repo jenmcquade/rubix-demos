@@ -1,6 +1,6 @@
 FROM node:alpine
 
-ARG build_type="production"
+ARG build_type
 ENV BUILD_TYPE=$build_type
 
 RUN echo $BUILD_TYPE
@@ -32,7 +32,9 @@ RUN npm install -g webpack cross-env && \
     cd / && \
     npm install
 
-RUN if [ "$BUILD_TYPE" == "production" ]; then webpack -p --config webpack.production.config.js && \
+RUN if [ "$BUILD_TYPE" == "production" ]; then \
+    rm -rf /node_modules && \
+    npm install --save express forever webpack -p --config webpack.production.config.js && \
     node ./node_modules/react-scripts/scripts/build.js; fi;
 
 ENTRYPOINT ["entrypoint"]

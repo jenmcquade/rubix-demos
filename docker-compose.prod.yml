@@ -1,29 +1,55 @@
 version: '3'
       
 services:
+  # Reverse Proxy provided by traefik  
+  traefik:
+    container_name: app_proxy
+    image: traefik
+    command: -c /dev/null --web --docker --logLevel=INFO
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - app 
   instaproxy:
-    image: instaproxy
+    image: jonmcquade/instaproxy
+    labels:
+      - 'traefik.backend=proxy'
+      - 'traefik.port=80'
+      - 'traefik.frontend.rule=Host:igproxy.azurewebsites.net'
+    environment: 
+      - NODE_ENV=production
     build: 
       context: ./social/insta-proxy
       dockerfile:  Dockerfile
       args: 
-        build_type: production
+        build_type: oroduction
     container_name: instaproxy
     ports: 
-     - "3000:3000"
+     - "80:80"
     networks:
      - app
   o3dv:
-    image: o3dv
+    image: jonmcquade/open3dviewer:dev
+    labels:
+      - 'traefik.backend=app'
+      - 'traefik.port=80'
+      - 'traefik.frontend.rule=Host:jonmcquade.azurewebsites.net'
     build: 
       context: .
       dockerfile: Dockerfile
       args: 
-        build_type: production
+        build_type: development
     container_name: o3dv
+    volumes:
+      - ./src:/src
     ports:
      - "80:80"
     links:
+     - instaproxy
+    depends_on:
      - instaproxy
     networks:
      - app
