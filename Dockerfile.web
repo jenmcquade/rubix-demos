@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM heroku/heroku:16
 
 ARG build_type
 ARG node_env
@@ -51,12 +51,6 @@ RUN apk del \
   make
 
 CMD node /server.js --bind 0.0.0.0:$PORT
-ENTRYPOINT ["entrypoint"]
 
-WORKDIR /
 
-EXPOSE 80
-EXPOSE 8080
-EXPOSE 3001
-EXPOSE 3002
 
