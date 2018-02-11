@@ -7,27 +7,40 @@ reviewing three-dimensional React components rendered to the DOM
 - A sampling of menu-driven DOM elelement interactions with Social Network APIs.
 - A sampling of keyboard-driven and visually-impaired device targeting interactions
 
+# To run this app in Development Mode from Docker
+- Install Docker: https://docs.docker.com/install/
+- Run this in the pulled directory:
+* `docker-compose up`
+- Builds a development container and puts the app in development mode; scripts are bundled and served through Express with Browsersync and Webpack middleware
+
+# To run this app in Production Mode from Docker
+- Install Docker: https://docs.docker.com/install/
+- Run this in the pulled directory:
+* `docker-compose up -f docker-compose.prod.yml`
+- Builds a production container and puts the app in production mode; Build scripts are launched and`./node_modules` is removed from the container to reduce size. Express is reinstalled and serves the static build files.
+
 # To run this app in Development Mode from Browsersync proxied into Webpack Dev Server
+- These actions are also performed when creating a Docker development container
 - Install Node with NPM: https://www.npmjs.com/get-npm
 - Run this in the pulled directory:
-
 * `npm install`
 * To start the App, run `npm start` (listens on port 8080)
 * To start the InstaProxy server, run `npm run start:igproxy` (listens on port 3000)
-
 - Runs the app in development mode; scripts are bundled but not compressed
 - Automatically opens http://localhost:8080 to view the app in the browser.
+- Instaproxy is served from http://localhost:3000/[user]/media
 
 # To run this app in Production Mode from the included Express server
+- These actions are not performed when creating a Docker production container,
+-   but instead launch Express servers without the need for package.json instructions
 - Install Node with NPM: https://www.npmjs.com/get-npm
 - Run this in the pulled directory:
-
 * `npm install`
 * `npm run build`
 * `npm run start:prod`
-
 - Runs the app in production mode, from the generated `build` folder; files are compressed and source mapped.
-- Open http://localhost:80 to view the app in the browser.
+- Open http://localhost to view the app in the browser.
+- Instaproxy is served from http://localhost:3000/[user]/media
 
 ## Hot Module Replacement with WebPack and React
 Hot Module Replacement (HMR) comes as part of the development bundle of scripts.  If you save a React component, the change will be compiled and injected into the DOM without a full page refresh, when using Webpack Dev Server.
@@ -35,17 +48,18 @@ Hot Module Replacement (HMR) comes as part of the development bundle of scripts.
 ## Webpack Dev Server with Browsersync
 When running `npm start` a browser session will be opened to *http://localhost:8080*.  This is a BrowserSync proxy address that opens Webpack Dev Server runnning on *http://localhost:3002*.  BrowserSync administration can be accessed from *http://localhost:3001*.
 - More info about BrowserSync is available here: https://browsersync.io/
+- These resources are also available when running Docker images using `docker-compose up`
 
-## Currently In Progress
-- As of 2/7/18
-* `git checkout -b feature_docker`
-* Running `npm install` is suggested if you have previously cloned from the master branch.
+### Currently In Progress
+- As of 2/11/18
+* `git checkout -b feature_micro-menus`
+* Running `npm install` is suggested if you have previously cloned from the master branch and want to continue serving files without using Docker.
 
-## This project has many dependencies
+### This project has many dependencies
 Open project.json and you'll notice that there are several listed dependencies that will
 be downloaded when you run `npm install`.  Some packages are currently implemented and some are listed now, in preparation for further work.  By installing them now, you may save yourself quirks of having to run `npm install` after pulling down the latest updates.  See the "Currently in Progress" section above to determine if running `npm install` is suggested.
 
-## This Project contains Babel and ESLint ReactJS configurations
+### This Project contains Babel and ESLint ReactJS configurations
 My preferred IDE for React development is Visual Studio Code.  There are several plugins native to Visual Studio Code that can assist you in identifying bugs or issues with code style.  *This project uses double spaces* instead of tabs, which is consistent with React lint modules.
 
 ## Origins
