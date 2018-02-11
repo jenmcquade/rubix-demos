@@ -1,4 +1,5 @@
-[![InstaProxy on Heroku](https://heroku-badge.herokuapp.com/?app=o3dv&style=flat&root=server_check_hook)](https://o3dv.herokuapp.com/)
+[![InstaProxy on Heroku](https://heroku-badge.herokuapp.com/?app=o3dv)](https://o3dv.herokuapp.com/)
+[![InstaProxy on Heroku](https://heroku-badge.herokuapp.com/?app=igdata)](https://igdata.herokuapp.com/)
 
 ## Objective
 - A demonstration playground of CSS animations and object interactions for importing and 
