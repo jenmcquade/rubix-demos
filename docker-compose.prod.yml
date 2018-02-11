@@ -23,7 +23,7 @@ services:
       dockerfile: Dockerfile
       args: 
         build_type: production
-        node_env: development
+        node_env: production
         port: 80
     volumes:
       - ./build:/build
