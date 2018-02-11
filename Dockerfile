@@ -28,8 +28,6 @@ RUN  apk add --no-cache \
         file \
         nasm \
         make && \
-        mkdir /public && \
-        mkdir /build && \
         npm install
 
 RUN if [ "$BUILD_TYPE" = "production" ]; then \

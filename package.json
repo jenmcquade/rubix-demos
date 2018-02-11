@@ -24,9 +24,7 @@
     "react-scrollbars": "0.0.5",
     "react-shortcut": "^1.0.6",
     "redux": "^3.7.2",
-    "redux-thunk": "^2.2.0"
-  },
-  "devDependencies": {
+    "redux-thunk": "^2.2.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^7.2.3",
     "babel-loader": "^7.1.2",
