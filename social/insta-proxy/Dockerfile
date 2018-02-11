@@ -2,10 +2,8 @@ FROM node:alpine
 
 ARG build_type
 ARG node_env
-ARG port
 ENV BUILD_TYPE=$build_type
 ENV NODE_ENV=$node_env
-ENV PORT=$port
 
 RUN echo $BUILD_TYPE
 

@@ -2,11 +2,9 @@ FROM node:alpine
 
 ARG build_type
 ARG node_env
-ARG port
 ENV BUILD_TYPE=$build_type
 ENV NODE_ENV=$node_env
 ENV CLIENT=true
-ENV PORT=$port
 
 COPY ./entrypoint /usr/local/bin/
 COPY ./server.js /

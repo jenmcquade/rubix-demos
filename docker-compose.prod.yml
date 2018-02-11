@@ -11,6 +11,8 @@ services:
         build_type: production
         node_env: production
         port: 80
+    nvironment:
+      "PORT=80"
     container_name: instaproxy
     ports: 
      - "3000:80"
@@ -25,6 +27,8 @@ services:
         build_type: production
         node_env: production
         port: 80
+    environment:
+      "PORT=80"
     container_name: o3dv
     ports:
      - "80:80"
