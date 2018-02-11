@@ -16,7 +16,7 @@ services:
       - app 
   instaproxy:
     container_name: instaproxy_dev
-    image: jonmcquade/instaproxy:dev
+    image: instaproxy:dev
     labels:
       - 'traefik.backend=proxy'
       - 'traefik.port=3000'
@@ -34,7 +34,7 @@ services:
      - app
   o3dv:
     container_name: o3dv_dev
-    image: jonmcquade/open3dviewer:dev
+    image: open3dviewer:dev
     labels:
       - 'traefik.backend=app'
       - 'traefik.port=8080'

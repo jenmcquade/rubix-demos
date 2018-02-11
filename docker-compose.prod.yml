@@ -3,7 +3,7 @@ version: '3'
 services:
   # Reverse Proxy provided by traefik  
   instaproxy:
-    image: jonmcquade/instaproxy:latest
+    image: instaproxy:latest
     build: 
       context: ./social/insta-proxy
       dockerfile:  Dockerfile
@@ -17,7 +17,7 @@ services:
     networks:
      - app
   o3dv:
-    image: jonmcquade/open3dviewer:latest
+    image: open3dviewer:latest
     build: 
       context: .
       dockerfile: Dockerfile
