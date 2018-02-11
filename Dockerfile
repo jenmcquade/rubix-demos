@@ -34,9 +34,9 @@ RUN if [ "$BUILD_TYPE" = "production" ]; then \
         node /node_modules/webpack/bin/webpack.js -p --config /webpack.production.config.js && \
         node /node_modules/react-scripts/scripts/build.js && \
         rm -rf /node_modules && \
-        rm /package.json /package-lock.json && \
+        rm /package-lock.json && \
         cd / && npm install --save express path cross-env && \
-        ls -l; \
+        cd /build; ls -l; \
     fi
 
 RUN if [ "$BUILD_TYPE" = "development" ]; then \

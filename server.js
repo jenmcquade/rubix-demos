@@ -70,6 +70,6 @@ if (process.env.NODE_ENV === 'development') {
   app.listen(process.env.PORT ? process.env.PORT : 3002, () => console.log('Now serving with WebPack Middleware on port 3002!'))
 } else {
   app.use('/', buildDir);
-  app.listen(process.env.PORT ? process.env.PORT : 80, () => console.log('Now serving build directory on port 80!'))
+  app.listen(process.env.PORT ? process.env.PORT : 80, () => console.log('Now serving ' + Path.resolve(__dirname, 'build') + ' directory on port 80!'))
 }
 
