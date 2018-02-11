@@ -4,8 +4,8 @@
   "description": "Provides an API layer over Instagram's public API.",
   "main": "app.js",
   "scripts": {
-    "start": "NODE_ENV=development CLIENT=true PORT=3000 node ./app.js",
-    "start:prod": "cross-env NODE_ENV=production CLIENT=true PORT=80 node ./node_modules/forever/bin/forever app.js",
+    "start": "NODE_ENV=development CLIENT=true node ./app.js",
+    "start:prod": "cross-env NODE_ENV=production CLIENT=true node ./node_modules/forever/bin/forever app.js",
     "dev": "NODE_ENV=devevelopment node app.js",
     "test": "echo \"Dummy Tests Pass\""
   },

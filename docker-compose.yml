@@ -8,7 +8,7 @@ services:
     command: -c /dev/null --web --docker --logLevel=INFO
     ports:
       - '80:80'
-      - '443:443'
+      - '8443:443'
       - '8081:8080' # Dashboard
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -21,14 +21,13 @@ services:
       - 'traefik.backend=proxy'
       - 'traefik.port=3000'
       - 'traefik.frontend.rule=Host:igproxy.docker.localhost'
-    environment: 
-      - NODE_ENV=development
-      - PORT=3000
     build: 
       context: ./social/insta-proxy
       dockerfile:  Dockerfile
       args: 
         build_type: development
+        node_env: development
+        port: 3000
     ports: 
      - "3000:3000"
     networks:
@@ -38,18 +37,18 @@ services:
     image: jonmcquade/open3dviewer:dev
     labels:
       - 'traefik.backend=app'
-      - 'traefik.port=80'
+      - 'traefik.port=8080'
       - 'traefik.frontend.rule=Host:o3dv.docker.localhost'
-    environment: 
-      - NODE_ENV=production
-      - PORT=80
     build: 
       context: .
       dockerfile: Dockerfile
       args: 
         build_type: development
+        node_env: development
+        port: 3002
     volumes:
       - ./src:/src
+      - ./public:/public
     ports:
      - "8080:8080"
      - "3001:3001"

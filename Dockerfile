@@ -2,9 +2,11 @@ FROM node:alpine
 
 ARG build_type
 ARG node_env
+ARG port
 ENV BUILD_TYPE=$build_type
 ENV NODE_ENV=$node_env
 ENV CLIENT=true
+ENV PORT=$port
 
 COPY ./entrypoint /usr/local/bin/
 COPY ./server.js /
@@ -15,7 +17,7 @@ COPY ./src/ /src/
 COPY ./.babelrc /
 COPY ./.eslintrc /
 
-RUN  apk add --no-cache --virtual \
+RUN  apk add --no-cache \
         bash \
         libpng-dev \
         automake \
@@ -43,12 +45,22 @@ RUN if [ "$BUILD_TYPE" = "development" ]; then \
         ls -l; \
     fi
 
-CMD NODE_ENV=$NODE_ENV node /server.js --bind 0.0.0.0:$PORT
+RUN apk del \
+  libpng-dev \
+  automake \
+  autoconf \
+  libtool \
+  gettext-dev \
+  g++ \
+  file \
+  nasm \
+  make
+
+CMD node /server.js --bind 0.0.0.0:$PORT
 ENTRYPOINT ["entrypoint"]
 
 WORKDIR /
 
-EXPOSE $PORT
 EXPOSE 80
 EXPOSE 8080
 EXPOSE 3001

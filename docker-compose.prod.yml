@@ -4,14 +4,13 @@ services:
   # Reverse Proxy provided by traefik  
   instaproxy:
     image: jonmcquade/instaproxy:latest
-    environment: 
-      - NODE_ENV=production
-      - PORT=3000
     build: 
       context: ./social/insta-proxy
       dockerfile:  Dockerfile
       args: 
         build_type: production
+        node_env: production
+        port: 80
     container_name: instaproxy
     ports: 
      - "3000:80"
@@ -19,14 +18,15 @@ services:
      - app
   o3dv:
     image: jonmcquade/open3dviewer:latest
-    environment: 
-      - NODE_ENV=production
-      - PORT=80
     build: 
       context: .
       dockerfile: Dockerfile
       args: 
         build_type: production
+        node_env: production
+        port: 80
+    volumes:
+      - ./build:/build
     container_name: o3dv
     ports:
      - "80:80"
