@@ -1,11 +1,5 @@
 FROM heroku/heroku:16
 
-ARG build_type
-ARG node_env
-ENV BUILD_TYPE=$build_type
-ENV NODE_ENV=$node_env
-ENV CLIENT=true
-
 COPY ./entrypoint /usr/local/bin/
 COPY ./server.js /
 COPY ./package.json /
