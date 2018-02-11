@@ -1,5 +1,7 @@
 FROM heroku/heroku:16
 
+FROM node:8.9.4
+
 COPY ./entrypoint /usr/local/bin/
 COPY ./server.js /
 COPY ./package.json /
