@@ -50,7 +50,7 @@ RUN apk del \
   nasm \
   make
 
-CMD node /server.js --bind 0.0.0.0:$PORT
+CMD node PORT=$PORT /server.js --bind 0.0.0.0:$PORT
 ENTRYPOINT ["entrypoint"]
 
 WORKDIR /
