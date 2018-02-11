@@ -12,7 +12,7 @@ if [ "$BUILD_TYPE" == "development" ]; then
     set -- npm run start "$@"
 else    
     cd / && npm install express path cross-env && \
-    set -- node server.js "$@"
+    set -- PORT=$PORT node server.js "$@"
 fi
 
 exec "$@"
