@@ -11,8 +11,8 @@ COPY ./.eslintrc /
 
 RUN npm install
 
-RUN export BUILD_TIME=`date +'%y.%m.%d %H:%M:%S'` && \
-    export BUILD_VER="v0.2.12"    
+RUN set BUILD_TIME=`date +'%y.%m.%d %H:%M:%S'` && \
+    set BUILD_VER="v0.2.12"    
 
 RUN node /node_modules/webpack/bin/webpack.js -p --config /webpack.production.config.js && \
         node /node_modules/react-scripts/scripts/build.js && \
