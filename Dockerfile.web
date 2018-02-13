@@ -11,5 +11,5 @@ RUN cd / && npm install --save express path cross-env && \
 
 CMD node /server.js --bind 0.0.0.0:$PORT
 
-
+ 
 
