@@ -1,25 +1,13 @@
+FROM heroku/heroku:16
+
 FROM node:8.9.4
 
-COPY ./entrypoint /usr/local/bin/
 COPY ./server.js /
 COPY ./package.json /
-COPY ./webpack.config.js /
-COPY ./webpack.production.config.js /
-COPY ./src/ /src/
-COPY ./.babelrc /
-COPY ./.eslintrc /
+COPY ./build /
 
-RUN npm install
-
-RUN set BUILD_TIME=`date +'%y.%m.%d %H:%M:%S'` && \
-    set BUILD_VER="v0.2.12"    
-
-RUN node /node_modules/webpack/bin/webpack.js -p --config /webpack.production.config.js && \
-        node /node_modules/react-scripts/scripts/build.js && \
-        rm -rf /node_modules && \
-        rm /package-lock.json && \
-        cd / && npm install --save express path cross-env && \
-        cd /build; ls -l
+RUN cd / && npm install --save express path cross-env && \
+    cd /build; ls -l
 
 CMD node /server.js --bind 0.0.0.0:$PORT
 

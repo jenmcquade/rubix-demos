@@ -39,8 +39,8 @@ module.exports = {
       template: path.resolve(SRC_PATH, 'index.html'),
       inject: false,
       minify: {minifyCSS: true, minifyJS: true},
-      buildAt: process.env.BUILD_TIME + ' UTC',
-      buildVer: process.env.BUILD_VER,
+      buildAt: process.env.BUILD_TIME ? process.env.BUILD_TIME + ' UTC' : 'unavailable',
+      buildVer: process.env.BUILD_VER ? process.env.BUILD_VER : 'unavailable',
     }),
     new Webpack.optimize.OccurrenceOrderPlugin(),
     new Webpack.optimize.UglifyJsPlugin(), //minify everything
