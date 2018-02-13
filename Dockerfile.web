@@ -13,7 +13,7 @@ COPY ./.eslintrc /
 
 RUN npm install
 
-RUN node /node_modules/webpack/bin/webpack.js -p --config /webpack.production.config.js && \
+RUN export BUILD_TIME=`date +'%y.%m.%d %H:%M:%S'` && node /node_modules/webpack/bin/webpack.js -p --config /webpack.production.config.js && \
         node /node_modules/react-scripts/scripts/build.js && \
         rm -rf /node_modules && \
         rm /package-lock.json && \
