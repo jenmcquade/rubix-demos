@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === 'development') {
   const compiler = webpack(webpackConfig);
   require('react-hot-loader/patch');
   browserSync.init({
-    port: 8080,
+    port: process.env.PORT ? process.env.PORT : 8080,
     proxy: {
       target: LOCAL_HOST,
       middleware: [
@@ -65,11 +65,13 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 let buildDir = express.static(Path.resolve(__dirname, 'build'));
+let prod_port = process.env.PORT ? process.env.PORT : 80;
+let dev_port = 3002;
 
-if (process.env.NODE_ENV === 'development') {
-  app.listen(process.env.PORT ? process.env.PORT : 3002, () => console.log('Now serving with WebPack Middleware on port 3002!'))
+if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging') {
+  app.listen(dev_port, () => console.log('Now serving with WebPack Middleware on port ' + dev_port + '!'))
 } else {
   app.use('/', buildDir);
-  app.listen(process.env.PORT ? process.env.PORT : 80, () => console.log('Now serving on port ' + process.env.PORT + ' using the ' + Path.resolve(__dirname, 'build') + ' directory!'))
+  app.listen(prod_port, () => console.log('Now serving on port ' + prod_port + ' using the ' + Path.resolve(__dirname, 'build') + ' directory!'))
 }
 

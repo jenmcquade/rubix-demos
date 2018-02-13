@@ -47,9 +47,10 @@ services:
       args: 
         build_type: development
         node_env: development
-        port: 3002
+        port: 8080
     environment:
-      - PORT=3002
+      - PORT=8080
+      - BUILD_VER=v0.2.12
     volumes:
       - ./src:/src
       - ./public:/public

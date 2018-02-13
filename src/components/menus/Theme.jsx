@@ -331,7 +331,7 @@ function searchByHashTagPaging(e) {
       value: {
         searchType: 'hashTag',
         searchValue: e.target.value, 
-        returnCount: SEARCH_RETURN_COUNT - 6,
+        returnCount: parseInt(SEARCH_RETURN_COUNT / 2, 10),
         pages: getCubeFaces().length,
       }
     });

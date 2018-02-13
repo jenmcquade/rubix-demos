@@ -1,18 +1,24 @@
 #!/bin/bash
 #
-# Description: ENTRYPOINT for running BiStorm Docker Images in Containers
+# Description: ENTRYPOINT for running Docker Images in Containers
 
 # Use this file for customizing the default behavior when a container is created
 
-# USED TO INITIATE PHP FROM THIS SCRIPT
 set -e
-echo $BUILD_TYPE
+export BUILD_TIME=$BUILD_TIME
+export BUILD_TYPE=$BUILD_TYPE
+export BUILD_VER=$BUILD_VER
+
+echo "BUILD_TIME: $BUILD_TIME"
+echo "BUILD_TYPE: $BUILD_TYPE"
+echo "BUILD_VER: $BUILD_VER"
 
 if [ "$BUILD_TYPE" == "development" ]; then    
     set -- npm run start "$@"
+    exec "$@"
 else    
     cd / && npm install express path cross-env && \
-    set -- PORT=$PORT node server.js "$@"
+    BUILD_TIME=`date +'%y.%m.%d %H:%M:%S'` BUILD_VER=$BUILD_VER node /server.js
 fi
 
-exec "$@"
+

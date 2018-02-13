@@ -99,6 +99,13 @@
       <img style="width: 200px;" src="./static/media/loader.gif" />
     </div>
     <div id="root"></div>
+    <div id="prodBuildInfo">
+      <div style="position:absolute;float:right;bottom:1em;right:2em;">
+        <div><label>Built at: </label><span> <%= htmlWebpackPlugin.options.buildAt.toString() %></span></div>
+        <div><label>Version: </label><span> <%= htmlWebpackPlugin.options.buildVer.toString() %></span></div>
+      </div> 
+    </div>
+
     <style>
       body {
         margin: 0;

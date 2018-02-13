@@ -2,8 +2,11 @@ FROM node:alpine
 
 ARG build_type
 ARG node_env
+ARG build_ver
+ARG build_time=
 ENV BUILD_TYPE=$build_type
 ENV NODE_ENV=$node_env
+ENV BUILD_VER=$build_ver
 ENV CLIENT=true
 
 COPY ./entrypoint /usr/local/bin/
@@ -26,11 +29,12 @@ RUN  apk add --no-cache \
         file \
         nasm \
         make && \
-        npm install
+        npm install 
 
 RUN if [ "$BUILD_TYPE" = "development" ]; then \
         ls -l; \
     else \
+        export BUILD_TIME=`date +'%y.%m.%d %H:%M:%S'` && \
         node /node_modules/webpack/bin/webpack.js -p --config /webpack.production.config.js && \
         node /node_modules/react-scripts/scripts/build.js && \
         rm -rf /node_modules && \
@@ -40,7 +44,7 @@ RUN if [ "$BUILD_TYPE" = "development" ]; then \
     fi
 
 RUN apk del \
-  libpng-dev \
+  libpng-dev \ 
   automake \
   autoconf \
   libtool \
@@ -51,7 +55,7 @@ RUN apk del \
   make
 
 CMD node /server.js --bind 0.0.0.0:$PORT
-ENTRYPOINT ["entrypoint"]
+ENTRYPOINT BUILD_TIME=`date +'%y.%m.%d %H:%M:%S'` BUILD_VER=$BUILD_VER entrypoint
 
 WORKDIR /
 

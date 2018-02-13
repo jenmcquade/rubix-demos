@@ -10,7 +10,6 @@ services:
       args: 
         build_type: production
         node_env: production
-        port: 80
     environment:
       - PORT=80 
     container_name: instaproxy
@@ -25,8 +24,8 @@ services:
       dockerfile: Dockerfile
       args: 
         build_type: production
+        build_ver: v0.2.12
         node_env: production
-        port: 80
     environment:
       - PORT=80
     container_name: o3dv

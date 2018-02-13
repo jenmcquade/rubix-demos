@@ -17,7 +17,6 @@ import {
   URL_BASE_HASHTAG,
 } from './InstaProxyActions'
 
-// CONSTANTS
 export class InstaProxy extends Component {
   constructor(props) {
     super(props);
@@ -129,7 +128,6 @@ InstaProxy.propTypes = {
 // Retrieve data from store as props
 function mapStateToProps(store) {
   return {
-    app: store.app,
     ig: store.instaProxy,
   };
 }

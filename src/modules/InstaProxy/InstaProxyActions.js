@@ -1,4 +1,4 @@
-import { PROXY_DOMAIN } from '../../env.js'
+import { PROXY_DOMAIN } from './env.js'
 
 // Export Constants
 export const SET_IS_MOUNTED = 'INSTAPROXY_IS_MOUNTED';
