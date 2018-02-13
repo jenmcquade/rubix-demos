@@ -4,7 +4,7 @@ FROM node:8.9.4
 
 COPY ./server.js /
 COPY ./package.json /
-COPY ./build /
+COPY ./public_build /
 
 RUN cd / && npm install --save express path cross-env && \
     cd /build; ls -l
