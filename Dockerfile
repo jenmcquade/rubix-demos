@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:8.9.4-alpine
 
 ARG build_type
 ARG node_env

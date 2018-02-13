@@ -1,6 +1,4 @@
-FROM heroku/heroku:16
-
-FROM node:8.9.4
+FROM node:8.9.4-alpine
 
 COPY ./server.js /
 COPY ./package.json /
