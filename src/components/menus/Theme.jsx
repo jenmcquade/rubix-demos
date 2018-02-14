@@ -166,7 +166,7 @@ class Theme extends Component {
             let dropupEnabled = false;
             let size = Object.keys(this.state.forms).length;
             if ( i === size - 1 || i === size - 2) {
-               dropupEnabled = true;
+              dropupEnabled = true;
             }
 
             try {

@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import 'html-gl/dist/htmlgl.min';
 
 import { MenuWrapper } from '../menus/Common'
 import Category from './Category';
@@ -15,10 +16,14 @@ class Menu extends React.Component {
     return( 
       <MenuWrapper role="navigation">
         <Category label="Perspective" id="perspective" iconType="glyphicon glyphicon-th">
-          <Perspective />
+          <html-gl>
+            <Perspective />
+          </html-gl>
         </Category>
         <Category label="Theme" id="theme" iconType="fa fa-hashtag">
-          <Theme />
+          <html-gl>
+            <Theme />
+          </html-gl>
         </Category>
       </MenuWrapper>
      );
