@@ -495,6 +495,11 @@ InstaProxy.getRouteMap = function () {
  */
 InstaProxy.setUpApp = function () {
   this.app = Express();
+  this.app.get('*', function(req, res) {  
+    if(!req.secure && process.env.NODE_ENV !== 'development'){
+      res.redirect('https://' + req.headers.host + req.url);
+    }
+  });
   this.app.use(ResponseTime());
   this.app.use(Cors());
   this.app.use(compression());
