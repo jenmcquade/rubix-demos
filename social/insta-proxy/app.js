@@ -495,11 +495,6 @@ InstaProxy.getRouteMap = function () {
  */
 InstaProxy.setUpApp = function () {
   this.app = Express();
-  this.app.get('*', function(req, res) {  
-    if(req.url.indexOf('https') === -1 && process.env.NODE_ENV === 'production'){
-      res.redirect('https://' + req.headers.host + req.url);
-    }
-  });
   this.app.use(function(req, res, next) {
     if(process.env.NODE_ENV === 'production') {
       res.header('Access-Control-Allow-Origin', 'o3dv.herokuapp.com');

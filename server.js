@@ -12,7 +12,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.get('*', function(req, res) {  
+app.get('/', function(req, res) {  
   if(req.url.indexOf('https') === -1 && process.env.NODE_ENV === 'production'){
     res.redirect('https://' + req.headers.host + req.url);
   }
