@@ -29,6 +29,10 @@ git checkout master
 
 git pull origin master
 
+git rm public_build/*
+
+git add public_build/*
+
 git commit -m "Production Release at $date" ./public_build ./docker-compose.prod.yml 
 
 git push origin master

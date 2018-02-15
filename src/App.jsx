@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import AppWrap from './modules/App/App';
 import loader from './assets/loader.gif';
+import registerServiceWorker from './registerServiceWorker';
 import './assets/icon.png';
 
 export default function App(props) {
@@ -20,4 +21,6 @@ export default function App(props) {
 App.propTypes = {
   store: PropTypes.object.isRequired,
 };
+
+registerServiceWorker();
 

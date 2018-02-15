@@ -4,14 +4,13 @@ const Webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
-
-//const TARGET = process.env.;
+const ManifestPlugin = require('webpack-manifest-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ROOT_PATH = path.resolve(__dirname);
 const MODULES_PATH = path.resolve(__dirname, 'node_modules');
 const PUBLIC_PATH = path.resolve(__dirname, 'public');
 const BUNDLE_PATH = path.join(PUBLIC_PATH, '');
 const SRC_PATH = path.join(ROOT_PATH, 'src');
-const ASSETS_PATH = path.join(SRC_PATH, 'assets', '/');
 
 module.exports = {
   entry: {
@@ -78,7 +77,13 @@ module.exports = {
           warnings: false,
       },
       sourceMap: false,
-    })
+    }),
+    new ManifestPlugin({
+      fileName: 'asset-manifest.json', // Not to confuse with manifest.json 
+    }),
+    new CopyWebpackPlugin([
+      { from: 'src/pwa' }, // define the path of the files to be copied
+    ])
   ],
 
   module: {

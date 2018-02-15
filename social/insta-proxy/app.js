@@ -17,8 +17,6 @@ const Url = require('url');
 const compression = require('compression')
 const pretty = require('express-prettify');
 
-Express().use(pretty({ query: 'pretty' }));;
-
 /**
  * App Namespace
  * @const
@@ -499,6 +497,8 @@ InstaProxy.setUpApp = function () {
   this.app = Express();
   this.app.use(ResponseTime());
   this.app.use(Cors());
+  this.app.use(compression());
+  this.app.use(pretty({ query: 'pretty' }));
   this.setUpRoutes();
 };
 
