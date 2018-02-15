@@ -5,8 +5,8 @@ const Path = require('path');
 const LOCAL_HOST = 'http://localhost:3002';
 
 const app = express();
+app.use(compression({threshold: 0}));
 app.use(function(req, res, next) {
-  compression();
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept');
   next();
