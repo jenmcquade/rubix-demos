@@ -24,7 +24,7 @@ services:
       dockerfile: Dockerfile
       args: 
         build_type: production
-        build_ver: v0.2.14
+        build_ver: v0.2.15
         node_env: production
     environment:
       - PORT=80
