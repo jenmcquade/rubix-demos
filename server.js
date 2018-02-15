@@ -12,12 +12,6 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.get('*', function(req, res) {  
-  if(!req.connection.encrypted && process.env.NODE_ENV === 'production'){
-    res.redirect('https://' + req.headers.host + req.url);
-  }
-});
-
 /**
 * Run Browsersync and use middleware for Hot Module Replacement
 */
