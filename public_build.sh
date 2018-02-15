@@ -8,6 +8,8 @@
 #   then returns to the original branch
 #
 
+rm -rf public_build
+
 docker-compose -f docker-compose.prod.yml down
 
 date=`date +'%y.%m.%d %H:%M:%S'`
@@ -29,9 +31,9 @@ git checkout master
 
 git pull origin master
 
-git rm public_build/*
+git rm -r public_build
 
-git add public_build/*
+git add public_build 
 
 git commit -m "Production Release at $date" ./public_build ./docker-compose.prod.yml 
 
