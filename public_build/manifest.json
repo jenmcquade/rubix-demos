@@ -3,7 +3,7 @@
   "name": "Open 3D Object Viewer",
   "icons": [
     {
-      "src": "assets/icon.png",
+      "src": "static/media/icon.png",
       "sizes": "512x512",
       "type": "image/png"
     }
