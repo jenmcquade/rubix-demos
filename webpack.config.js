@@ -103,8 +103,18 @@ module.exports = {
         loader: path.resolve(MODULES_PATH, 'file-loader?name=./[name].[ext]'),
       },
       {
-        test: /\.jpe?g$|\.gif$|\.png$|^(?!.*\.inline\.svg$).*\.svg$/,
+        test: /\.jpe?g$|\.gif$|\.png$/,
         loader: path.resolve(MODULES_PATH, 'file-loader?name=./static/media/[name].[ext]'),
+      },
+      {
+        test: /\.svg/,
+        use: {
+            loader: 'svg-url-loader',
+            options: {
+              encoding: 'base64',
+              limit: 1024
+            }
+        }
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2)$/,
@@ -113,3 +123,4 @@ module.exports = {
     ]
   }
 };
+

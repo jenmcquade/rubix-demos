@@ -5,6 +5,7 @@ import AppWrap from './modules/App/App';
 import loader from './assets/loader.gif';
 import registerServiceWorker from './registerServiceWorker';
 import './assets/icon.png';
+import './assets/loader.svg';
 
 export default function App(props) {
   return (

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Styles from './Cube.styles';
 import 'html-gl/dist/htmlgl.min';
 
-import spinner from '../../../assets/image-spinner.gif'
+import Spinner from '../../../assets/loader.svg';
 
 const Style = new Styles();
 
@@ -23,6 +23,7 @@ class Cube extends React.Component {
       igProxyIsOnline: false,
       wrapperStyle: {},
       hasImagesOnLoad: props.hasImagesOnLoad,
+      isMounted: false,
     };
     this.faces = Object.keys(this.props.object.style);
 
@@ -43,6 +44,7 @@ class Cube extends React.Component {
   }
 
   componentDidMount() {
+    this.setState({isMounted: true});
     let faces = getCubeFaces();
     for(let face in faces) {
       setImagesToLoading(faces[face]);
@@ -81,55 +83,55 @@ class Cube extends React.Component {
                   >
 
                   <Item id={face+'-1'} position="top-left" type="corner">
-                    {!hasImages ? 'top left' : 
+                    {!hasImages || !this.props.object.theme[face].images[0] ? 'top left' : 
                       <img id={face+'-1-image'} style={this.imageStyle} alt="1" src={this.props.object.theme[face].images[0]} />
                     }
                   </Item>
 
                   <Item id={face+'-2'} position="top" type="side">
-                    {!hasImages ? 'top' : 
+                    {!hasImages || !this.props.object.theme[face].images[1] ? 'top' : 
                       <img id={face+'-2-image'} style={this.imageStyle} alt="2" src={this.props.object.theme[face].images[1]} />
                     }
                   </Item>
 
                   <Item id={face+'-3'} position="top-right" type="corner">
-                    {!hasImages ? 'top right' : 
+                    {!hasImages || !this.props.object.theme[face].images[2] ? 'top right' : 
                       <img id={face+'-3-image'} style={this.imageStyle} alt="3" src={this.props.object.theme[face].images[2]} />
                     }
                   </Item>
 
                   <Item id={face+'-4'} position="left" type="side">
-                    {!hasImages ? 'left' : 
+                    {!hasImages || !this.props.object.theme[face].images[3] ? 'left' : 
                       <img id={face+'-4-image'} style={this.imageStyle} alt="4" src={this.props.object.theme[face].images[3]} />
                     }
                   </Item>
 
                   <Item id={face+'-5'} position="center" type="middle">
-                    {!hasImages ? 'center' : 
+                    {!hasImages || !this.props.object.theme[face].images[4] ? 'center' : 
                       <img id={face+'-5-image'} style={this.imageStyle} alt="5" src={this.props.object.theme[face].images[4]} />
                     }
                   </Item>
 
                   <Item id={face+'-6'} position="right" type="side">
-                    {!hasImages ? 'right' : 
+                    {!hasImages || !this.props.object.theme[face].images[5] ? 'right' : 
                       <img id={face+'-6-image'} style={this.imageStyle} alt="6" src={this.props.object.theme[face].images[5]} />
                     }
                   </Item>
 
                   <Item id={face+'-7'} position="bottom-left" type="corner">
-                    {!hasImages ? 'bot left' : 
+                    {!hasImages || !this.props.object.theme[face].images[6] ? 'bot left' : 
                       <img id={face+'-7-image'} style={this.imageStyle} alt="7" src={this.props.object.theme[face].images[6]} />
                     }
                   </Item>
 
                   <Item id={face+'-8'} position="bottom" type="side">
-                    {!hasImages ? 'bottom' : 
+                    {!hasImages || !this.props.object.theme[face].images[7] ? 'bottom' : 
                       <img id={face+'-8-image'} style={this.imageStyle} alt="8" src={this.props.object.theme[face].images[7]} />
                     }
                   </Item>
 
                   <Item id={face+'-9'} position="bottom-right" type="corner">
-                    {!hasImages ? 'bot right' : 
+                    {!hasImages || !this.props.object.theme[face].images[8] ? 'bot right' : 
                       <img id={face+'-9-image'} style={this.imageStyle} alt="9" src={this.props.object.theme[face].images[8]} />
                     }
                   </Item>
@@ -154,9 +156,10 @@ export function getCubeFaces() {
 export function setImagesToLoading(face) {
   for(let i=1; i<10; i++) {
     let img = document.getElementById(face + '-' + i + '-image');
-    if(img){
-      img = { spinner };
-      img.src = './static/media/' + img.src;
+    let item = document.getElementById(face + '-' + i);
+    if(img && item){
+      img = { Spinner };
+      item.style.transform = 'scale(0,0) rotate(360deg)';
     }
   }
 }
@@ -164,9 +167,9 @@ export function setImagesToLoading(face) {
 export function popOutImages(face) {
   let i = 0;
   for(i = 0; i < 10; i++) {
-    let img = document.getElementById(face + '-' + i);
-    if(img) {
-      img.style.transform = 'scale(0,0)';
+    let item = document.getElementById(face + '-' + i);
+    if(item) {
+      item.style.transform = 'scale(0,0) rotate(360deg)';
     }
   }
 }
@@ -176,7 +179,7 @@ export function popInImages(face) {
   for(i = 0; i < 10; i++) {
     let item = document.getElementById(face + '-' + i);
     if(item) {
-      item.style.transform = 'scale(1,1)';
+      item.style.transform = 'scale(1,1) rotate(-360deg)';
     }
   }
 }

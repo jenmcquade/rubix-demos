@@ -12,7 +12,9 @@ import {
   SET_THEME_CUBE_IMAGES,
 } from './CubeActions';
 
-const DEFAULT_IMG = './static/media/image-spinner.gif'
+import '../../../assets/loader.svg';
+
+const DEFAULT_IMG = 'static/media/loader.svg';
 const IMAGE_COUNT = 9;
 
 //

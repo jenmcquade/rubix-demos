@@ -19,15 +19,14 @@ services:
      - app
   o3dv:
     image: open3dviewer:latest
+    env_file:
+      - prod-build.env
     build: 
       context: .
       dockerfile: Dockerfile
       args: 
         build_type: production
-        build_ver: v0.2.15
         node_env: production
-    environment:
-      - PORT=80
     container_name: o3dv
     ports:
      - "80:80"

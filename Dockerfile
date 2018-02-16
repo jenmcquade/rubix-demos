@@ -2,11 +2,8 @@ FROM node:8.9.4-alpine
 
 ARG build_type
 ARG node_env
-ARG build_ver
-ARG build_time=
 ENV BUILD_TYPE=$build_type
 ENV NODE_ENV=$node_env
-ENV BUILD_VER=$build_ver
 ENV CLIENT=true
 
 COPY ./entrypoint /usr/local/bin/
