@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { SEARCH_RETURN_COUNT } from '../../modules/InstaProxy/InstaProxyActions'
+import { 
+  SEARCH_RETURN_COUNT, 
+} from '../../modules/InstaProxy/InstaProxyActions'
 
 import { getCubeFaces } from '../3d/rubix/Cube'
 
@@ -331,7 +333,7 @@ function searchByHashTagPaging(e) {
       value: {
         searchType: 'hashTag',
         searchValue: e.target.value, 
-        returnCount: parseInt(SEARCH_RETURN_COUNT / 2, 10),
+        returnCount: SEARCH_RETURN_COUNT,
         pages: getCubeFaces().length,
       }
     });

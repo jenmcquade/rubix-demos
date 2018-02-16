@@ -1,4 +1,4 @@
-import { PROXY_DOMAIN } from './env.js'
+import { PROXY_DOMAIN, DEFAULT_TYPE, DEFAULT_VALUE  } from './env.js'
 
 // Export Constants
 export const SET_IS_MOUNTED = 'INSTAPROXY_IS_MOUNTED';
@@ -13,8 +13,8 @@ export const SET_IG_SEARCH_URL = 'SET_IG_SEARCH_URL';
 export const SET_SEARCH_TYPE = 'SET_SEARCH_TYPE';
 export const UPDATE_IG_DATA = 'UPDATE_IG_DATA';
 export const SEARCH_RETURN_COUNT = 9;
-export const SEARCH_DEFAULT_TYPE = 'user';
-export const SEARCH_DEFAULT_VALUE = 'jonorjen';
+export const SEARCH_DEFAULT_TYPE = DEFAULT_TYPE ? DEFAULT_TYPE : 'user';
+export const SEARCH_DEFAULT_VALUE = DEFAULT_VALUE ? DEFAULT_VALUE : 'jonorjen';
 export const SEARCH_DEFAULT_HASHTAG = 'reactjs';
 export const DURATION_SEARCH_DISPATCH = 1500;
 export const NULL_REQUEST = 'NULL_REQUEST';
