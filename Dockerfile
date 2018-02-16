@@ -2,7 +2,9 @@ FROM node:8.9.4-alpine
 
 ARG build_type
 ARG node_env
+ARG build_ver
 ENV BUILD_TYPE=$build_type
+ENV BUILD_VER=$build_ver
 ENV NODE_ENV=$node_env
 ENV CLIENT=true
 
@@ -32,7 +34,7 @@ RUN if [ "$BUILD_TYPE" = "development" ]; then \
         ls -l; \
     else \
         export BUILD_TIME=`date +'%y.%m.%d %H:%M:%S'` && \
-        node /node_modules/webpack/bin/webpack.js -p --config /webpack.production.config.js && \
+        BUILD_VER=$BUILD_VER BUILD_TIME=$BUILD_TIME node /node_modules/webpack/bin/webpack.js -p --config /webpack.production.config.js && \
         node /node_modules/react-scripts/scripts/build.js && \
         rm -rf /node_modules && \
         rm /package-lock.json && \

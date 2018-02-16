@@ -83,56 +83,56 @@ class Cube extends React.Component {
                   >
 
                   <Item id={face+'-1'} position="top-left" type="corner">
-                    {!hasImages || !this.props.object.theme[face].images[0] ? 'top left' : 
-                      <img id={face+'-1-image'} style={this.imageStyle} alt="1" src={this.props.object.theme[face].images[0]} />
+                    {!hasImages || !this.state.object.theme[face].images[0] ? 'top left' : 
+                      <img id={face+'-1-image'} style={this.imageStyle} alt="1" src={this.state.object.theme[face].images[0]} />
                     }
                   </Item>
 
                   <Item id={face+'-2'} position="top" type="side">
-                    {!hasImages || !this.props.object.theme[face].images[1] ? 'top' : 
-                      <img id={face+'-2-image'} style={this.imageStyle} alt="2" src={this.props.object.theme[face].images[1]} />
+                    {!hasImages || !this.state.object.theme[face].images[1] ? 'top' : 
+                      <img id={face+'-2-image'} style={this.imageStyle} alt="2" src={this.state.object.theme[face].images[1]} />
                     }
                   </Item>
 
                   <Item id={face+'-3'} position="top-right" type="corner">
-                    {!hasImages || !this.props.object.theme[face].images[2] ? 'top right' : 
-                      <img id={face+'-3-image'} style={this.imageStyle} alt="3" src={this.props.object.theme[face].images[2]} />
+                    {!hasImages || !this.state.object.theme[face].images[2] ? 'top right' : 
+                      <img id={face+'-3-image'} style={this.imageStyle} alt="3" src={this.state.object.theme[face].images[2]} />
                     }
                   </Item>
 
                   <Item id={face+'-4'} position="left" type="side">
-                    {!hasImages || !this.props.object.theme[face].images[3] ? 'left' : 
-                      <img id={face+'-4-image'} style={this.imageStyle} alt="4" src={this.props.object.theme[face].images[3]} />
+                    {!hasImages || !this.state.object.theme[face].images[3] ? 'left' : 
+                      <img id={face+'-4-image'} style={this.imageStyle} alt="4" src={this.state.object.theme[face].images[3]} />
                     }
                   </Item>
 
                   <Item id={face+'-5'} position="center" type="middle">
-                    {!hasImages || !this.props.object.theme[face].images[4] ? 'center' : 
-                      <img id={face+'-5-image'} style={this.imageStyle} alt="5" src={this.props.object.theme[face].images[4]} />
+                    {!hasImages || !this.state.object.theme[face].images[4] ? 'center' : 
+                      <img id={face+'-5-image'} style={this.imageStyle} alt="5" src={this.state.object.theme[face].images[4]} />
                     }
                   </Item>
 
                   <Item id={face+'-6'} position="right" type="side">
-                    {!hasImages || !this.props.object.theme[face].images[5] ? 'right' : 
-                      <img id={face+'-6-image'} style={this.imageStyle} alt="6" src={this.props.object.theme[face].images[5]} />
+                    {!hasImages || !this.state.object.theme[face].images[5] ? 'right' : 
+                      <img id={face+'-6-image'} style={this.imageStyle} alt="6" src={this.state.object.theme[face].images[5]} />
                     }
                   </Item>
 
                   <Item id={face+'-7'} position="bottom-left" type="corner">
-                    {!hasImages || !this.props.object.theme[face].images[6] ? 'bot left' : 
-                      <img id={face+'-7-image'} style={this.imageStyle} alt="7" src={this.props.object.theme[face].images[6]} />
+                    {!hasImages || !this.state.object.theme[face].images[6] ? 'bot left' : 
+                      <img id={face+'-7-image'} style={this.imageStyle} alt="7" src={this.state.object.theme[face].images[6]} />
                     }
                   </Item>
 
                   <Item id={face+'-8'} position="bottom" type="side">
-                    {!hasImages || !this.props.object.theme[face].images[7] ? 'bottom' : 
-                      <img id={face+'-8-image'} style={this.imageStyle} alt="8" src={this.props.object.theme[face].images[7]} />
+                    {!hasImages || !this.state.object.theme[face].images[7] ? 'bottom' : 
+                      <img id={face+'-8-image'} style={this.imageStyle} alt="8" src={this.state.object.theme[face].images[7]} />
                     }
                   </Item>
 
                   <Item id={face+'-9'} position="bottom-right" type="corner">
-                    {!hasImages || !this.props.object.theme[face].images[8] ? 'bot right' : 
-                      <img id={face+'-9-image'} style={this.imageStyle} alt="9" src={this.props.object.theme[face].images[8]} />
+                    {!hasImages || !this.state.object.theme[face].images[8] ? 'bot right' : 
+                      <img id={face+'-9-image'} style={this.imageStyle} alt="9" src={this.state.object.theme[face].images[8]} />
                     }
                   </Item>
                 </Face>

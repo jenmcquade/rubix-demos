@@ -26,6 +26,7 @@ services:
       dockerfile:  Dockerfile
       args: 
         build_type: development
+        build_ver: $BUILD_VER
         node_env: development
         port: 3000
     environment:
@@ -48,8 +49,9 @@ services:
         build_type: development
         node_env: development
         port: 8080
-    env_file:
-      - dev-build.env
+    environment:
+      - "PORT=8080"
+      - "BUILD_VER=$BUILD_VER"
     volumes:
       - ./src:/src
     ports:
