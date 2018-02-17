@@ -106,10 +106,15 @@ class Styles {
       display: table-caption;
       position: relative;
       padding: 0.5em 0.5em 0.5em 0.5em;
+      border: none;
+
+      > :focus {
+        border: 1px solid white;
+      }
 
       > :focus, :hover {
         text-decoration: none;
-        color: rgba(255,255,255,0.8);
+        color: rgba(255,255,255,0.8) !important;
       }
 
       ${props => !props.active && !props.default && css`
@@ -252,11 +257,18 @@ class Styles {
       and (min-width : 75px) 
       and (max-width : 719px) {
         position: absolute;
-        min-height: 20em;
+        min-height: 100%;
         min-width: 100%;
         top: 184%;
         left: 0%;
         display: table-row;
+
+        ${props => props.scrollable && css`
+          :after {
+            font-family: "FontAwesome";
+            content: "\f078"
+          }
+        `}
 
         ${props => props.active && !props.default && css`
           transform: rotateX(0deg);

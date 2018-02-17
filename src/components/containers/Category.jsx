@@ -28,17 +28,15 @@ class Category extends Component {
     super(props);
     Object.assign(this, new Common(this));
     this.id = props.id.toLowerCase();
-    this.setTheme(this.props, true);
+    this.setTheme(props, true);
 
     this.category = this.props.menu.categories[this.id];
     this.themeColor = this.category.backgroundColor; 
     this.triggerColor = this.category.triggerColor;
 
     this.state = {
+      ...props,
       isDefaultState: true,
-      app: props.app,
-      menu: props.menu,
-      iconType: props.iconType,
       themeColor: this.themeColor,
       triggerColor: this.triggerColor,
     }
@@ -51,6 +49,8 @@ class Category extends Component {
   componentDidUpdate() {
     if(this.props.id) {
       this.setTheme(this.props);
+      document.querySelector('#' + this.props.id + ' a').style.backgroundColor = this.themeColor;
+      document.querySelector('#' + this.props.id + ' a').style['color'] = this.triggerColor;
     }
   }
 
@@ -69,15 +69,17 @@ class Category extends Component {
     return (
       <Item id={this.id} style={{backgroundColor: this.themeColor}}>
         <Trigger 
+          tabindex="-1"
           default={this.state.isDefaultState}
           active={menuIsOpen}
           onClick={this.handleTrigger}
-          style={{backgroundColor: this.themeColor, color: this.triggerColor}}
+          id={this.id + '-trigger'}
         >
           <Icon className={iconType} />
           <CategoryLabel>{label}</CategoryLabel>
         </Trigger>
         <Content
+          scrollable={this.props.id === 'theme' ? true : false}
           default={this.state.isDefaultState}
           active={menuIsOpen} 
           backgroundColor={baseColor}

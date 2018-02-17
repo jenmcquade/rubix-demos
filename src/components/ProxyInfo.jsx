@@ -10,7 +10,7 @@ class ProxyInfo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      ig: props.ig,
+      ...props,
       igProxyIsOnline: false,
     }
   }

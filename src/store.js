@@ -1,4 +1,11 @@
 /**
+ * This file configures the Redux Store
+ * Redux Middleware: 
+ *  redux-saga: managing synchrounous calls to InstaProxy's paging URLs
+ *  react-router-redux: keeping redux state in sync with react-router
+ */
+
+/**
  * Main store function
  */
 import { createStore, applyMiddleware, compose } from 'redux';
@@ -7,13 +14,27 @@ import DevTools from './components/DevTools';
 import rootReducer from './reducers';
 import rootSaga from './sagas';
 import instaProxySaga from './modules/InstaProxy/sagas';
- 
-// Middleware and store enhancers
+import createHistory from 'history/createBrowserHistory';
+import { routerMiddleware} from 'react-router-redux';
+
+// History is browser history
+const history = createHistory();
+
+// Define middleware
+const rMiddleware = routerMiddleware(history);
 const sagaMiddleware = createSagaMiddleware();
+ 
+// Enhancers array is passed to compose()
+//  And combined with reducers
 const enhancers = [
   applyMiddleware(sagaMiddleware),
+  applyMiddleware(rMiddleware),
 ];
 
+/**
+ * Configure the application state as a Redux store
+ * @param {*} initialState 
+ */
 export default function configureStore(initialState = {}) {
   
   if (process.env.CLIENT && process.env.NODE_ENV === 'development') {
@@ -21,11 +42,15 @@ export default function configureStore(initialState = {}) {
     enhancers.push(window.devToolsExtension ? window.devToolsExtension() : DevTools.instrument());
   }
 
-  const store = createStore(rootReducer, initialState, compose(...enhancers));
+  const store = createStore(
+    rootReducer, initialState, compose(...enhancers)
+  );
+
+  // Initiate sagas
   sagaMiddleware.run(rootSaga);
   sagaMiddleware.run(instaProxySaga);
 
-  // For hot reloading reducers
+  // This applies HMR to the store
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers
     module.hot.accept('./reducers', () => {

@@ -12,18 +12,17 @@ class Menu extends React.Component {
     super(props);
     this.state = props.menu;
   }
+  componentDidMount() {
+    document.querySelector('#perspective a').focus();  
+  }
   render() {
     return( 
-      <MenuWrapper role="navigation">
-        <Category label="Perspective" id="perspective" iconType="glyphicon glyphicon-th">
-          <html-gl>
-            <Perspective />
-          </html-gl>
+      <MenuWrapper id="MenuWrapper" role="navigation">
+        <Category tabindex="0" label="Perspective" id="perspective" iconType="glyphicon glyphicon-th">
+          <Perspective />
         </Category>
-        <Category label="Theme" id="theme" iconType="fa fa-hashtag">
-          <html-gl>
-            <Theme />
-          </html-gl>
+        <Category tabindex="0" label="Theme" id="theme" iconType="fa fa-hashtag">
+          <Theme />
         </Category>
       </MenuWrapper>
      );

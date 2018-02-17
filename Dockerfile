@@ -3,9 +3,13 @@ FROM node:8.9.4-alpine
 ARG build_type
 ARG node_env
 ARG build_ver
+ARG search_default_value
+ARG search_default_type
 ENV BUILD_TYPE=$build_type
 ENV BUILD_VER=$build_ver
 ENV NODE_ENV=$node_env
+ENV SEARCH_DEFAULT_VALUE=$search_default_value
+ENV SEARCH_DEFAULT_TYPE=$search_default_type
 ENV CLIENT=true
 
 COPY ./entrypoint /usr/local/bin/
@@ -31,14 +35,17 @@ RUN  apk add --no-cache \
         npm install 
 
 RUN if [ "$BUILD_TYPE" = "development" ]; then \
-        ls -l; \
+        echo "Building ./public folder for fallback to static files ..." && \
+        node /node_modules/webpack/bin/webpack.js && \
+        cd /public; ls -l; \
     else \
+        echo "Building ./build folder for serving static files ..." && \
         export BUILD_TIME=`date +'%y.%m.%d %H:%M:%S'` && \
         BUILD_VER=$BUILD_VER BUILD_TIME=$BUILD_TIME node /node_modules/webpack/bin/webpack.js -p --config /webpack.production.config.js && \
         node /node_modules/react-scripts/scripts/build.js && \
         rm -rf /node_modules && \
         rm /package-lock.json && \
-        cd / && npm install --save express compression path cross-env && \
+        cd / && npm install --save express express-history-api-fallback compression path cross-env && \
         cd /build; ls -l; \
     fi
 

@@ -24,8 +24,7 @@ export class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ig: props.ig,
-      app: props.app,
+      ...props,
       igProxyIsOnline: false,
     }
     this.shouldUpdateStoreWithNewDims = true;
@@ -66,7 +65,7 @@ export class App extends Component {
     return (
       <div>
         {this.state.isMounted && !window.devToolsExtension && process.env.NODE_ENV === 'development' && <DevTools />}
-        <div>
+        <div style={{display: 'flex'}}>
           <Helmet
             title="Open 3D Viewer"
             titleTemplate="%s - Default App"
@@ -84,6 +83,9 @@ export class App extends Component {
           />
 
           <Menu />
+          <a href="https://github.com/jonmcquade/rubix-demos">
+            <img style={{position: 'absolute', top: 0, right: 0, border: 0}} src="https://camo.githubusercontent.com/52760788cde945287fbb584134c4cbc2bc36f904/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" />
+          </a>
           <Stage />
           <InstaProxy fetchOnLoad={true} />
         </div>

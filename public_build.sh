@@ -18,28 +18,34 @@ docker-compose -f docker-compose.prod.yml up --build -d
 
 docker cp o3dv:/build/. ./public_build/
 
-docker-compose -f docker-compose.prod.yml down
+read -n1 -r -p "You can view the build at http://localhost.  Or press space to continue the release..." key
 
-heroku container:login
+if [ "$key" = '' ]; then
 
-docker tag instaproxy registry.heroku.com/igdata/web
-docker push registry.heroku.com/igdata/web
+  docker-compose -f docker-compose.prod.yml down
 
-original_branch=`git branch | grep \*`
+  heroku container:login
 
-git checkout master
+  docker tag instaproxy registry.heroku.com/igdata/web
+  docker push registry.heroku.com/igdata/web
 
-git pull origin master
+  original_branch=`git branch | grep \*`
 
-git rm -r public_build
+  git checkout master
 
-git add public_build 
+  git pull origin master
 
-git commit -m "Production Release at $date" ./public_build ./docker-compose.prod.yml 
+  git rm -r public_build
 
-git push origin master
+  git add public_build 
 
-git checkout $original_branch
+  git commit -m "Production Release at $date" .env ./public_build
+
+  git push origin master
+
+  git checkout $original_branch
+
+fi
 
 exit 0
 

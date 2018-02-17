@@ -11,6 +11,7 @@ function* fetchData(action) {
       return false;
     }
 
+    // Establish a frame for our data container
     let images = {
       nextPage: action.value.searchUri ? action.value.searchUri : URL_DEFAULT_SEARCH_URL, 
       urls: []
@@ -28,6 +29,7 @@ function* fetchData(action) {
       yield hideCubeImages(action.value);
     }
 
+    // Make the fetch call via InstaProxy module's callIg function
     let data = yield call(callIg, action.value);
 
     // Some additional flight checks before departure back to the store...
@@ -40,12 +42,13 @@ function* fetchData(action) {
       }
     }
 
+    // If we are invited to use paging, set the search url to the next page
     if(data.next) {
       images.nextPage = data.next;
       yield put({type: 'SET_IG_SEARCH_URL', value: data.next});
     }
 
-    // Post image assignment
+    // IG Post data image assignment to images array
     for(post in data.posts) {
       images.urls.push(data.posts[post].thumbnail_resources[0].src);
     }
@@ -53,32 +56,47 @@ function* fetchData(action) {
     // At this point, we're OK to fly...
     let msg = action.value.searchType.toUpperCase() + '_FETCH_SUCCEEDED';
     yield put({type: msg, data: data});
- 
+    yield call(onFetchSuccess, {action: action, images: images});
+    return images.nextPage;
+   } catch (e) {
+    yield call(onFetchFailure, action);
+    return false;
+   }
+}
+
+/**
+ * Post-fetch cleanup actions
+ */
+function *onFetchSuccess(props) {
+  try{
+    if(props.action.value.isFirstRequest) {
+      yield put({type: 'SET_IS_ONLINE', value: true});
+    }
     // If we have images, put them in the store
     //  and reveal the updated face
-    if(action.value.face) {
-        yield put({type: 'SET_THEME_FACE_IMAGES', value: {
-          face: action.value.face, 
-          images: images.urls, 
-        }});
-        showCubeImages(action.value);
-        return images.nextPage;
-    } else if(action.value.faces) {
+    if(props.action.value.face) {
+      yield put({type: 'SET_THEME_FACE_IMAGES', value: {
+        face: props.action.value.face, 
+        images: props.images.urls, 
+      }});
+    } else if(props.action.value.faces) {
       yield put({type: 'SET_THEME_CUBE_IMAGES', value: {
         faces: getCubeFaces(),
-        images: images,
+        images: props.images,
       }});
-      showCubeImages(action.value);
-      return images.nextPage;
     }
+  } catch(e) {
+    yield put({type: 'ON_FETCH_SUCCESS_ERROR'}); 
+  }
 
-   } catch (e) {
-      // We crashed somewhere mid-flight...
-      showCubeImages(action.value);
-      let msg = action.value.searchType.toUpperCase() + '_FETCH_FAILED';
-      yield put({type: msg});
-      return false;
-   }
+  showCubeImages(props.action.value);
+}
+
+function *onFetchFailure(action) {
+  // We crashed somewhere mid-flight...
+  showCubeImages(action.value);
+  let msg = action.value.searchType.toUpperCase() + '_FETCH_FAILED';
+  yield put({type: msg});
 }
 
 /**
@@ -116,6 +134,7 @@ function* fetchPages(action) {
   }
 }
 
+// Execute fetch on a new action
 function* getNextImages(newAction) {
   if(newAction) {
     const data = yield fetchData(newAction);
@@ -157,7 +176,7 @@ function showCubeImages(props) {
 }
 
 /*
-  Does not allow concurrent fetches. If "USER_FETCH_REQUESTED" gets
+  Does not allow concurrent fetches, to allow for paging. If "USER_FETCH_REQUESTED" gets
   dispatched while a fetch is already pending, that pending fetch is cancelled
   and only the latest one will be run.
 */

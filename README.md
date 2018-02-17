@@ -53,6 +53,15 @@ When running `npm start` a browser session will be opened to *http://localhost:8
 - More info about BrowserSync is available here: https://browsersync.io/
 - These resources are also available when running Docker images using `docker-compose up`
 
+## Traefik Reverse Proxy for local domain testing
+When running `docker-compose up` (developer build), Traefik administers a reverse proxy of both the InstaProxy and the O3DV containers.  This means you don't even need to modify your hosts file in order to demonstrate domain connectivity.
+
+After running `docker-compose up`, the app services are available here:
+* InstaProxy: http://igproxy.docker.localhost
+* Open 3D Object Viewer: http://o3dv.docker.localhost
+
+You can read more about Traefik here: https://github.com/containous/traefik
+
 ### Currently In Progress
 - As of 2/11/18
 * `git checkout -b feature_micro-menus`

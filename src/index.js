@@ -39,6 +39,9 @@ const store = configureStore(window.__INITIAL_STATE__);
 const mountApp = document.getElementById('root');
 
 const render = (Component) => {
+  if(process.env.NODE_ENV === 'development') {
+    document.getElementById('prodBuildInfo').style.display = 'none';
+  }
   ReactDOM.render(
     <AppContainer>
       <Component store={store} />

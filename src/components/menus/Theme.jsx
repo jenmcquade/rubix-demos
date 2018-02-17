@@ -6,6 +6,8 @@ import {
 
 import { getCubeFaces } from '../3d/rubix/Cube'
 
+import { push } from 'react-router-redux'
+
 //
 // Import Styled Components and React Bootstrap Components
 //
@@ -59,17 +61,15 @@ class Theme extends Component {
    */
   constructor(props) {
     super(props);
+    // Attach common methods
     Object.assign(this, new Common(this));
     this.faces = getCubeFaces();
     this.faces.unshift('all'); // add an additional 'all' face to the top of the array
     this.formsState = getInitialFormsState(this.faces);
 
     this.state = {
+      ...props,
       isDefaultState: true,
-      app: props.app,
-      ig: props.ig,
-      menu: props.menu,
-      rubix: props.rubix,
       searchType: 'color',
       themeFace: 'top',
       forms: this.formsState,
@@ -118,10 +118,10 @@ class Theme extends Component {
         formsState[this.faces[face]] = {
           searchType: searchType,
           text:{
-            user: {value: '', style: userStyle},
-            hashTag: {value: '', style:{display:'none'}},
-            bgColor: {value: '', style: bgColorStyle},
-            txtColor: {value: '', style:{display:'none'}}
+            user: {value: '', style: Object.assign({width: '10em'}, userStyle)},
+            hashTag: {value: '', style:{width: '10em', display:'none'}},
+            bgColor: {value: '', style: Object.assign({width: '10em'}, bgColorStyle)},
+            txtColor: {value: '', style:{width: '10em', display:'none'}}
           }
         }
       }
@@ -150,7 +150,8 @@ class Theme extends Component {
         autoHideDuration={200} 
         autoHeight 
         autoHeightMin={420} 
-        autoHeightMax={650}
+        autoHeightMax={555}
+        className="scroll-bar"
       >
         <SubTitle type="heading">
           Cube Colors and Background Images
@@ -257,6 +258,7 @@ function searchByUser(e) {
 
   setTimeout(() => {
     this.searchIsUnlocked = true;
+    dispatch(push('/' + face + '/@/' + e.target.value));
     dispatch({
       type: 'USER_FETCH_REQUESTED', 
       value: 
@@ -281,6 +283,7 @@ function searchByUserPaging(e) {
 
   setTimeout(() => {
     this.searchIsUnlocked = true;
+    dispatch(push('/@/' + e.target.value));
     dispatch({
       type: 'USER_FETCH_PAGING_REQUESTED', 
       value: {
@@ -304,6 +307,7 @@ function searchByHashTag(e) {
 
   setTimeout(() => {
     this.searchIsUnlocked = true;
+    dispatch(push('/' + face + '/#/' + e.target.value));
     dispatch({
       type: 'HASHTAG_FETCH_REQUESTED', 
       value: 
@@ -328,6 +332,7 @@ function searchByHashTagPaging(e) {
 
   setTimeout(() => {
     this.searchIsUnlocked = true;
+    dispatch(push('/#/' + e.target.value));
     dispatch({
       type: 'HASHTAG_FETCH_PAGING_REQUESTED', 
       value: {
@@ -350,10 +355,10 @@ function getInitialFormsState(faces) {
     formsState[faces[face]] = {
       searchType: 'color',
       text:{
-        user:{value: '', style:{display:'none',}},
-        hashTag:{value: '', style:{display:'none',}},
-        bgColor:{value: '', style:{display:'inline',}},
-        txtColor:{value: '', style:{display:'none',}}
+        user:{value: '', style:{width: '10em', display:'none'}},
+        hashTag:{value: '', style:{width: '10em', display:'none'}},
+        bgColor:{value: '', style:{width: '10em', display:'inline'}},
+        txtColor:{value: '', style:{width: '10em', display:'none'}}
       }
     }
   }
@@ -517,6 +522,7 @@ export function convertRGBAToString(value) {
 // Retrieve data from store as props
 function mapStateToProps(store) {
   return {
+    router: store.routerReducer,
     app: store.app,
     ig: store.instaProxy,
     menu: store.menu,
