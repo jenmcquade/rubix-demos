@@ -42,6 +42,7 @@
     "eslint-plugin-react": "^7.5.1",
     "express": "4.16.2",
     "express-history-api-fallback": "^2.2.1",
+    "express-https-redirect": "^1.0.0",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.6",
     "font-awesome": "^4.7.0",

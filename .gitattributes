@@ -15,6 +15,7 @@
 *Docker* eol=lf
 *docker* eol=lf
 *entrypoint* eol=lf
+*public_build* eol=lf
 
 # misc
 .DS_Store

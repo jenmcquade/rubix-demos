@@ -9,6 +9,7 @@ var compression = require('compression')
 var express = require('express');
 var Path = require('path');
 var fallback = require('express-history-api-fallback');
+var httpsRedirect = require('express-https-redirect');
 var root = process.env.NODE_ENV === 'production' ? '/build' : '/public';
 
 var LOCAL_HOST = 'http://localhost:3002';
@@ -16,6 +17,7 @@ var LOCAL_HOST = 'http://localhost:3002';
 var app = express();
 app.use(compression({threshold: 0}));
 app.use(fallback('index.html', { root }));
+app.use('/', httpsRedirect());
 
 app.use(function(req, res, next) {
   res.header('Content-Security-Policy', "connect-src 'self' http://localhost http://igdata.herokuapp.com"); // eslint-disable-line 

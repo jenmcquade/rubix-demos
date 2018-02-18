@@ -45,7 +45,7 @@ RUN if [ "$BUILD_TYPE" = "development" ]; then \
         node /node_modules/react-scripts/scripts/build.js && \
         rm -rf /node_modules && \
         rm /package-lock.json && \
-        cd / && npm install --save express express-history-api-fallback compression path cross-env && \
+        cd / && npm install --save express express-https-redirect express-history-api-fallback compression path cross-env && \
         cd /build; ls -l; \
     fi
 

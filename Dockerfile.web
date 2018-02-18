@@ -4,7 +4,7 @@ COPY ./server.js /
 COPY ./package.json /
 COPY ./public_build/ /build/ 
 
-RUN cd / && npm install --save express-history-api-fallback express compression path cross-env && \
+RUN cd / && npm install --save express express-https-redirect express-history-api-fallback compression path cross-env && \
     cd /build; ls -l
 
 CMD node /server.js --bind 0.0.0.0:$PORT
