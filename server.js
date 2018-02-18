@@ -9,15 +9,13 @@ var compression = require('compression')
 var express = require('express');
 var Path = require('path');
 var fallback = require('express-history-api-fallback');
-var httpsRedirect = require('express-https-redirect');
 var root = process.env.NODE_ENV === 'production' ? '/build' : '/public';
 
 var LOCAL_HOST = 'http://localhost:3002';
 
 var app = express();
 app.use(compression({threshold: 0}));
-app.use(fallback('index.html', { root }));
-app.use('/', httpsRedirect());
+app.set('trust proxy', true);
 
 app.use(function(req, res, next) {
   res.header('Content-Security-Policy', "connect-src 'self' http://localhost http://igdata.herokuapp.com"); // eslint-disable-line 
@@ -82,15 +80,15 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
 
-var buildDir = Path.resolve(__dirname, 'build');
-var serveBuildDir = express.static(buildDir);
+var buildDir = '/build';
+var serveBuildDir = express.static('/build');
 var prod_port = process.env.PORT ? process.env.PORT : 80;
 var dev_port = 3002; // Express is served over 3002, but is proxied by BrowserSync
 
 if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging') {
   app.listen(dev_port, () => console.log('Now serving with WebPack Middleware on port ' + dev_port + '!'))
 } else {
-  app.use('/', serveBuildDir);
-  app.listen(prod_port, () => console.log('Now serving on port ' + prod_port + ' using the ' + Path.resolve(__dirname, 'build') + ' directory!'))
+  app.use('*', serveBuildDir);
+  app.use(fallback('index.html', { root }));
+  app.listen(prod_port, () => console.log('Now serving on port ' + prod_port + ' using the ' + buildDir + ' directory!'))
 }
-

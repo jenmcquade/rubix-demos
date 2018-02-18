@@ -5,7 +5,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
-const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ROOT_PATH = path.resolve(__dirname);
 const MODULES_PATH = path.resolve(__dirname, 'node_modules');
@@ -67,6 +66,9 @@ module.exports = {
     }),
     new Webpack.IgnorePlugin(/^\.\/locale$/, [/moment$/]),
     new Webpack.NoEmitOnErrorsPlugin(),
+    new ManifestPlugin({
+      fileName: 'asset-manifest.json', // Not to confuse with manifest.json 
+    }),
     new CompressionPlugin({
       asset: '[path].gz[query]',
       algorithm: 'gzip',

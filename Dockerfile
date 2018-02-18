@@ -15,6 +15,7 @@ ENV CLIENT=true
 COPY ./entrypoint /usr/local/bin/
 COPY ./server.js /
 COPY ./package.json /
+COPY ./package.prod.json /
 COPY ./webpack.config.js /
 COPY ./webpack.production.config.js /
 COPY ./src/ /src/
@@ -44,9 +45,10 @@ RUN if [ "$BUILD_TYPE" = "development" ]; then \
         BUILD_VER=$BUILD_VER BUILD_TIME=$BUILD_TIME node /node_modules/webpack/bin/webpack.js -p --config /webpack.production.config.js && \
         node /node_modules/react-scripts/scripts/build.js && \
         rm -rf /node_modules && \
-        rm /package-lock.json && \
-        cd / && npm install --save express express-https-redirect express-history-api-fallback compression path cross-env && \
-        cd /build; ls -l; \
+        rm /package.json /package-lock.json && \
+        sed -e "s/[[BUILD_VER]]/\"${$BUILD_VER}\"/g" /package.prod.json > /package.json && \
+        npm install && \
+        cd /build && ls -l; \
     fi
 
 RUN apk del \
