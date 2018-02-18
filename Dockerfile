@@ -47,7 +47,7 @@ RUN if [ "$BUILD_TYPE" = "development" ]; then \
         rm -rf /node_modules && \
         rm /package.json /package-lock.json && \
         sed -i.bak s/[[BUILD_VER]]/${BUILD_VER}/g package.prod.json && \
-        mv /package.prod.json /package.json && \\
+        mv /package.prod.json /package.json && \
         npm install && \
         cd /build && ls -l; \
     fi
