@@ -15,7 +15,6 @@ var LOCAL_HOST = 'http://localhost:3002';
 
 var app = express();
 app.use(compression({threshold: 0}));
-app.set('trust proxy', true);
 
 app.use(function(req, res, next) {
   res.header('Content-Security-Policy', "connect-src 'self' http://localhost http://igdata.herokuapp.com"); // eslint-disable-line 
@@ -88,7 +87,7 @@ var dev_port = 3002; // Express is served over 3002, but is proxied by BrowserSy
 if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging') {
   app.listen(dev_port, () => console.log('Now serving with WebPack Middleware on port ' + dev_port + '!'))
 } else {
-  app.use('*', serveBuildDir);
+  app.use('/', serveBuildDir);
   app.use(fallback('index.html', { root }));
   app.listen(prod_port, () => console.log('Now serving on port ' + prod_port + ' using the ' + Path.resolve(__dirname, 'build') + ' directory!'))
 }
