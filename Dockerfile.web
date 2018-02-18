@@ -1,9 +1,11 @@
 FROM node:8.9.4-alpine
 
 COPY ./server.js /
+COPY ./package.prod.json /
 COPY ./public_build/ /build/ 
 
-RUN npm install cross-env path compression express express-history-api-fallback && \
+RUN mv /package.prod.json /package.json && \
+    npm install && \
     cd /build; ls -l
 
 CMD node /server.js --bind 0.0.0.0:$PORT
