@@ -88,7 +88,7 @@ var dev_port = 3002; // Express is served over 3002, but is proxied by BrowserSy
 if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging') {
   app.listen(dev_port, () => console.log('Now serving with WebPack Middleware on port ' + dev_port + '!'))
 } else {
-  app.use('*', serveBuildDir);
+  app.use('/', serveBuildDir);
   app.use(fallback('index.html', { root }));
   app.listen(prod_port, () => console.log('Now serving on port ' + prod_port + ' using the ' + buildDir + ' directory!'))
 }
