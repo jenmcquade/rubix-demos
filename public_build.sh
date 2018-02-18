@@ -35,7 +35,7 @@ if [ "$key" = '' ]; then
 
   git pull origin master
 
-  git rm -rf public_build
+  git rm -r public_build
 
   git add public_build 
 

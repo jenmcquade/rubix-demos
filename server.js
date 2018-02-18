@@ -87,6 +87,6 @@ if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging'
   app.listen(dev_port, () => console.log('Now serving with WebPack Middleware on port ' + dev_port + '!'))
 } else {
   app.use('/', serveBuildDir);
-  app.use(fallback('index.html', { root }));
+  app.use(fallback('index.html', { buildDir }));
   app.listen(prod_port, () => console.log('Now serving on port ' + prod_port + ' using the ' + Path.resolve(__dirname, 'build') + ' directory!'))
 }
