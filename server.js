@@ -79,7 +79,7 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
 
-var buildDir = Path.resolve(__dirname, 'build');
+var buildDir = __dirname+'/build';
 var serveBuildDir = express.static(buildDir);
 var prod_port = process.env.PORT ? process.env.PORT : 80;
 var dev_port = 3002; // Express is served over 3002, but is proxied by BrowserSync
