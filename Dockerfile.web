@@ -1,10 +1,11 @@
 FROM node:8.9.4-alpine
 
 COPY ./server.js /
-COPY ./package.prod.json /package.json
+COPY ./package.prod.json /
 COPY ./public_build/ /build/ 
 
-RUN cd / && npm install && \
+RUN mv /package.prod.json /package.json && \
+    npm install && \
     cd /build; ls -l
 
 CMD node /server.js --bind 0.0.0.0:$PORT
