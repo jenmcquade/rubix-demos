@@ -17,7 +17,7 @@ var app = express();
 app.use(compression({threshold: 0}));
 
 app.use(function(req, res, next) {
-  res.header('Content-Security-Policy', "connect-src 'self' http://localhost http://igdata.herokuapp.com"); // eslint-disable-line 
+  res.header('Content-Security-Policy', "script-src 'self'; connect-src 'self' *igdata.herokuapp.com"); // eslint-disable-line 
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept');
   next();
