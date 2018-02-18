@@ -48,7 +48,7 @@ RUN if [ "$BUILD_TYPE" = "development" ]; then \
         rm /package.json /package-lock.json && \
         sed -i.bak s/[[BUILD_VER]]/${BUILD_VER}/g package.prod.json && \
         mv /package.prod.json /package.json && \
-        npm install && \
+        npm install --save cross-env compression express express-history-api-fallback && \
         cd /build && ls -l; \
     fi
 
