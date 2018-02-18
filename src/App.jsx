@@ -13,7 +13,11 @@ export default function App(props) {
   return (
     <Provider store={props.store}>
       <ConnectedRouter history={history}>
-        <AppWrap />
+        <AppWrap>
+          <div id="loadingSpinner">
+            <img alt="The app is loading..." style={{width: '200px'}} src={loader} />
+          </div>
+        </AppWrap>
       </ConnectedRouter>
     </Provider>
   );

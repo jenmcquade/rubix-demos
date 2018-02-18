@@ -46,7 +46,8 @@ RUN if [ "$BUILD_TYPE" = "development" ]; then \
         node /node_modules/react-scripts/scripts/build.js && \
         rm -rf /node_modules && \
         rm /package.json /package-lock.json && \
-        sed -e "s/[[BUILD_VER]]/\"${$BUILD_VER}\"/g" /package.prod.json > /package.json && \
+        sed -i.bak s/[[BUILD_VER]]/${BUILD_VER}/g package.prod.json && \
+        mv /package.prod.json /package.json && \\
         npm install && \
         cd /build && ls -l; \
     fi
