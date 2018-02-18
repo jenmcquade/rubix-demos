@@ -17,7 +17,6 @@ var app = express();
 app.use(compression({threshold: 0}));
 
 app.use(function(req, res, next) {
-  res.header('Content-Security-Policy', "script-src 'self'; connect-src 'self' *igdata.herokuapp.com"); // eslint-disable-line 
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept');
   next();
@@ -88,6 +87,5 @@ if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging'
   app.listen(dev_port, () => console.log('Now serving with WebPack Middleware on port ' + dev_port + '!'))
 } else {
   app.use('/', serveBuildDir);
-  app.use(fallback('index.html', { root }));
   app.listen(prod_port, () => console.log('Now serving on port ' + prod_port + ' using the ' + Path.resolve(__dirname, 'build') + ' directory!'))
 }
