@@ -80,15 +80,15 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
 
-var buildDir = '/build';
-var serveBuildDir = express.static('/build');
+var buildDir = Path.resolve(__dirname, 'build');
+var serveBuildDir = express.static(buildDir);
 var prod_port = process.env.PORT ? process.env.PORT : 80;
 var dev_port = 3002; // Express is served over 3002, but is proxied by BrowserSync
 
 if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging') {
   app.listen(dev_port, () => console.log('Now serving with WebPack Middleware on port ' + dev_port + '!'))
 } else {
-  app.use('/', serveBuildDir);
+  app.use('*', serveBuildDir);
   app.use(fallback('index.html', { root }));
-  app.listen(prod_port, () => console.log('Now serving on port ' + prod_port + ' using the ' + buildDir + ' directory!'))
+  app.listen(prod_port, () => console.log('Now serving on port ' + prod_port + ' using the ' + Path.resolve(__dirname, 'build') + ' directory!'))
 }
