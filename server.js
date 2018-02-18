@@ -9,6 +9,7 @@ var compression = require('compression')
 var express = require('express');
 var Path = require('path');
 var fallback = require('express-history-api-fallback');
+var serve = require('serve');
 var root = process.env.NODE_ENV === 'development' ? '/public' : '/build';
 
 var LOCAL_HOST = 'http://localhost:3002';
@@ -87,11 +88,9 @@ var dev_port = 3002; // Express is served over 3002, but is proxied by BrowserSy
 if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging') {
   app.listen(dev_port, () => console.log('Now serving with WebPack Middleware on port ' + dev_port + '!'))
 } else {
-  app.use('/', serveBuildDir);
-  app.use(redirectUnmatched); 
-  app.listen(prod_port, () => console.log('Now serving on port ' + prod_port + ' using the ' + Path.resolve(__dirname, 'build') + ' directory!'))
+  serve = serve(buildDir, {
+    port: process.env.PORT,
+  })
+  app.listen(prod_port, () => console.log('Now serving on port ' + prod_port + ' using the ' + buildDir + ' directory!'))
 }
 
-function redirectUnmatched(req, res) {
-  res.redirect('https://o3dv.herokuapp.com/');
-}

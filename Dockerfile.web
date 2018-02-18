@@ -5,7 +5,7 @@ COPY ./package.prod.json /
 COPY ./public_build/ /build/ 
 
 RUN mv /package.prod.json /package.json && \
-    npm install --save cross-env compression express express-history-api-fallback && \
+    npm install --save cross-env compression serve express express-history-api-fallback && \
     cd /build; ls -l
 
 CMD node /server.js --bind 0.0.0.0:$PORT
