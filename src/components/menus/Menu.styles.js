@@ -137,7 +137,7 @@ class Styles {
 
         > :focus, :hover {
           text-decoration: none;
-          color: rgba(0,0,0,0.8);
+          color: rgba(0,0,0,0.2) !important;
         }
       }
 

@@ -150,7 +150,7 @@ class Theme extends Component {
         autoHideDuration={200} 
         autoHeight 
         autoHeightMin={420} 
-        autoHeightMax={555}
+        autoHeightMax={455}
         className="scroll-bar"
       >
         <SubTitle type="heading">

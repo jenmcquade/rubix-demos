@@ -39,7 +39,7 @@ const store = configureStore(window.__INITIAL_STATE__);
 const mountApp = document.getElementById('root');
 
 const render = (Component) => {
-  if(process.env.NODE_ENV === 'development') {
+  if(process.env.NODE_ENV === 'production') {
     document.getElementById('prodBuildInfo').style.display = 'none';
   }
   ReactDOM.render(
