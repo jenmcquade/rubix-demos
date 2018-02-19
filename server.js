@@ -20,6 +20,19 @@ app.use(function(req, res, next) {
   next();
 });
 
+var forceSsl = function(req, res, next) {
+  if (req.headers['x-forwarded-proto'] !== 'https') {
+    return res.redirect(['https://', req.get('Host'), req.url].join(''));
+  }
+  return next();
+}
+
+app.configure(function() {
+  if (process.env.NODE_ENV === 'production') {
+    app.use(forceSsl);
+  }
+})
+
 /**
 * Run Browsersync and use middleware for Hot Module Replacement
 */
