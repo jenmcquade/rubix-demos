@@ -100,16 +100,15 @@
     <div id="loadingSpinner">
       <img style="width: 200px;" src="/static/media/loader.gif" />
     </div>
+    <div id="prodBuildInfo" style="display: none;">
+      <div>
+        <div><label>Built at: </label><span> <%= htmlWebpackPlugin.options.buildAt %></span></div>
+        <div><label>Version: </label><span> <%= htmlWebpackPlugin.options.buildVer %></span></div>
+      </div> 
+    </div>
     <div id="app">
       <div style="display:flex">
-        <div id="root">
-          <div id="prodBuildInfo" style="position: absolute; z-index: 99; bottom: 1.25em; right: 1em; max-width: 20%">
-              <div>
-                <div><label>Built at: </label><span> <%= htmlWebpackPlugin.options.buildAt %></span></div>
-                <div><label>Version: </label><span> <%= htmlWebpackPlugin.options.buildVer %></span></div>
-              </div> 
-            </div>
-        </div>
+        <div id="root" />
       </div>
     </div>
 
@@ -122,14 +121,13 @@
         height: 100%;
         width: 100%;
       }
-      #root {
-        overflow: hidden;
-        position: fixed;
-        z-index: 99;
-      }
       @media only screen
       and (min-width : 75px) 
       and (max-width : 719px) {
+        #prodBuildInfo {
+          font-family: sans-serif;
+          font-size: 0.5em;
+        }
         .fa {
           font-size: 2em;
         }
