@@ -27,12 +27,6 @@ var forceSsl = function(req, res, next) {
   return next();
 }
 
-app.configure(function() {
-  if (process.env.NODE_ENV === 'production') {
-    app.use(forceSsl);
-  }
-})
-
 /**
 * Run Browsersync and use middleware for Hot Module Replacement
 */
@@ -103,6 +97,15 @@ if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging'
   app.get('*', function (request, response){
     response.sendFile(Path.resolve(__dirname, 'build', 'index.html'))
   })
+  // Although this looks weird, 
+  //  Heroku doesn't use port 80 or 443.
+  //  SSL resolves at the DNS level.
+  //  So, if we aren't serving port 80,
+  //  we assume it's because we're in production on Heroku,
+  //  vs. a production check on the local instance
+  if(process.env.PORT !== 80 && process.env.NODE_ENV === 'production') {
+    app.use(forceSsl);
+  }
   app.listen(prod_port, () => console.log('Now serving on port ' + prod_port + ' using the ' + buildDir + ' directory!'))
 }
 
