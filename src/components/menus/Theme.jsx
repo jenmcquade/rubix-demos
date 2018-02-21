@@ -265,10 +265,10 @@ function getInitialFormsState(faces) {
     formsState[faces[face]] = {
       searchType: 'color',
       text:{
-        user:{value: '', style:{width: '10em', display:'none'}},
-        hashTag:{value: '', style:{width: '10em', display:'none'}},
-        bgColor:{value: '', style:{width: '10em', display:'inline'}},
-        txtColor:{value: '', style:{width: '10em', display:'none'}}
+        user:{value: '', style:{width: '7em', display:'none'}},
+        hashTag:{value: '', style:{width: '7em', display:'none'}},
+        bgColor:{value: '', style:{width: '7em', display:'inline'}},
+        txtColor:{value: '', style:{width: '7em', display:'none'}}
       },
       slider:{
         imageOpacity: {value: .5, style:{width: '10em', 'margin': '.8em 0.5em', display:'none'}}

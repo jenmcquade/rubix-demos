@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Styles from './Cube.styles';
 import 'html-gl/dist/htmlgl.min';
+import Draggable from 'react-draggable';
 
 import Spinner from '../../../assets/loader.svg';
 
@@ -72,40 +73,49 @@ class Cube extends React.Component {
       {type: 'corner', position: ['bottom', 'left']},
     ]
     return(
-      <CubeWrapper style={this.state.wrapperStyle}>
-        <html-gl>
-          <Box flat={this.props.object.objectIsFlat}>
-            { 
-              this.faces.map((face) => {
-                let hasImages = this.state.hasImagesOnLoad;
-                return <Face id={face} key={face}
-                  itemBgColor={this.props.object.theme[face].bgColor}
-                  itemColor={this.props.object.theme[face].txtColor}
-                  style={this.props.object.style[face]}
-                >
-                {
-                  items.map((item, i) => {
-                    let position = item.position.join('-');
-                    let positionTxt = this.getPositionTxt(item);
-                    return <Item key={i}
-                      id={face + '-' + (i+1).toString()}
-                      position={position}
-                      type={item.type}>
-                      { !hasImages || !this.state.object.theme[face].images[i] ? positionTxt : 
-                        <img alt={positionTxt} id={face + '-' + (i+1).toString() + '-image'}
-                          style={this.state.object.theme[face].imageStyle}
-                          src={this.state.object.theme[face].images[i]}
-                        />
-                      }
-                    </Item>
+      <Draggable
+          handle=".handle"
+          defaultPosition={{x: 0, y: 0}}
+          position={null}
+          grid={[5, 5]}
+          onStart={this.handleStart}
+          onDrag={this.handleDrag}
+          onStop={this.handleStop}>
+          <CubeWrapper className="handle" style={this.state.wrapperStyle}>
+            <html-gl>
+              <Box flat={this.props.object.objectIsFlat}>
+                { 
+                  this.faces.map((face) => {
+                    let hasImages = this.state.hasImagesOnLoad;
+                    return <Face id={face} key={face}
+                      itemBgColor={this.props.object.theme[face].bgColor}
+                      itemColor={this.props.object.theme[face].txtColor}
+                      style={this.props.object.style[face]}
+                    >
+                    {
+                      items.map((item, i) => {
+                        let position = item.position.join('-');
+                        let positionTxt = this.getPositionTxt(item);
+                        return <Item key={i}
+                          id={face + '-' + (i+1).toString()}
+                          position={position}
+                          type={item.type}>
+                          { !hasImages || !this.state.object.theme[face].images[i] ? positionTxt : 
+                            <img alt={positionTxt} id={face + '-' + (i+1).toString() + '-image'}
+                              style={this.state.object.theme[face].imageStyle}
+                              src={this.state.object.theme[face].images[i]}
+                            />
+                          }
+                        </Item>
+                      })
+                    }
+                    </Face>
                   })
                 }
-                </Face>
-              })
-            }
-          </Box>
-        </html-gl>
-      </CubeWrapper>
+              </Box>
+            </html-gl>
+          </CubeWrapper>
+        </Draggable>            
     );
   }
 };

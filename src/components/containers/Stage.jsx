@@ -3,19 +3,20 @@ import Cube from '../3d/rubix/Cube';
 import EnvInfo from '../EnvInfo';
 import ProxyInfo from '../ProxyInfo';
 import queryString from 'query-string';
-import Draggable from 'react-draggable';
 
 import Styles from './container.styles';
 
 const styles = new Styles();
 const InfoLink = styles.info;
+const InfoWrap = styles.infoWrap;
 
 export default class Stage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       ...props,
-      parsedQs: {...queryString.parse(window.location.search)}
+      parsedQs: {...queryString.parse(window.location.search)},
+      appInfoIsOpen: false,
     }
     this.handleStart = handleStart.bind(this);
     this.handleDrag = handleDrag.bind(this);
@@ -28,31 +29,22 @@ export default class Stage extends React.Component {
   render() {
     return(
       <div id="stage" className="stage" role="main">
-        <Draggable
-        axis="x"
-        handle=".handle"
-        defaultPosition={{x: 0, y: 0}}
-        position={null}
-        grid={[25, 25]}
-        onStart={this.handleStart}
-        onDrag={this.handleDrag}
-        onStop={this.handleStop}>
-          <Cube hasImagesOnLoad="false" />
-        </Draggable>
-        <div style={{fontSize: '1em', position: 'absolute', bottom: '0px', padding: '1em', letterSpacing: '0.10em'  }}>
-          <InfoLink onClick={this.handleProjectInfoClick}>
+        <Cube hasImagesOnLoad="false" />
+        <InfoWrap isOpen={this.state.appInfoIsOpen} id="infoWrapper">
+          <InfoLink to="?info" onClick={this.handleProjectInfoClick}>
             <i className='fa fa-info-circle'/>
           </InfoLink>
-          { this.state.parsedQs.hasOwnProperty('info') && <ProxyInfo /> }
-          { this.state.parsedQs.hasOwnProperty('info') && process.env.NODE_ENV !== 'production' && <EnvInfo/> }
-        </div>
+          <div style={{borderBottom: '1px solid white', }} />
+          { <ProxyInfo /> }
+          { process.env.NODE_ENV !== 'production' && <EnvInfo/> }
+        </InfoWrap>
       </div>
     );
   }
 }
 
-function handleProjectInfoClick() {
-
+function handleProjectInfoClick(e) {
+  this.setState({appInfoIsOpen: !this.state.appInfoIsOpen});
 }
 
 function handleStart() {
