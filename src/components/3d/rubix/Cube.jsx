@@ -12,6 +12,7 @@ const Style = new Styles();
  * Styled Wrappers
  */
 const CubeWrapper = Style.wrapper;
+const DraggableHandle = Style.handle;
 const Box = Style.cube;
 const Item = Style.item;
 const Face = Style.face;
@@ -74,14 +75,16 @@ class Cube extends React.Component {
     ]
     return(
       <Draggable
-          handle=".handle"
-          defaultPosition={{x: 0, y: 0}}
-          position={null}
-          grid={[5, 5]}
-          onStart={this.handleStart}
-          onDrag={this.handleDrag}
-          onStop={this.handleStop}>
-          <CubeWrapper className="handle" style={this.state.wrapperStyle}>
+        handle=".handle"
+        defaultPosition={{x: 0, y: 0}}
+        position={null}
+        grid={[5, 5]}
+        onStart={this.handleStart}
+        onDrag={this.handleDrag}
+        onStop={this.handleStop}
+      >
+        <DraggableHandle className="handle">
+          <CubeWrapper style={this.state.wrapperStyle}>
             <html-gl>
               <Box flat={this.props.object.objectIsFlat}>
                 { 
@@ -115,7 +118,8 @@ class Cube extends React.Component {
               </Box>
             </html-gl>
           </CubeWrapper>
-        </Draggable>            
+        </DraggableHandle>
+      </Draggable>            
     );
   }
 };

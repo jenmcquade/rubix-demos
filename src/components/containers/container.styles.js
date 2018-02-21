@@ -25,7 +25,7 @@ class Styles {
       `}
 
       ${props => !props.isOpen && css`
-        transform: translateY(15em);
+        transform: translateY(${process.env.NODE_ENV === 'development' ? '15em' : '5.5em'});
       `}
     `
 

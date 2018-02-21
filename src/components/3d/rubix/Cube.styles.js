@@ -10,6 +10,12 @@ class Styles {
       width: 100%;
     `;
 
+    this.handle = styled.div`
+      top: 50%;
+      left: 50%;
+      position: absolute;    
+    `
+    
     this.wrapper = styled.div`
       top: 50%;
       left: 50%;
