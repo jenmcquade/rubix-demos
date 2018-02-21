@@ -18,29 +18,21 @@ const Face = Style.face;
 class Cube extends React.Component {
   constructor(props) {
     super(props);
+    this.faces = Object.keys(this.props.object.style);
     this.state = {
       ...props,
       igProxyIsOnline: false,
       wrapperStyle: {},
       hasImagesOnLoad: props.hasImagesOnLoad,
-      isMounted: false,
+      isMounted: false
     };
-    this.faces = Object.keys(this.props.object.style);
-
-    this.imageStyle = {
-      opacity: '0.50',
-      width: '100%',
-      height: '100%',
-      display: 'default',
-      borderRadius: '25%',
-      margin: '10px',
-    }
 
     this.getCubeFaces = getCubeFaces.bind(this);
     this.showImages = showImages.bind(this);
     this.hideImages = hideImages.bind(this);
     this.popInImages = popInImages.bind(this);
     this.popOutImages = popOutImages.bind(this);
+    this.getPositionTxt = getPositionTxt.bind(this);
   }
 
   componentDidMount() {
@@ -52,7 +44,6 @@ class Cube extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-
     if(nextProps.ig.status) {
       this.setState({igProxyIsOnline: true });
       this.showImages();
@@ -69,6 +60,17 @@ class Cube extends React.Component {
   }
 
   render() {
+    let items = [
+      {type: 'corner', position: ['top', 'left']},
+      {type: 'side', position: ['top']},
+      {type: 'corner', position: ['top', 'right']},
+      {type: 'side', position: ['left']},
+      {type: 'middle', position: ['center']},
+      {type: 'side', position: ['right']},
+      {type: 'corner', position: ['bottom', 'left']},
+      {type: 'side', position: ['bottom']},
+      {type: 'corner', position: ['bottom', 'left']},
+    ]
     return(
       <CubeWrapper style={this.state.wrapperStyle}>
         <html-gl>
@@ -77,64 +79,27 @@ class Cube extends React.Component {
               this.faces.map((face) => {
                 let hasImages = this.state.hasImagesOnLoad;
                 return <Face id={face} key={face}
-                    itemBgColor={this.props.object.theme[face].bgColor}
-                    itemColor={this.props.object.theme[face].txtColor}
-                    style={this.props.object.style[face]}
-                  >
-
-                  <Item id={face+'-1'} position="top-left" type="corner">
-                    {!hasImages || !this.state.object.theme[face].images[0] ? 'top left' : 
-                      <img id={face+'-1-image'} style={this.imageStyle} alt="1" src={this.state.object.theme[face].images[0]} />
-                    }
-                  </Item>
-
-                  <Item id={face+'-2'} position="top" type="side">
-                    {!hasImages || !this.state.object.theme[face].images[1] ? 'top' : 
-                      <img id={face+'-2-image'} style={this.imageStyle} alt="2" src={this.state.object.theme[face].images[1]} />
-                    }
-                  </Item>
-
-                  <Item id={face+'-3'} position="top-right" type="corner">
-                    {!hasImages || !this.state.object.theme[face].images[2] ? 'top right' : 
-                      <img id={face+'-3-image'} style={this.imageStyle} alt="3" src={this.state.object.theme[face].images[2]} />
-                    }
-                  </Item>
-
-                  <Item id={face+'-4'} position="left" type="side">
-                    {!hasImages || !this.state.object.theme[face].images[3] ? 'left' : 
-                      <img id={face+'-4-image'} style={this.imageStyle} alt="4" src={this.state.object.theme[face].images[3]} />
-                    }
-                  </Item>
-
-                  <Item id={face+'-5'} position="center" type="middle">
-                    {!hasImages || !this.state.object.theme[face].images[4] ? 'center' : 
-                      <img id={face+'-5-image'} style={this.imageStyle} alt="5" src={this.state.object.theme[face].images[4]} />
-                    }
-                  </Item>
-
-                  <Item id={face+'-6'} position="right" type="side">
-                    {!hasImages || !this.state.object.theme[face].images[5] ? 'right' : 
-                      <img id={face+'-6-image'} style={this.imageStyle} alt="6" src={this.state.object.theme[face].images[5]} />
-                    }
-                  </Item>
-
-                  <Item id={face+'-7'} position="bottom-left" type="corner">
-                    {!hasImages || !this.state.object.theme[face].images[6] ? 'bot left' : 
-                      <img id={face+'-7-image'} style={this.imageStyle} alt="7" src={this.state.object.theme[face].images[6]} />
-                    }
-                  </Item>
-
-                  <Item id={face+'-8'} position="bottom" type="side">
-                    {!hasImages || !this.state.object.theme[face].images[7] ? 'bottom' : 
-                      <img id={face+'-8-image'} style={this.imageStyle} alt="8" src={this.state.object.theme[face].images[7]} />
-                    }
-                  </Item>
-
-                  <Item id={face+'-9'} position="bottom-right" type="corner">
-                    {!hasImages || !this.state.object.theme[face].images[8] ? 'bot right' : 
-                      <img id={face+'-9-image'} style={this.imageStyle} alt="9" src={this.state.object.theme[face].images[8]} />
-                    }
-                  </Item>
+                  itemBgColor={this.props.object.theme[face].bgColor}
+                  itemColor={this.props.object.theme[face].txtColor}
+                  style={this.props.object.style[face]}
+                >
+                {
+                  items.map((item, i) => {
+                    let position = item.position.join('-');
+                    let positionTxt = this.getPositionTxt(item);
+                    return <Item key={i}
+                      id={face + '-' + (i+1).toString()}
+                      position={position}
+                      type={item.type}>
+                      { !hasImages || !this.state.object.theme[face].images[i] ? positionTxt : 
+                        <img alt={positionTxt} id={face + '-' + (i+1).toString() + '-image'}
+                          style={this.state.object.theme[face].imageStyle}
+                          src={this.state.object.theme[face].images[i]}
+                        />
+                      }
+                    </Item>
+                  })
+                }
                 </Face>
               })
             }
@@ -144,6 +109,19 @@ class Cube extends React.Component {
     );
   }
 };
+
+function getPositionTxt(item) {
+  let position = item.position.join('-');
+  let positionTxt = '';
+  if(item.type === 'corner' && position[0] === 'bottom') {
+    positionTxt = 'bot ' + item.position[1];
+  } else if(item.type === 'side' && position[0] === 'bottom') {
+    positionTxt = 'bot';
+  } else {
+    positionTxt = item.position.join(' ');
+  }
+  return positionTxt;
+}
 
 export function getCubeFaces() {
   if(this) {

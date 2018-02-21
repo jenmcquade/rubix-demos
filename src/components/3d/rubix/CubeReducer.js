@@ -10,12 +10,23 @@ import {
   RESET_FACE_TXT,
   SET_THEME_FACE_IMAGES,
   SET_THEME_CUBE_IMAGES,
+  SET_THEME_FACE_IMAGE_OPACITY,
+  SET_THEME_CUBE_IMAGE_OPACITY
 } from './CubeActions';
 
 import '../../../assets/loader.svg';
 
 const DEFAULT_IMG = 'static/media/loader.svg';
 const IMAGE_COUNT = 9;
+const IMAGE_STYLE = {
+  opacity: '0.5',
+  width: '100%',
+  height: '100%',
+  display: 'default',
+  borderRadius: '25%',
+  margin: '10px',
+  transition: 'opacity',
+}
 
 //
 // Theming template
@@ -42,31 +53,37 @@ const initialState = {
       bgColor: 'rgba(255,255,255,1)',
       txtColor: 'black',
       images: getDefaultImagesArray(),
+      imageStyle: IMAGE_STYLE,
     },
     bottom: {
       bgColor: 'rgba(255,255,0,1)',
       txtColor: 'black',
       images: getDefaultImagesArray(),
+      imageStyle: IMAGE_STYLE,
     },
     front: {
       bgColor: 'rgba(0,0,255,1)',
       txtColor: 'white',
       images: getDefaultImagesArray(),
+      imageStyle: IMAGE_STYLE,
     },
     back: {
       bgColor: 'rgba(0,128,0,1)',
       txtColor: 'white',
       images: getDefaultImagesArray(),
+      imageStyle: IMAGE_STYLE,
     },
     left: {
       bgColor: 'rgba(255,0,0,1)',
       txtColor: 'white',
       images: getDefaultImagesArray(),
+      imageStyle: IMAGE_STYLE,
     },
     right: {
       bgColor: 'rgba(255,165,0,1)',
       txtColor: 'white',
       images: getDefaultImagesArray(),
+      imageStyle: IMAGE_STYLE,
     }
   },
   style: {
@@ -190,6 +207,27 @@ const CubeReducer = (state = initialState, action) => {
       }
       newState.theme[action.value.face].txtColor = backupStateFaceTxtColor.theme[action.value.face].txtColor;
       return {...state, ...newState};
+
+    case SET_THEME_CUBE_IMAGE_OPACITY: {
+      if(!action.value) {
+        return state;
+      }
+      let face = 0;
+      for(face in action.value.faces) {
+        let newStyle = {...IMAGE_STYLE, ...{opacity: action.value.opacity <= 100 ?  action.value.opacity.toString() : '0.5'}};
+        newState.theme[action.value.faces[face]].imageStyle = newStyle;
+      }
+      return {...state, ...newState};
+    }
+
+    case SET_THEME_FACE_IMAGE_OPACITY: {
+      if(!action.value) {
+        return state;
+      }
+      let newStyle = {...IMAGE_STYLE, ...{opacity: action.value.opacity <= 100 ?  action.value.opacity.toString() : '0.5'}};
+      newState.theme[action.value.faceId].imageStyle = newStyle;
+      return {...state, ...newState};
+    }
 
     default:
       return state;

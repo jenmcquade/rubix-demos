@@ -10,6 +10,8 @@ export const RESET_FACE_TXT = 'RESET_FACE_TXT';
 export const SET_THEME_FACE_IMAGES = 'SET_THEME_FACE_IMAGES';
 export const SET_THEME_CUBE_IMAGES = 'SET_THEME_CUBE_IMAGES';
 export const SET_IMAGES_TO_LOADING = 'SET_IMAGES_TO_LOADING';
+export const SET_THEME_FACE_IMAGE_OPACITY = 'SET_FACE_IMAGE_OPACITY';
+export const SET_THEME_CUBE_IMAGE_OPACITY = 'SET_ALL_IMAGE_OPACITY';
 
 export function restoreObject() {
   return {
@@ -81,6 +83,20 @@ export function resetThemeImages(faceId) {
   return {
     type: SET_IMAGES_TO_LOADING,
     value: faceId
+  }
+}
+
+export function setThemeCubeImageOpacity(faces, opacity) {
+  return {
+    type: SET_THEME_CUBE_IMAGE_OPACITY,
+    value: {faces: faces, opacity: opacity},
+  }
+}
+
+export function setThemeFaceImageOpacity(faceId, opacity) {
+  return {
+    type: SET_THEME_FACE_IMAGE_OPACITY,
+    value: {faceId: faceId, opacity: opacity},
   }
 }
 

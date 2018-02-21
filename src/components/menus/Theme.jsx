@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { 
-  SEARCH_RETURN_COUNT, 
-} from '../../modules/InstaProxy/InstaProxyActions'
+import Slider from 'rc-slider/lib/Slider';
+import 'rc-slider/assets/index.css';
+import 'rc-tooltip/assets/bootstrap.css';
 
 import { getCubeFaces } from '../3d/rubix/Cube'
-
-import { push } from 'react-router-redux'
 
 //
 // Import Styled Components and React Bootstrap Components
@@ -24,19 +22,27 @@ import Common, {
   Label,
 } from './Common';
 
-//
-// Import Actions
-//
-import {
-  setThemeRGBA,
-  setThemeTxtColor,
-  resetThemeRGBA,
-  resetThemeTxt,
-} from '../3d/rubix/CubeActions'
-
 import {
   toggleMenuSetup,
 } from './MenuActions'
+
+import {
+  changeBgColor,
+  changeAllBgColor,
+  changeAllTxtColor,
+  changeTxtColor,
+  convertRGBAToString
+} from './helpers/theme_colors'
+
+import {
+  changeSearchType,
+  changeImageOpacity,
+  changeAllImageOpacity,
+  searchByUser,
+  searchByHashTag,
+  searchByUserPaging, 
+  searchByHashTagPaging
+} from './helpers/theme_search'
 
 //
 // IG Service functions
@@ -74,6 +80,7 @@ class Theme extends Component {
       themeFace: 'top',
       forms: this.formsState,
       igProxyIsOnline: false,
+      faceId: 'all',
     }
 
     this.searchIsUnlocked = true;
@@ -92,6 +99,9 @@ class Theme extends Component {
     this.searchByUserPaging = searchByUserPaging.bind(this);
     this.searchByHashTagPaging = searchByHashTagPaging.bind(this);
     this.setIgSearchType = setIgSearchType.bind(this);
+    this.changeAllImageOpacity = changeAllImageOpacity.bind(this);
+    this.changeImageOpacity = changeImageOpacity.bind(this);
+    this.updateFormsDisplay = updateFormsDisplay.bind(this);
   }
 
   /**
@@ -101,34 +111,16 @@ class Theme extends Component {
   componentWillReceiveProps(nextProps) {
     if(nextProps.ig.status) {
       this.setState({igProxyIsOnline: true });
-
       // If this our first time, continue. 
       //  otherwise, we're done
       if(!nextProps.menu.isInSetup) {
         return true;
       }
-      
       this.props.dispatch(toggleMenuSetup());
-      let formsState = {};
-      for(var face in this.faces) {
-        face = face.toLowerCase();
-        let searchType = this.faces[face] === 'all' ? 'color' : 'user';
-        let userStyle = this.faces[face] === 'all' ? {display:'none'} : {display:'inline'};
-        let bgColorStyle = this.faces[face] === 'all' ? {display:'inline'} : {display:'none'};
-        formsState[this.faces[face]] = {
-          searchType: searchType,
-          text:{
-            user: {value: '', style: Object.assign({width: '10em'}, userStyle)},
-            hashTag: {value: '', style:{width: '10em', display:'none'}},
-            bgColor: {value: '', style: Object.assign({width: '10em'}, bgColorStyle)},
-            txtColor: {value: '', style:{width: '10em', display:'none'}}
-          }
-        }
-      }
-      this.setState({forms: formsState});
+      this.updateFormsDisplay();  
     } else {
       this.formsState = {};
-      for(face in this.faces) {
+      for(let face in this.faces) {
         face = face.toLowerCase();
       }
     }
@@ -161,6 +153,7 @@ class Theme extends Component {
         {
           // Create theme forms based on rubix faces
           Object.keys(this.state.forms).map((face, i) => {
+            this.face = face;
             let themeColor = 'default';
             let txtColor = 'default';
             let isAll = face === 'all' ? true : false;
@@ -168,7 +161,7 @@ class Theme extends Component {
             // Use dropup styling if this is the last form set
             let dropupEnabled = false;
             let size = Object.keys(this.state.forms).length;
-            if ( i === size - 1 || i === size - 2) {
+            if ( i > size - 4 ) {
               dropupEnabled = true;
             }
 
@@ -198,12 +191,14 @@ class Theme extends Component {
                     dropup={dropupEnabled}
                     style={{
                       backgroundColor: themeColor, 
-                      color: txtColor
+                      color: txtColor,
+                      minWidth: '6em',
                     }}
                   >
                     <DropdownItem display={proxyIsOnline.toString()} eventKey={face + '-user'}>@ (user)</DropdownItem>
                     <DropdownItem display={proxyIsOnline.toString()} eventKey={face + '-hashTag'}># (hashtag)</DropdownItem>
-                    <DropdownItem display="true" eventKey={face + '-bgColor'}>Background Color (0-255,0-255,0-255,0-1)</DropdownItem>
+                    <DropdownItem display="true" eventKey={face + '-bgColor'}>Background</DropdownItem>
+                    <DropdownItem display="true" eventKey={face + '-imageOpacity'}>Image Opacity</DropdownItem>
                     <DropdownItem display="true" eventKey={face + '-txtColor'}>Text Color</DropdownItem>
                   </DropdownButton>
                   <TextBox
@@ -232,9 +227,22 @@ class Theme extends Component {
                     bsSize="large"
                     id={'searchTextColor-' + face}
                     type="text"
-                    style={this.state.forms[face.toLowerCase()].text.txtColor.style}
+                    style={this.state.forms[face].text.txtColor.style}
                     placeholder={txtColor}
                     onChange={isAll ? this.changeAllTxtColor : this.changeTxtColor}
+                  />
+                  <Slider
+                    min={0}
+                    max={1}
+                    step={.1}
+                    defaultValue={this.state.forms[face].slider.imageOpacity.value}
+                    id={'imageOpacity-' + face} 
+                    onBeforeChange={() => this.setState({faceId: face})}
+                    onChange={isAll ? this.changeAllImageOpacity : this.changeImageOpacity }
+                    style={this.state.forms[face].slider.imageOpacity.style}
+                    trackStyle={[{ backgroundColor: 'black' }]}
+                    handleStyle={[{ backgroundColor: txtColor }]}
+                    railStyle={{ backgroundColor: themeColor }}
                   />
                 </FormGroup>
               </Form>
@@ -245,104 +253,6 @@ class Theme extends Component {
       </ScrollBar>
     );
   }
-}
-
-function searchByUser(e) {
-  e.persist();
-  if(!this.searchIsUnlocked) {
-    return false;
-  }
-  const { dispatch } = this.props;
-  let face = e.target.id.split('-')[1];
-  this.searchIsUnlocked = false;
-
-  setTimeout(() => {
-    this.searchIsUnlocked = true;
-    dispatch(push('/' + face + '/@/' + e.target.value));
-    dispatch({
-      type: 'USER_FETCH_REQUESTED', 
-      value: 
-        {
-          face: face,
-          searchType: 'user', 
-          searchValue: e.target.value, 
-          returnCount: SEARCH_RETURN_COUNT
-        }
-    });
-  }, 1500)
-}
-
-function searchByUserPaging(e) {
-  e.persist();
-  if(!this.searchIsUnlocked) {
-    return false;
-  }
-  const { dispatch } = this.props;
-
-  this.searchIsUnlocked = false;
-
-  setTimeout(() => {
-    this.searchIsUnlocked = true;
-    dispatch(push('/@/' + e.target.value));
-    dispatch({
-      type: 'USER_FETCH_PAGING_REQUESTED', 
-      value: {
-        searchType: 'user',
-        searchValue: e.target.value, 
-        returnCount: SEARCH_RETURN_COUNT,
-        pages: getCubeFaces().length,
-      }
-    });
-  }, 1500);
-}
-
-function searchByHashTag(e) {
-  e.persist();
-  if(!this.searchIsUnlocked) {
-    return false;
-  }
-  const { dispatch } = this.props;
-  let face = e.target.id.split('-')[1];
-  this.searchIsUnlocked = false;
-
-  setTimeout(() => {
-    this.searchIsUnlocked = true;
-    dispatch(push('/' + face + '/#/' + e.target.value));
-    dispatch({
-      type: 'HASHTAG_FETCH_REQUESTED', 
-      value: 
-        {
-          face: face,
-          searchType: 'hashTag', 
-          searchValue: e.target.value, 
-          returnCount: SEARCH_RETURN_COUNT
-        }
-    });
-  }, 1500)
-}
-
-function searchByHashTagPaging(e) {
-  e.persist();
-  if(!this.searchIsUnlocked) {
-    return false;
-  }
-  const { dispatch } = this.props;
-
-  this.searchIsUnlocked = false;
-
-  setTimeout(() => {
-    this.searchIsUnlocked = true;
-    dispatch(push('/#/' + e.target.value));
-    dispatch({
-      type: 'HASHTAG_FETCH_PAGING_REQUESTED', 
-      value: {
-        searchType: 'hashTag',
-        searchValue: e.target.value, 
-        returnCount: SEARCH_RETURN_COUNT,
-        pages: getCubeFaces().length,
-      }
-    });
-  }, 1500);
 }
 
 //
@@ -359,165 +269,42 @@ function getInitialFormsState(faces) {
         hashTag:{value: '', style:{width: '10em', display:'none'}},
         bgColor:{value: '', style:{width: '10em', display:'inline'}},
         txtColor:{value: '', style:{width: '10em', display:'none'}}
+      },
+      slider:{
+        imageOpacity: {value: .5, style:{width: '10em', 'margin': '.8em 0.5em', display:'none'}}
       }
     }
   }
   return formsState;
 }
 
-//
-// Form handlers
-//
-function changeSearchType(e) {
-  let face = e.split('-')[0];
-  let type = e.split('-')[1];
-  let newState = JSON.parse(JSON.stringify(this.state.forms));
-  let friendlyType = 'color';
-
-  this.setIgSearchType(type);
-
-  switch (type) {
-    case 'bgColor':
-      friendlyType = 'color';
-      break;
-    
-    case 'txtColor':
-      friendlyType = 'text';
-      break;
-    
-    case 'user':
-      friendlyType = '@';
-      break;
-
-    case 'hashTag':
-      friendlyType = '#';
-      break;
-
-    default:
-      friendlyType = 'color';
-  }
-
-  // Initially, change search type and set display to none for all
-  newState[face].searchType = friendlyType;
-
-  let textBoxes = Object.keys(this.state.forms[face].text);
-  for(var box in textBoxes) {
-    newState[face].text[textBoxes[box]].style.display = 'none';
-  }
-  newState[face].text[type].style.display = 'inline';
-
-  this.setState({forms: newState});
+function updateFormsDisplay() {
+  let formsState = {};
+  for(var face in this.faces) {
+    face = face.toLowerCase();
+    let searchType = this.faces[face] === 'all' ? 'color' : 'user';
+    let userStyle = this.faces[face] === 'all' ? {display:'none'} : {display:'inline'};
+    let bgColorStyle = this.faces[face] === 'all' ? {display:'inline'} : {display:'none'};
+    let thisFace = this.state.forms[this.faces[face]];
+    formsState[this.faces[face]] = {
+      searchType: searchType,
+      text:{
+        user: {value: '', style: Object.assign(...thisFace.text.user.style, userStyle)},
+        hashTag: {value: '', style: Object.assign(...thisFace.text.bgColor.style, {display:'none'})},
+        bgColor: {value: '', style: Object.assign(...thisFace.text.bgColor.style, bgColorStyle)},
+        txtColor: {value: '', style: Object.assign(...thisFace.text.txtColor.style, {display:'none'})},
+      },
+      slider:{
+        imageOpacity: {value: thisFace.slider.imageOpacity.value, style: {width: '10em', 'margin': '.8em 0.5em', display:'none'}},
+      }
+    }
+  }      
+  this.setState({forms: formsState});
 }
 
-function changeLoadFace(value) {
+export function changeLoadFace(value) {
   this.setState({themeFace: value.toLowerCase()});
 }
-
-function changeBgColor(e){
-  e.persist();
-  let faceId = e.target.id.split('-')[1];
-  if(e.target.value === '') {
-    this.props.dispatch(resetThemeRGBA(faceId));
-    return true;
-  }
-  if(!convertStringToThemeRGBA(e.target.value)) {
-    return false;
-  }
-  let value = {
-    id: e.target.id.split('-')[1],
-    bgColor: convertStringToThemeRGBA(e.target.value),
-  }
-  if(value.bgColor) {
-    this.props.dispatch(setThemeRGBA(value));
-  }
-}
-
-function changeAllBgColor(e) {
-  e.persist();
-  let faces = getCubeFaces();
-  let face = 0;
-  for(face in faces) {
-    e.target.id = 'searchTextBgColor-' + faces[face]
-    this.changeBgColor(e);
-  }
-}
-
-function changeTxtColor(e) {
-  e.persist();
-  let faceId = e.target.id.split('-')[1];
-  if(e.target.value === '') {
-    this.props.dispatch(resetThemeTxt(faceId));
-  }
-  let value = {
-    id: faceId,
-    txtColor: e.target.value,
-  }
-  if(value.txtColor) {
-    this.props.dispatch(setThemeTxtColor(value));
-  }
-}
-
-function changeAllTxtColor(e) {
-  e.persist();
-  let faces = getCubeFaces();
-  let face = 0;
-  for(face in faces) {
-    if (face === 'all') {
-      continue;
-    }
-    e.target.id = 'searchTextColor-' + faces[face]
-    this.changeTxtColor(e);
-  }
-}
-
-export function convertStringToThemeRGBA(value) {
-  value = value.replace(/ /g,' ');
-  let themeRGBA = 'rgba(';
-  let colorArray = value.split(',');
-  if(colorArray.length === 1 && colorArray[0].length > 2) {
-    return colorArray[0];
-  }
-  if(colorArray.length === 3) {
-    colorArray.push(1)
-  }
-  if(colorArray.length < 4 || colorArray[colorArray.length-1] === '') {
-    return false;
-  }
-  for(var color in colorArray) {
-    if(colorArray[colorArray.length-1] === colorArray[color]){
-      themeRGBA += colorArray[color]
-    }else{
-      themeRGBA += colorArray[color] + ','
-    }
-  }
-  themeRGBA += ')';
-  return themeRGBA;
-}
-
-export function convertRGBAToString(value) {
-  let leftPar = value.indexOf('(');
-  let rightPar = value.indexOf(')');
-  if(leftPar === -1 && rightPar === -1 && value[0].length > 2) {
-    return value[0];
-  }
-  let colorString = value.substring(leftPar+1, rightPar);
-  let colorArray = colorString.split(',');
-  if(colorArray.length === 3) {
-    colorArray.push(1);
-  }
-  if(colorArray.length < 4 || colorArray[colorArray.length-1] === '') {
-    return false;
-  }
-  for(var color in colorArray) {
-    if(colorArray[colorArray.length-1] === colorArray[color]){
-      colorArray[color] = parseFloat(colorArray[color]).toFixed(1);
-    } else {
-      colorArray[color] = parseInt(colorArray[color], 10);
-    }
-  }
-  return colorArray.join(', ');
-}
-
 
 // Retrieve data from store as props
 function mapStateToProps(store) {

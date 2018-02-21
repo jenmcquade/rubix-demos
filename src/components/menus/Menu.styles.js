@@ -349,7 +349,7 @@ class Styles {
     // Form label
     //
     this.label = styled.label`
-      margin-right: 0.25em;
+      margin: 0.55em 0.25em 0 0;
       font-weight: 400;
       min-width: 4em;
     `
@@ -405,7 +405,9 @@ class Styles {
     //
     //  Bootstrap FormGroup
     //
-    this.formGroup = FormGroup;
+    this.formGroup = styled(FormGroup)`
+      display: flex !important;
+    `;
     
     //
     //  Bootstrap InputGroup
