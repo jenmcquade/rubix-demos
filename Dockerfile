@@ -3,11 +3,13 @@ FROM node:8.9.4-alpine
 ARG build_type
 ARG node_env
 ARG build_ver
+ARG local_prod
 ARG search_default_value
 ARG search_default_type
 ENV BUILD_TYPE=$build_type
 ENV BUILD_VER=$build_ver
 ENV NODE_ENV=$node_env
+ENV LOCAL_PROD=$local_prod
 ENV SEARCH_DEFAULT_VALUE=$search_default_value
 ENV SEARCH_DEFAULT_TYPE=$search_default_type
 ENV CLIENT=true
@@ -21,6 +23,9 @@ COPY ./webpack.production.config.js /
 COPY ./src/ /src/
 COPY ./.babelrc /
 COPY ./.eslintrc /
+COPY ./localssl/localhost.crt /localhost.crt
+COPY ./localssl/localhost.key /localhost.key
+COPY ./localssl/localhost.key /localhost.csr
 
 RUN  apk add --no-cache \
         bash \
@@ -64,11 +69,12 @@ RUN apk del \
   make
 
 CMD node /server.js --bind 0.0.0.0:$PORT
-ENTRYPOINT BUILD_TIME=`date +'%y.%m.%d %H:%M:%S'` BUILD_VER=$BUILD_VER entrypoint
+ENTRYPOINT PORT=$PORT BUILD_TIME=`date +'%y.%m.%d %H:%M:%S'` BUILD_VER=$BUILD_VER entrypoint --bind 0.0.0.0:$PORT
 
 WORKDIR /
 
 EXPOSE 80
+EXPOSE 443
 EXPOSE 8080
 EXPOSE 3001
 EXPOSE 3002

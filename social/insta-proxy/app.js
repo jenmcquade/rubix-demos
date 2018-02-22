@@ -12,6 +12,7 @@
 const Cors = require('cors');
 const Express = require('express');
 const Https = require('https');
+const fs = require('fs');
 const ResponseTime = require('response-time');
 const Url = require('url');
 const compression = require('compression')
@@ -452,8 +453,16 @@ InstaProxy.serverCheck = function (request, response) {
  * @this
  */
 InstaProxy.serve = function () {
-  this.log('Starting server.');
-  this.app.listen(process.env.PORT || this.SERVER_PORT);
+  let isLocalProd = process.env.LOCAL_PROD ? process.env.LOCAL_PROD : 'false';
+  if(isLocalProd === 'true') {
+    Https.createServer(this.options, this.app).listen(process.env.PORT || this.SERVER_PORT, function(){
+      console.log('Now serving with SSL on port ' + process.env.PORT || this.SERVER_PORT);
+    });
+  } else {
+    this.app.listen(process.env.PORT || this.SERVER_PORT);
+    this.log('Starting server.');
+  }
+
 };
 
 /**
@@ -494,6 +503,13 @@ InstaProxy.getRouteMap = function () {
  * @this
  */
 InstaProxy.setUpApp = function () {
+  this.options = {
+    key: fs.readFileSync('/localhost.key'),
+    cert: fs.readFileSync('/localhost.crt'),
+    ciphers: 'ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES256-SHA384',
+    honorCipherOrder: true,
+    secureProtocol: 'TLSv1_2_method'
+  };
   this.app = Express();
   this.app.use(ResponseTime());
   this.app.use(Cors());

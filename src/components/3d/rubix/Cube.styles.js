@@ -15,7 +15,7 @@ class Styles {
       left: 50%;
       position: absolute;    
     `
-    
+
     this.wrapper = styled.div`
       top: 50%;
       left: 50%;
@@ -93,6 +93,7 @@ class Styles {
     `;
 
     this.face = styled.div`
+      user-drag: none;
       min-width: 200%;
       min-height: 200%;
       display: grid;
@@ -130,6 +131,7 @@ class Styles {
     `;
 
     this.item = styled.div`
+      user-drag: none;
       align-items: center;
       justify-content: center;
       width: 100px;

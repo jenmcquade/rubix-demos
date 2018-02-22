@@ -17,7 +17,7 @@ if [ "$BUILD_TYPE" == "development" ]; then
     set -- npm run start "$@"
     exec "$@"
 else    
-    BUILD_TIME=`date +'%y.%m.%d %H:%M:%S'` BUILD_VER=$BUILD_VER node /server.js
+    BUILD_TIME=`date +'%y.%m.%d %H:%M:%S'` LOCAL_PROD=true BUILD_VER=$BUILD_VER node /server.js --bind 0.0.0.0:$PORT
 fi
 
 

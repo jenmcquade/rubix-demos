@@ -19,6 +19,7 @@ import '../../../assets/loader.svg';
 const DEFAULT_IMG = 'static/media/loader.svg';
 const IMAGE_COUNT = 9;
 const IMAGE_STYLE = {
+  userDrag: 'none',
   opacity: '0.5',
   width: '100%',
   height: '100%',

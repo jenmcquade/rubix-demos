@@ -1,4 +1,4 @@
-import styled, { css, keyframes } from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom'
 
 class Styles {
@@ -6,8 +6,14 @@ class Styles {
 
     this.info = styled(Link)`
       position: relative;
-      bottom: .5em;
-      left: 50%;
+      bottom: 1em;
+      z-index: 0;
+      @media only screen 
+      and (min-width : 75px) 
+      and (max-width : 667px) 
+      { 
+        font-size: 0.5em;
+      }
     `
 
     this.infoWrap = styled.div`
@@ -20,12 +26,17 @@ class Styles {
       transition: transform 0.8s;
       transform: translateY(0em);
 
+      > div:not(:nth-child(2)) {
+        padding: 0.25em;
+        background: rgba(0,0,0,0.5);
+      }
+
       ${props => props.isOpen && css`
         transform: translateY(0em);
       `}
 
       ${props => !props.isOpen && css`
-        transform: translateY(${process.env.NODE_ENV === 'development' ? '15em' : '5.5em'});
+        transform: translateY(${process.env.NODE_ENV === 'development' ? '16em' : '6em'});
       `}
     `
 

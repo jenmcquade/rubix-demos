@@ -8,8 +8,19 @@
 var compression = require('compression')
 var express = require('express');
 var Path = require('path');
+var fs = require('fs');
+var https = require('https');
+var http = require('http');
 
 var LOCAL_HOST = 'http://localhost:3002';
+
+var options = {
+  key: fs.readFileSync('/localhost.key'),
+  cert: fs.readFileSync('/localhost.crt'),
+  ciphers: 'ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES256-SHA384',
+  honorCipherOrder: true,
+  secureProtocol: 'TLSv1_2_method'
+};
 
 var app = express();
 app.use(compression({threshold: 0}));
@@ -85,7 +96,9 @@ if (process.env.NODE_ENV === 'development') {
 
 var buildDir = __dirname+'build';
 var prod_port = process.env.PORT ? process.env.PORT : 80;
+var prod_ssl_port = 443;
 var dev_port = 3002; // Express is served over 3002, but is proxied by BrowserSync
+var isLocalProd = process.env.LOCAL_PROD ? process.env.LOCAL_PROD : 'false'
 
 if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging') {
   app.listen(dev_port, () => console.log('Now serving with WebPack Middleware on port ' + dev_port + '!'))
@@ -93,19 +106,20 @@ if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging'
     response.sendFile(Path.resolve(__dirname, 'build', 'index.html'))
   })
 } else {
-  // Although this looks weird, 
-  //  Heroku doesn't use port 80 or 443.
-  //  SSL resolves at the DNS level.
-  //  So, if we aren't serving port 80,
-  //  we assume it's because we're in production on Heroku,
-  //  vs. a production check on  local instance
-  if(process.env.PORT !== 80 && process.env.NODE_ENV === 'production') {
-    app.use(forceSsl);
-  }
   app.use(express.static(__dirname + 'build'))
   app.get('*', function (request, response){
     response.sendFile(Path.resolve(__dirname, 'build', 'index.html'))
   })
-  app.listen(prod_port, () => console.log('Now serving on port ' + prod_port + ' using the ' + buildDir + ' directory!'))
+  if(!isLocalProd === 'true') {
+    app.use(forceSsl);
+    app.listen(prod_port, () => console.log('Now serving on port ' + prod_port + ' using the ' + buildDir + ' directory!'));
+  } else {
+    http.createServer(app).listen(prod_port, function(){
+      console.log('Now serving HTTP on port ' + prod_port + ' using the ' + buildDir + ' directory!');
+    });
+    https.createServer(options, app).listen(prod_ssl_port, function(){
+      console.log('Now serving with SSL on port ' + prod_ssl_port + ' using the ' + buildDir + ' directory!');
+    });
+  }
 }
 

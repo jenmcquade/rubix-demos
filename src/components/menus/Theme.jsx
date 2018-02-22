@@ -141,8 +141,8 @@ class Theme extends Component {
         autoHideTimeout={1000} 
         autoHideDuration={200} 
         autoHeight 
-        autoHeightMin={420} 
-        autoHeightMax={455}
+        autoHeightMin={460} 
+        autoHeightMax={500}
         className="scroll-bar"
       >
         <SubTitle type="heading">
@@ -265,13 +265,13 @@ function getInitialFormsState(faces) {
     formsState[faces[face]] = {
       searchType: 'color',
       text:{
-        user:{value: '', style:{width: '7em', display:'none'}},
-        hashTag:{value: '', style:{width: '7em', display:'none'}},
-        bgColor:{value: '', style:{width: '7em', display:'inline'}},
-        txtColor:{value: '', style:{width: '7em', display:'none'}}
+        user:{value: '', style:{marginRight: '1em', width: '9em', display:'none'}},
+        hashTag:{value: '', style:{marginRight: '1em', width: '9em', display:'none'}},
+        bgColor:{value: '', style:{marginRight: '1em', width: '9em', display:'inline'}},
+        txtColor:{value: '', style:{marginRight: '1em', width: '9em', display:'none'}}
       },
       slider:{
-        imageOpacity: {value: .5, style:{width: '10em', 'margin': '.8em 0.5em', display:'none'}}
+        imageOpacity: {value: .5, style:{width: '8.2em', 'margin': '0.8em 1em 0 0', display:'none'}}
       }
     }
   }

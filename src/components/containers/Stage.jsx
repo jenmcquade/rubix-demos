@@ -10,6 +10,15 @@ const styles = new Styles();
 const InfoLink = styles.info;
 const InfoWrap = styles.infoWrap;
 
+const ProdBuildInfo = () => {
+    let buildInfo = document.querySelector('#prodBuildInfo');
+    buildInfo.style.position = 'absolute';
+    buildInfo.style.bottom = '0em';
+    buildInfo.style.right = '1em';
+    buildInfo.style.display = 'block';
+    return buildInfo;
+}
+
 export default class Stage extends React.Component {
   constructor(props) {
     super(props);
@@ -37,6 +46,7 @@ export default class Stage extends React.Component {
           <div style={{borderBottom: '1px solid white', }} />
           { <ProxyInfo /> }
           { process.env.NODE_ENV !== 'production' && <EnvInfo/> }
+          { process.env.NODE_ENV === 'production' && ProdBuildInfo }
         </InfoWrap>
       </div>
     );

@@ -46,18 +46,12 @@ export class App extends Component {
 
   componentWillMount() {
     let loadingImg = document.querySelector('#loadingSpinner');
-    let buildInfo = document.querySelector('#prodBuildInfo');
     let rootNode = document.querySelector('#root');
+    rootNode.style.overflow = 'hidden';
+    rootNode.style.position = 'fixed'; 
     if(loadingImg) {
       loadingImg.style.display = 'none';
     }
-    buildInfo.style.position = 'absolute';
-    buildInfo.style.bottom = '1.25em';
-    buildInfo.style.right = '1em';
-    buildInfo.style.display = 'block';
-    rootNode.appendChild(buildInfo);
-    rootNode.style.overflow = 'hidden';
-    rootNode.style.position = 'fixed'; 
   }
 
   componentDidMount() {

@@ -10,6 +10,9 @@ RUN echo $BUILD_TYPE
 COPY ./app.js /
 COPY ./package.json /
 COPY ./app.json /
+COPY ./localssl/localhost.crt /localhost.crt
+COPY ./localssl/localhost.key /localhost.key
+COPY ./localssl/localhost.key /localhost.csr
 
 RUN apk update && \
     apk --no-cache add \
@@ -23,3 +26,4 @@ WORKDIR /
 
 EXPOSE 3000
 EXPOSE 80
+EXPOSE 443

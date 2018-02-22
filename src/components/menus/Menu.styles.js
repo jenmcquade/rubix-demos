@@ -85,7 +85,7 @@ class Styles {
       @media only screen 
       and (min-width: 720px) 
       and (max-width: 1023px) { 
-        width: 5em;
+        width: 5.5em;
       }
     `;
 
@@ -352,6 +352,7 @@ class Styles {
       margin: 0.55em 0.25em 0 0;
       font-weight: 400;
       min-width: 4em;
+      display: default;
     `
 
     //

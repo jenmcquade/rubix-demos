@@ -90,7 +90,7 @@ class Cube extends React.Component {
                 { 
                   this.faces.map((face) => {
                     let hasImages = this.state.hasImagesOnLoad;
-                    return <Face id={face} key={face}
+                    return <Face draggable="false" id={face} key={face}
                       itemBgColor={this.props.object.theme[face].bgColor}
                       itemColor={this.props.object.theme[face].txtColor}
                       style={this.props.object.style[face]}
@@ -104,7 +104,7 @@ class Cube extends React.Component {
                           position={position}
                           type={item.type}>
                           { !hasImages || !this.state.object.theme[face].images[i] ? positionTxt : 
-                            <img alt={positionTxt} id={face + '-' + (i+1).toString() + '-image'}
+                            <img draggable="false" alt={positionTxt} id={face + '-' + (i+1).toString() + '-image'}
                               style={this.state.object.theme[face].imageStyle}
                               src={this.state.object.theme[face].images[i]}
                             />
