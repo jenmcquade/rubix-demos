@@ -98,12 +98,12 @@ if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging'
     response.sendFile(Path.resolve(__dirname, 'build', 'index.html'))
   })
 } else {
+  app.use(forceSsl);
   app.use(express.static(__dirname + 'build'))
   app.get('*', function (request, response){
     response.sendFile(Path.resolve(__dirname, 'build', 'index.html'))
   })
   if(isLocalProd === 'false') {
-    app.use(forceSsl);
     app.listen(prod_port, () => console.log('Now serving on port ' + prod_port + ' using the ' + buildDir + ' directory!'));
   } else {
     var options = {
