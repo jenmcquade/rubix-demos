@@ -14,14 +14,6 @@ var http = require('http');
 
 var LOCAL_HOST = 'http://localhost:3002';
 
-var options = {
-  key: fs.readFileSync('/localhost.key'),
-  cert: fs.readFileSync('/localhost.crt'),
-  ciphers: 'ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES256-SHA384',
-  honorCipherOrder: true,
-  secureProtocol: 'TLSv1_2_method'
-};
-
 var app = express();
 app.use(compression({threshold: 0}));
 
@@ -114,6 +106,13 @@ if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging'
     app.use(forceSsl);
     app.listen(prod_port, () => console.log('Now serving on port ' + prod_port + ' using the ' + buildDir + ' directory!'));
   } else {
+    var options = {
+      key: fs.readFileSync('/localhost.key'),
+      cert: fs.readFileSync('/localhost.crt'),
+      ciphers: 'ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES256-SHA384',
+      honorCipherOrder: true,
+      secureProtocol: 'TLSv1_2_method'
+    };
     http.createServer(app).listen(prod_port, function(){
       console.log('Now serving HTTP on port ' + prod_port + ' using the ' + buildDir + ' directory!');
     });
