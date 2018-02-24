@@ -24,7 +24,7 @@ app.use(function(req, res, next) {
 });
 
 var forceSsl = function(req, res, next) {
-  if (req.headers['X-Forwarded-Proto'] !== 'https') {
+  if (req.headers['x-forwarded-proto'] !== 'https') {
     return res.redirect(['https://', req.get('Host'), req.url].join(''));
   }
   return next();
@@ -88,23 +88,36 @@ if (process.env.NODE_ENV === 'development') {
 
 var buildDir = __dirname+'build';
 var prod_port = process.env.PORT ? process.env.PORT : 80;
-var prod_ssl_port = process.env.SSL_PORT ? process.env.SSL_PORT : 8443;
+var prod_ssl_port = 443;
 var dev_port = 3002; // Express is served over 3002, but is proxied by BrowserSync
+var isLocalProd = process.env.LOCAL_PROD ? process.env.LOCAL_PROD : 'false'
 
 if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging') {
   app.listen(dev_port, () => console.log('Now serving with WebPack Middleware on port ' + dev_port + '!'))
   app.get('*', function (request, response){
-    response.sendFile(Path.resolve(__dirname, 'public', 'index.html'))
-  });
-} 
-
-if(process.env.NODE_ENV === 'production') {
+    response.sendFile(Path.resolve(__dirname, 'build', 'index.html'))
+  })
+} else {
   app.use(forceSsl);
-  app.use(express.static(__dirname + 'build'));
+  app.use(express.static(__dirname + 'build'))
   app.get('*', function (request, response){
     response.sendFile(Path.resolve(__dirname, 'build', 'index.html'))
-  });
-
-  app.listen(prod_port, () => console.log('Now serving on port ' + prod_port + ' using the ' + buildDir + ' directory!'));
+  })
+  if(isLocalProd === 'false') {
+    app.listen(prod_port, () => console.log('Now serving on port ' + prod_port + ' using the ' + buildDir + ' directory!'));
+  } else {
+    var options = {
+      key: fs.readFileSync('/localhost.key'),
+      cert: fs.readFileSync('/localhost.crt'),
+      ciphers: 'ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES256-SHA384',
+      honorCipherOrder: true,
+      secureProtocol: 'TLSv1_2_method'
+    };
+    http.createServer(app).listen(prod_port, function(){
+      console.log('Now serving HTTP on port ' + prod_port + ' using the ' + buildDir + ' directory!');
+    });
+    https.createServer(options, app).listen(prod_ssl_port, function(){
+      console.log('Now serving with SSL on port ' + prod_ssl_port + ' using the ' + buildDir + ' directory!');
+    });
+  }
 }
-
