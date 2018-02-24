@@ -271,11 +271,15 @@ function getInitialFormsState(faces) {
         txtColor:{value: '', style:{marginRight: '1em', width: '9em', display:'none'}}
       },
       slider:{
-        imageOpacity: {value: .5, style:{width: '8.2em', 'margin': '0.8em 1em 0 0', display:'none'}}
+        imageOpacity: {value: .5, style: getSliderStyle()}
       }
     }
   }
   return formsState;
+}
+
+function getSliderStyle() {
+  return { width: '8.2em', 'margin': '0.8em 1em 0 0', display:'none' }
 }
 
 function updateFormsDisplay() {
@@ -295,7 +299,7 @@ function updateFormsDisplay() {
         txtColor: {value: '', style: Object.assign(...thisFace.text.txtColor.style, {display:'none'})},
       },
       slider:{
-        imageOpacity: {value: thisFace.slider.imageOpacity.value, style: {width: '10em', 'margin': '.8em 0.5em', display:'none'}},
+        imageOpacity: {value: thisFace.slider.imageOpacity.value, style: getSliderStyle()},
       }
     }
   }      

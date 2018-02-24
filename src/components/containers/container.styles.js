@@ -36,7 +36,7 @@ class Styles {
       `}
 
       ${props => !props.isOpen && css`
-        transform: translateY(${process.env.NODE_ENV === 'development' ? '20em' : '10em'});
+        transform: translateY(${process.env.NODE_ENV === 'development' ? '17em' : '10em'});
       `}
     `
 

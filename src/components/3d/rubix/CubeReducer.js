@@ -25,8 +25,7 @@ const IMAGE_STYLE = {
   height: '100%',
   display: 'default',
   borderRadius: '25%',
-  margin: '10px',
-  transition: 'opacity',
+  background: 'url()',
 }
 
 //
@@ -41,8 +40,25 @@ function getDefaultImagesArray (){
 }
 
 // Initial State
+// cube properties (used to determine state changes)
+// animation: used for whole cube transformations
+// scale: used for whole cube transformations
+// theme: used for styling individual faces of the cube
+// style: used for 'inflating' transformation from flat style to cube
 const initialState = {
   objectIsFlat: false,
+  transformOrigin: ['top', 'left'],
+  isCubeSpinning: true,
+  animation: {
+    transform: {
+      translateX: 0,
+      translateY: 0,
+      translateZ: 0,
+      rotateX: 0,
+      rotateY: 0,
+      rotateZ: 0,
+    }
+  },
   scale: {
     small: [0.6, 0.6],
     medium: [0.8, 0.8],

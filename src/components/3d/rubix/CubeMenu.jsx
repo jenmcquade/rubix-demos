@@ -15,7 +15,6 @@ const CubeWrapper = Style.wrapper;
 const DraggableHandle = Style.handle;
 const Box = Style.cube;
 const Item = Style.item;
-const SolidColor = Style.item;
 const Face = Style.face;
 
 class Cube extends React.Component {
@@ -31,7 +30,6 @@ class Cube extends React.Component {
     };
 
     this.getCubeFaces = getCubeFaces.bind(this);
-    this.loadImages = loadImages.bind(this);
     this.showImages = showImages.bind(this);
     this.hideImages = hideImages.bind(this);
     this.popInImages = popInImages.bind(this);
@@ -50,7 +48,6 @@ class Cube extends React.Component {
   componentWillReceiveProps(nextProps) {
     if(nextProps.ig.status) {
       this.setState({igProxyIsOnline: true });
-      this.loadImages(nextProps.object);
       this.showImages();
       this.popInImages();
     } else {
@@ -107,8 +104,9 @@ class Cube extends React.Component {
                           position={position}
                           type={item.type}>
                           { !hasImages || !this.state.object.theme[face].images[i] ? positionTxt : 
-                            <div draggable="false" alt={positionTxt} id={face + '-' + (i+1).toString() + '-image'}
+                            <img draggable="false" alt={positionTxt} id={face + '-' + (i+1).toString() + '-image'}
                               style={this.state.object.theme[face].imageStyle}
+                              src={this.state.object.theme[face].images[i]}
                             />
                           }
                         </Item>
@@ -121,7 +119,7 @@ class Cube extends React.Component {
             </html-gl>
           </CubeWrapper>
         </DraggableHandle>
-      </Draggable>     
+      </Draggable>            
     );
   }
 };
@@ -144,24 +142,6 @@ export function getCubeFaces() {
     return this.faces;
   } else {
     return ['top', 'bottom', 'front', 'back', 'left', 'right'];
-  }
-}
-
-export function loadImages(cubeState) {
-  if(!cubeState.theme) {
-    return false;
-  }
-  let faces = this.getCubeFaces();
-  let face = 0;
-  for(face in faces) {
-    let faceId = faces[face];
-    let images = cubeState.theme[faceId].images;
-    for(let i=1; i<images.length+1; i++) {
-      let img = document.getElementById(faceId + '-' + i + '-image');
-      if(img){
-        img.style.background = 'url(' + images[i-1] +')';
-      }
-    }
   }
 }
 
