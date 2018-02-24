@@ -15,6 +15,7 @@ ENV SEARCH_DEFAULT_TYPE=$search_default_type
 ENV CLIENT=true
 
 COPY ./entrypoint /usr/local/bin/
+COPY ./gen_local_ssl.sh /usr/local/bin/
 COPY ./server.js /
 COPY ./package.json /
 COPY ./package.prod.json /
@@ -23,9 +24,6 @@ COPY ./webpack.production.config.js /
 COPY ./src/ /src/
 COPY ./.babelrc /
 COPY ./.eslintrc /
-COPY ./localssl/localhost.crt /localhost.crt
-COPY ./localssl/localhost.key /localhost.key
-COPY ./localssl/localhost.key /localhost.csr
 
 RUN  apk add --no-cache \
         bash \
@@ -38,7 +36,8 @@ RUN  apk add --no-cache \
         file \
         nasm \
         make && \
-        npm install 
+        npm install && \
+        sh /usr/local/bin/gen_local_ssl.sh
 
 RUN if [ "$BUILD_TYPE" = "development" ]; then \
         echo "Building ./public folder for fallback to static files ..." && \
@@ -74,7 +73,7 @@ ENTRYPOINT PORT=$PORT BUILD_TIME=`date +'%y.%m.%d %H:%M:%S'` BUILD_VER=$BUILD_VE
 WORKDIR /
 
 EXPOSE 80
-EXPOSE 443
+EXPOSE 8443
 EXPOSE 8080
 EXPOSE 3001
 EXPOSE 3002

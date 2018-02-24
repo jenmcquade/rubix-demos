@@ -48,8 +48,6 @@ module.exports = {
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
         CLIENT: JSON.stringify(process.env.CLIENT),
-        BUILD_TIME: JSON.stringify(process.env.BUILD_TIME),
-        BUILD_VER: JSON.stringify(process.env.BUILD_VER),
       }
     }),
     new ExtractTextPlugin({ filename: 'css/[name].css', allChunks: true}),
