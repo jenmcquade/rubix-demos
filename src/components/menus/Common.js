@@ -112,9 +112,9 @@ export default class Common {
     }
     var category = props.menu.categories[this.id];
     let baseColor = this.getThemeRGBA(category.baseColor);
-    let screenSize = this.props.app.screenSize;
+    let screenSize = props.screenSize;
     if (dispatchToStore) {
-      if(props.app.screenSize === 'small' || props.app.screenSize === 'medium' ) {
+      if(screenSize === 'small' || screenSize === 'medium' ) {
         props.dispatch(
           setMobileTheme()
         );
@@ -167,9 +167,7 @@ export default class Common {
     let triggerUrl = route.indexOf('/' + this.id + '/') !== -1 ? 
       '/' + userPath + window.location.search + hashValue : 
       '/' + this.id + '/' + userPath + window.location.search + hashValue;
-    //if(triggerUrl !== this.triggerUrl) {
-      this.triggerUrl = triggerUrl;
-    //}
+    this.triggerUrl = triggerUrl;
   }
 
 }

@@ -24,11 +24,9 @@ class Cube extends React.Component {
     this.faces = Object.keys(this.props.object.style);
     this.state = {
       ...props,
-      igProxyIsOnline: false,
-      wrapperStyle: {},
-      hasImagesOnLoad: props.app.qs.offline ? false : props.hasImagesOnLoad,
       isMounted: false
     };
+    this.wrapperStyle = {};
 
     this.getCubeFaces = getCubeFaces.bind(this);
     this.loadImages = loadImages.bind(this);
@@ -42,7 +40,7 @@ class Cube extends React.Component {
   componentDidMount() {
     this.setState({isMounted: true});
     let faces = getCubeFaces();
-    if(!this.state.ig.status) {
+    if(!this.props.igStatus) {
       return false;
     }
     for(let face in faces) {
@@ -51,24 +49,18 @@ class Cube extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.ig.status) {
-      this.setState({igProxyIsOnline: true });
-      this.setState({hasImagesOnLoad: nextProps.ig.status});
-      this.loadImages(nextProps.object);
+    if(this.props.igStatus) {
+      this.loadImages(this.props.object);
       this.showImages();
       this.popInImages();
     } else {
       this.hideImages();
     }
-
-    this.setState({ 
-      wrapperStyle: {
-        transform: 'scale(' + nextProps.object.scale[nextProps.app.screenSize][0] + ',' + nextProps.object.scale[nextProps.app.screenSize][1] + ')',        
-      }
-    });
+    this.wrapperStyle = {transform: 'scale(' + nextProps.object.scale[nextProps.screenSize][0] + ',' + nextProps.object.scale[nextProps.screenSize][1] + ')'};
   }
 
   render() {
+    let hasImages = this.props.hasImagesOnLoad;
     let items = [
       {type: 'corner', position: ['top', 'left']},
       {type: 'side', position: ['top']},
@@ -80,7 +72,6 @@ class Cube extends React.Component {
       {type: 'side', position: ['bottom']},
       {type: 'corner', position: ['bottom', 'left']},
     ]
-    let hasImages = this.state.hasImagesOnLoad;
     return(
       <Draggable
         handle=".handle"
@@ -92,7 +83,7 @@ class Cube extends React.Component {
         onStop={this.handleStop}
       >
         <DraggableHandle className="handle">
-          <CubeWrapper style={this.state.wrapperStyle}>
+          <CubeWrapper style={this.wrapperStyle}>
             <html-gl>
               <Box flat={this.props.object.objectIsFlat}>
                 { 
@@ -110,9 +101,9 @@ class Cube extends React.Component {
                           id={face + '-' + (i+1).toString()}
                           position={position}
                           type={item.type}>
-                          { !hasImages || !this.state.object.theme[face].images[i] ? positionTxt : 
+                          { !hasImages || !this.props.object.theme[face].images[i] ? positionTxt : 
                             <ItemImage draggable="false" alt={positionTxt} id={face + '-' + (i+1).toString() + '-image'}
-                              style={this.state.object.theme[face].imageStyle}
+                              style={this.props.object.theme[face].imageStyle}
                             >
                               <label>{positionTxt}</label>
                             </ItemImage>
@@ -211,7 +202,6 @@ function hideImages() {
       }
     }
   }
-  this.setState({hasImagesOnLoad: false});
 }
 
 function showImages() {
@@ -224,15 +214,12 @@ function showImages() {
       }
     }
   }
-  this.setState({hasImagesOnLoad: true});
 }
 
 // Retrieve data from store as props
 function mapStateToProps(store) {
   return {
-    app: store.app,
     object: store.rubix,
-    ig: store.instaProxy,
   };
 }
 

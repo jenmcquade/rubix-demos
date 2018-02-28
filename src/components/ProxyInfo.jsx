@@ -1,24 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 
 import {
   SubTitle, Status,
 } from './menus/Common'; 
 
-class ProxyInfo extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      ...props,
-      igProxyIsOnline: false,
-    }
-  }
-  componentWillReceiveProps(nextProps) {
-    this.setState({igProxyIsOnline: nextProps.ig.status})
-  }
+export default class ProxyInfo extends React.Component {
   render() {
-    let proxyIsOnline = this.state.igProxyIsOnline;
+    let proxyIsOnline = this.props.igStatus;
     return(
       <div>
         <SubTitle>Web Services</SubTitle>
@@ -31,16 +19,4 @@ class ProxyInfo extends React.Component {
   }
 }
 
-ProxyInfo.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-};
-
-// Retrieve data from store as props
-function mapStateToProps(store) {
-  return {
-    ig: store.instaProxy,
-  };
-}
-
-export default connect(mapStateToProps)(ProxyInfo);
 

@@ -38,7 +38,7 @@ class Category extends Component {
     Object.assign(this, new Common(this)); // Import common functions as methods
     this.id = props.id.toLowerCase();
     this.setScreenTheme(props, true); // See Common.js
-    let route = this.props.router.location.pathname;
+    let route = window.location.pathname;
     this.triggerUrl = route.indexOf('/' + this.id + '/') !== -1 ? 
       '/' + window.location.search + window.location.hash : 
       '/' + this.id + window.location.search + window.location.hash
@@ -60,7 +60,7 @@ class Category extends Component {
   }
 
   componentDidMount() {
-    let route = this.state.router.location.pathname;
+    let route = window.location.pathname;
     if(route.split('/')[1] && route.split('/')[1].toLowerCase() === this.id) {
       this.props.dispatch(toggleMenu(this.id, true));
     }
@@ -130,11 +130,7 @@ class Category extends Component {
 // Retrieve data from store as props
 function mapStateToProps(store, ownProps) {
   return {
-    router: store.routerReducer,
-    app: store.app,
-    ig: store.instaProxy,
     menu: store.menu,
-    rubix: store.rubix,
   };
 }
 

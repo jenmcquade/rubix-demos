@@ -36,7 +36,6 @@ export class InstaProxy extends Component {
   componentDidMount() {
     this.setState({isMounted: true}); // For immediate state checking
     this.setup();
-
   }
 
   componentWillReceiveProps(nextProps) {
@@ -45,16 +44,6 @@ export class InstaProxy extends Component {
       this.props.router.location.hash.indexOf('#/') === -1) {
       return false;
     }
-    /*
-    if(this.props.ig.searchValue !== nextProps.ig.searchValue) {
-      this.callIg({
-        searchUri: searchProps.searchUri,
-        searchType: searchProps.searchType,
-        searchValue: searchProps.searchValue,
-        returnCount: !searchProps.faceType ? getCubeFaces().length : false
-      });
-    }
-    */
   }
 
   render() {
@@ -155,22 +144,25 @@ function getSearchPropsFromUrl(location) {
   // Get correct path value from location object
   try {
     if(location.hash !== '') {
+      isHashPath = true;
       path = location.hash;
       if(location.pathname !== '/') {
         helperPath = location.pathname;
       }
-      isHashPath = true;
     } else {
       path = location.pathname;
-      helperPath = location.hash;
+      if(location.hash !== '' && location.hash !== '/') {
+        helperPath = location.hash;
+      }
     }
   } catch(e) {
     return e;
   }
 
   const pathArray = path.split('/');
+
   const helperPathArray = helperPath.split('/');
-  const searchUrlIndex = pathArray.indexOf('@') ? pathArray.indexOf('@') : pathArray.indexOf('#')
+  const searchUrlIndex = pathArray.indexOf('@') !== -1 ? pathArray.indexOf('@') : pathArray.indexOf('#');
   let firstPropIsFace = false;
 
   // Get face to determine
@@ -197,8 +189,9 @@ function getSearchPropsFromUrl(location) {
   }
 
   try{
-    let pathIndex = isHashPath ? searchUrlIndex : searchUrlIndex+1;
+    let pathIndex = searchUrlIndex+1;
     pathSearchValue = pathArray[pathIndex].split('?')[0].toString();
+
     if(pathSearchValue === '') {
       pathSearchValue = SEARCH_DEFAULT_VALUE;
     }
@@ -213,13 +206,14 @@ function getSearchPropsFromUrl(location) {
   let searchUri = searchType === 'hashTag' ? 
     URL_BASE_HASHTAG + searchValue + '/media/?count=' + SEARCH_RETURN_COUNT:
     URL_BASE_USER + searchValue + '/media/?count=' + SEARCH_RETURN_COUNT;
-    
-  return {
+  
+  let returnProps = {
     faceType: faceType, 
     searchType: searchType, 
     searchValue: searchValue, 
     searchUri: searchUri
   }
+  return returnProps
 }
 
 function setup() {

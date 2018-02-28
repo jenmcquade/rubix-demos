@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import Cube from '../3d/rubix/Cube';
 import CubeMenu from '../3d/rubix/CubeMenu'
 import EnvInfo from '../EnvInfo';
@@ -17,12 +16,9 @@ const ProdBuildInfo = () => {
   return <div dangerouslySetInnerHTML={{ __html: buildInfo}}/>
 }
 
-class Stage extends React.Component {
+export default class Stage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      ...props,
-    }
     this.handleStart = handleStart.bind(this);
     this.handleDrag = handleDrag.bind(this);
     this.handleStop = handleStop.bind(this);
@@ -30,15 +26,24 @@ class Stage extends React.Component {
   }
 
   render() {
+    let infoPanelIsOpen = this.props.appStore.infoPanelIsOpen;
+    let qs = this.props.appStore.qs;
+    let igStatus = this.props.igStatus;
+    let screenSize = this.props.screenSize;
     return(
       <div id="stage" className="stage" role="main">
-        <Cube hasImagesOnLoad={this.props.app.qs.hasOwnProperty('offline') ? false : true} />
-        <InfoWrap isOpen={ this.props.app.infoPanelIsOpen } ref="InfoWrapper" id="infoWrapper">
-          <InfoLink to={ this.props.app.infoPanelIsOpen ? window.location.pathname + window.location.search : window.location.search + '#info' } onClick={this.handleProjectInfoClick}>
+        <Cube screenSize={screenSize} igStatus={igStatus} hasImagesOnLoad={qs.hasOwnProperty('offline') || !igStatus ? false : true} />
+        <InfoWrap isOpen={ infoPanelIsOpen } ref="InfoWrapper" id="infoWrapper">
+          <InfoLink 
+            to={ infoPanelIsOpen ? 
+              window.location.pathname + window.location.search : 
+              window.location.search + '#info' } 
+            onClick={this.handleProjectInfoClick}
+          >
             <i className='fa fa-info-circle'/>
           </InfoLink>
           <div style={{borderBottom: '1px solid white', }} />
-          { <ProxyInfo /> }
+          { <ProxyInfo igStatus={igStatus} /> }
           { process.env.NODE_ENV !== 'production' && <EnvInfo/> }
           { <ProdBuildInfo /> }
         </InfoWrap>
@@ -63,12 +68,3 @@ function handleDrag() {
 function handleStop() {
 
 }
-
-// Retrieve data from store as props
-function mapStateToProps(store) {
-  return {
-    app: store.app,
-  };
-}
-
-export default connect(mapStateToProps)(Stage);

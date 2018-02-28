@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { callIg } from './InstaProxy';
-import { URL_DEFAULT_SEARCH_URL, SEARCH_RETURN_COUNT, PROXY_SERVER, URL_BASE_USER, URL_BASE_HASHTAG } from './InstaProxyActions';
+import { URL_DEFAULT_SEARCH_URL, SEARCH_RETURN_COUNT, PROXY_SERVER } from './InstaProxyActions';
 import { getCubeFaces, popOutImages, popInImages } from '../../components/3d/rubix/Cube';
 
 // worker Saga: will be fired on USER_FETCH_REQUESTED actions
@@ -21,7 +21,7 @@ function* fetchData(action) {
     // Pre-dispatch query settings; overrides defaults
     yield put({type: 'SET_IG_SEARCH_TYPE', value: action.value.searchType});
     yield put({type: 'SET_IG_SEARCH_VALUE', value: action.value.searchValue});
-    if(action.value.searchUri) {
+    if(action.value.first && action.value.searchUri) {
       yield put({type: 'SET_IG_SEARCH_URL', value: action.value.searchUri});
     }
 
@@ -53,7 +53,7 @@ function* fetchData(action) {
     if(data.next) {
       images.nextPage = data.next;
       yield put({type: 'SET_IG_SEARCH_URL', value: data.next});
-    }
+    } 
 
     // IG Post data image assignment to images array
     for(post in data.posts) {
