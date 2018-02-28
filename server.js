@@ -8,8 +8,6 @@
 var compression = require('compression')
 var express = require('express');
 var Path = require('path');
-var fs = require('fs');
-var https = require('https');
 var http = require('http');
 
 var LOCAL_HOST = 'http://localhost:3002';
@@ -88,14 +86,13 @@ if (process.env.NODE_ENV === 'development') {
 
 var buildDir = __dirname+'build';
 var prod_port = process.env.PORT ? process.env.PORT : 80;
-var prod_ssl_port = 443;
 var dev_port = 3002; // Express is served over 3002, but is proxied by BrowserSync
 var isLocalProd = process.env.LOCAL_PROD ? process.env.LOCAL_PROD : 'false'
 
 if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging') {
   app.listen(dev_port, () => console.log('Now serving with WebPack Middleware on port ' + dev_port + '!'))
   app.get('*', function (request, response){
-    response.sendFile(Path.resolve(__dirname, 'build', 'index.html'))
+    response.sendFile(Path.resolve(__dirname, 'public', 'index.html'))
   })
 } else {
   app.use(forceSsl);
@@ -106,18 +103,8 @@ if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging'
   if(isLocalProd === 'false') {
     app.listen(prod_port, () => console.log('Now serving on port ' + prod_port + ' using the ' + buildDir + ' directory!'));
   } else {
-    var options = {
-      key: fs.readFileSync('/localhost.key'),
-      cert: fs.readFileSync('/localhost.crt'),
-      ciphers: 'ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES256-SHA384',
-      honorCipherOrder: true,
-      secureProtocol: 'TLSv1_2_method'
-    };
     http.createServer(app).listen(prod_port, function(){
       console.log('Now serving HTTP on port ' + prod_port + ' using the ' + buildDir + ' directory!');
-    });
-    https.createServer(options, app).listen(prod_ssl_port, function(){
-      console.log('Now serving with SSL on port ' + prod_ssl_port + ' using the ' + buildDir + ' directory!');
     });
   }
 }

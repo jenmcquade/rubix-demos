@@ -17,9 +17,10 @@ export function resetMenuState(menu) {
   };
 }
 
-export function toggleMenu(id) {
+export function toggleMenu(id, forceOn=false) {
   return {
     type: 'TOGGLE_MENU_' + id.toUpperCase(),
+    forceOn: forceOn,
   };
 }
 

@@ -503,10 +503,6 @@ InstaProxy.getRouteMap = function () {
  * @this
  */
 InstaProxy.setUpApp = function () {
-  this.options = {
-    key: fs.readFileSync('/docker.localhost.key'),
-    cert: fs.readFileSync('/docker.localhost.crt'),
-  };
   this.app = Express();
   this.app.use(ResponseTime());
   this.app.use(Cors());

@@ -10,12 +10,10 @@ RUN echo $BUILD_TYPE
 COPY ./app.js /
 COPY ./package.json /
 COPY ./app.json /
-COPY ./gen_local_ssl.sh /usr/local/bin/
 
 RUN apk update && \
     apk --no-cache add \
     bash && \
-    sh /usr/local/bin/gen_local_ssl.sh && \
     cd / && \
     npm install 
 

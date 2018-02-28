@@ -66,8 +66,11 @@ export default class Common {
 
     // Bind this class's methods to the component
     this.handleTrigger = this.handleTrigger.bind(component);
-    this.setTheme = this.setTheme.bind(component);
+    this.setScreenTheme = this.setScreenTheme.bind(component);
     this.getThemeRGBA = this.getThemeRGBA.bind(component);
+
+    this.updateUrl = this.updateUrl.bind(component);
+    this.updateMenuState = this.updateMenuState.bind(component);
   }
 
   //
@@ -103,7 +106,7 @@ export default class Common {
    * Or hard-reset individual properties that are used to style the menus
    * @param {*} props 
    */
-  setTheme(props, dispatchToStore = false) {
+  setScreenTheme(props, dispatchToStore = false) {
     if(!props.id) {
       return false;
     }
@@ -129,6 +132,44 @@ export default class Common {
         this.triggerColor = 'white';
       }
     }  
+  }
+
+  updateMenuState(nextProps) {
+    let route = nextProps.router.location.pathname;
+    if(
+      this.props.router.location.key !== nextProps.router.location.key 
+      && route.split('/')[1] 
+      && route.split('/')[1].toLowerCase() === this.id
+    ) {
+      this.props.dispatch(toggleMenu(this.id, true));
+    }
+  }
+  
+  updateUrl(nextProps) {
+    let route = window.location.pathname;
+    let hasUserSearch = route.indexOf('/@/') === -1 ? false : true;
+    let hasHashTagSearch = route.indexOf('/#/') === -1 ? false : true;
+    let userPath = hasUserSearch ? '/' : '';
+    let hashValue = window.location.hash;
+    if(hasUserSearch) {
+      let userPathArray = route.split('/@/');
+      let userPathValue = userPathArray[1] ? userPathArray[1].split('/')[0] : '';
+      userPath = userPathArray[1] ? '@/' + userPathValue : '';
+      hashValue = '';
+    }
+    if(hasHashTagSearch) {
+      let hashPathArray = route.split('/#/');
+      let hashPathValue = hashPathArray[1] ? hashPathArray[1].split('/')[0] : '';
+      hashValue = hashPathArray[1] ? '#/' + hashPathValue : '';
+      userPath = '';
+    }
+
+    let triggerUrl = route.indexOf('/' + this.id + '/') !== -1 ? 
+      '/' + userPath + window.location.search + hashValue : 
+      '/' + this.id + '/' + userPath + window.location.search + hashValue;
+    //if(triggerUrl !== this.triggerUrl) {
+      this.triggerUrl = triggerUrl;
+    //}
   }
 
 }

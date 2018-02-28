@@ -8,6 +8,8 @@ import {
   setThemeCubeImageOpacity,
 } from '../../3d/rubix/CubeActions'
 
+const SEARCH_WAIT_TIME = 2500;
+
 export function searchByUser(e) {
   e.persist();
   if(!this.searchIsUnlocked) {
@@ -19,7 +21,7 @@ export function searchByUser(e) {
 
   setTimeout(() => {
     this.searchIsUnlocked = true;
-    dispatch(push('/' + face + '/@/' + e.target.value));
+    dispatch(push(getPushUrl({type: 'user', value: e.target.value})));
     dispatch({
       type: 'USER_FETCH_REQUESTED', 
       value: 
@@ -44,7 +46,7 @@ export function searchByUserPaging(e) {
 
   setTimeout(() => {
     this.searchIsUnlocked = true;
-    dispatch(push('/@/' + e.target.value));
+    dispatch(push(getPushUrl({type: 'user', value: e.target.value})));
     dispatch({
       type: 'USER_FETCH_PAGING_REQUESTED', 
       value: {
@@ -68,7 +70,7 @@ export function searchByHashTag(e) {
 
   setTimeout(() => {
     this.searchIsUnlocked = true;
-    dispatch(push('/' + face + '/#/' + e.target.value));
+    dispatch(push(getPushUrl({type: 'hashTag', value: e.target.value})));
     dispatch({
       type: 'HASHTAG_FETCH_REQUESTED', 
       value: 
@@ -79,7 +81,7 @@ export function searchByHashTag(e) {
           returnCount: SEARCH_RETURN_COUNT
         }
     });
-  }, 1500)
+  }, SEARCH_WAIT_TIME)
 }
 
 export function searchByHashTagPaging(e) {
@@ -93,7 +95,7 @@ export function searchByHashTagPaging(e) {
 
   setTimeout(() => {
     this.searchIsUnlocked = true;
-    dispatch(push('/#/' + e.target.value));
+    dispatch(push(getPushUrl({type: 'hashTag', value: e.target.value})));
     dispatch({
       type: 'HASHTAG_FETCH_PAGING_REQUESTED', 
       value: {
@@ -103,7 +105,28 @@ export function searchByHashTagPaging(e) {
         pages: getCubeFaces().length,
       }
     });
-  }, 1500);
+  }, SEARCH_WAIT_TIME);
+}
+
+//
+// Give a clean url to push to the routerReducer
+//  props: { type: 'hashTag'||'user', value: 'search_value'}
+//
+export function getPushUrl(props) {
+  // If we have no value or empty value, it's usually because a form field was wiped
+  let searchChar = props.type === 'hashTag' ? '#' : '@';
+  if(!props.value || props.value === '') {
+    return window.location.pathname.split('/' + searchChar + '/')[0] + window.location.search + window.location.hash;
+  }
+
+  // Searches can be part of location.pathname or location.hash
+  // So, we use pathRoot to find the url before search terms.
+  let pathname = window.location.pathname;
+  let pathRoot = pathname.split('/@/')[0] || pathname.split('/#/')[0];
+  let extraSlash = pathname.slice(-1) !== '/' ? '/' : '';
+
+  let pushUrl = pathRoot + extraSlash + searchChar + '/' + props.value + window.location.search; 
+  return pushUrl;
 }
 
 export function changeAllImageOpacity(newVal) {

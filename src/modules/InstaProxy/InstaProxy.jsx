@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getCubeFaces } from '../../components/3d/rubix/Cube';
 
-
 // Import Actions
 import {
   setIsMounted,
+  setStatus,
   setSearchType,
   setSearchValue,
   setSearchUrl,
@@ -30,25 +30,31 @@ export class InstaProxy extends Component {
     this.setIgSearchValue = setIgSearchValue.bind(this);
     this.callIg = callIg.bind(this);
     this.setIgSearchUrl = setIgSearchUrl.bind(this);
+    this.setup = setup.bind(this);
   }
 
   componentDidMount() {
     this.setState({isMounted: true}); // For immediate state checking
-    let router = this.state.router;
-    let searchProps = getSearchPropsFromUrl(router.location);
-    let typeToUpper = searchProps.searchType.toUpperCase();
+    this.setup();
 
-    this.props.dispatch({
-      type: !searchProps.faceType ? typeToUpper + '_FETCH_PAGING_REQUESTED' : typeToUpper + '_FETCH_REQUESTED', 
-      value: {
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let searchProps = getSearchPropsFromUrl(window.location);
+    if(searchProps && this.props.router.location.pathname.indexOf('@/') === -1 &&
+      this.props.router.location.hash.indexOf('#/') === -1) {
+      return false;
+    }
+    /*
+    if(this.props.ig.searchValue !== nextProps.ig.searchValue) {
+      this.callIg({
+        searchUri: searchProps.searchUri,
         searchType: searchProps.searchType,
         searchValue: searchProps.searchValue,
-        pages: !searchProps.faceType ? getCubeFaces().length : false,
-        face: searchProps.faceType ? searchProps.faceType : null,
-        isFirstRequest: true,
-      }
-    });
-    this.props.dispatch(setIsMounted()); // For state checking in store
+        returnCount: !searchProps.faceType ? getCubeFaces().length : false
+      });
+    }
+    */
   }
 
   render() {
@@ -82,7 +88,7 @@ export function callIg({...props}) {
     searchValue: props.searchValue,
     returnCount: props.returnCount ? props.returnCount : SEARCH_RETURN_COUNT,
     searchUri: props.searchUri,
-  });
+  })
 }
 
 /**
@@ -90,7 +96,6 @@ export function callIg({...props}) {
  *  To dispatch query to InstaProxy server
  */
 function getLatestData({...props}) {
-
   // Set our request configurations
   let queryPath = props.searchType === 'user' 
     ? URL_BASE_USER 
@@ -100,14 +105,16 @@ function getLatestData({...props}) {
     method: 'GET',
     mode: 'cors',
     cache: 'default',
-
   };
+  let path = ''
   // Build URL
-  let path = queryPath + props.searchValue.toLowerCase() + '/media/?count=' + props.returnCount;
+  if(!props.searchUri) {
+    path = queryPath + props.searchValue.toLowerCase() + '/media/?count=' + props.returnCount;
+  }
 
   // If we are passed a searchUrl property, 
   //   use the full uri that we can override for paging.
-  if(props.searchUri && !props.first) {
+  if(props.searchUri) {
     path = props.searchUri;
   }
 
@@ -118,6 +125,8 @@ function getLatestData({...props}) {
       return response.json().then( thisData => {
         return thisData;
       });
+    } else {
+      return response.json.json();
     }
   })
   .then((jsonData) => { return jsonData })
@@ -139,7 +148,6 @@ function getSearchPropsFromUrl(location) {
   let path = '';
   let searchType = SEARCH_DEFAULT_TYPE;
   let searchValue = SEARCH_DEFAULT_VALUE;
-  let firstPropIsFace = false;
   let isHashPath = false;
   let helperPath = '';
   let pathSearchValue = '';
@@ -152,8 +160,9 @@ function getSearchPropsFromUrl(location) {
         helperPath = location.pathname;
       }
       isHashPath = true;
-    } else if (location.pathname !== '/' && location.hash === '') {
+    } else {
       path = location.pathname;
+      helperPath = location.hash;
     }
   } catch(e) {
     return e;
@@ -161,6 +170,7 @@ function getSearchPropsFromUrl(location) {
 
   const pathArray = path.split('/');
   const helperPathArray = helperPath.split('/');
+  const searchUrlIndex = pathArray.indexOf('@') ? pathArray.indexOf('@') : pathArray.indexOf('#')
 
   // Get face to determine
   //  if this is a paged request to all sides
@@ -174,7 +184,7 @@ function getSearchPropsFromUrl(location) {
   }
 
   // Set the searchType
-  switch (pathArray[0]) {
+  switch (pathArray[searchUrlIndex]) {
     case '@':
       searchType = 'user';
       break;
@@ -182,11 +192,15 @@ function getSearchPropsFromUrl(location) {
       searchType = 'hashTag';
       break;
     default:
-      searchType = SEARCH_DEFAULT_TYPE;
+      searchType = 'user';
   }
 
   try{
-    pathSearchValue = pathArray[isHashPath ? 1 : 2].split('?')[0].toString();
+    let pathIndex = isHashPath ? searchUrlIndex : searchUrlIndex+1;
+    pathSearchValue = pathArray[pathIndex].split('?')[0].toString();
+    if(pathSearchValue === '') {
+      pathSearchValue = SEARCH_DEFAULT_VALUE;
+    }
   } catch (e) {
     pathSearchValue = SEARCH_DEFAULT_VALUE;
   }
@@ -195,7 +209,52 @@ function getSearchPropsFromUrl(location) {
   // Position is dependepent on if /faceId exists and if path is a hash value
   searchValue = pathArray.length > 1 ? pathSearchValue : SEARCH_DEFAULT_VALUE;
 
-  return {faceType: faceType, searchType: searchType, searchValue: searchValue}
+  let searchUri = searchType === 'hashTag' ? 
+    URL_BASE_HASHTAG + searchValue + '/media/?count=' + SEARCH_RETURN_COUNT:
+    URL_BASE_USER + searchValue + '/media/?count=' + SEARCH_RETURN_COUNT;
+    
+  return {
+    faceType: faceType, 
+    searchType: searchType, 
+    searchValue: searchValue, 
+    searchUri: searchUri
+  }
+}
+
+function setup() {
+  if(!this.props.fetchOnLoad) {
+    this.props.dispatch(setStatus(false));
+    return false;
+  }
+
+  this.getLatestData({
+    searchUri: URL_BASE_USER + 'server_check_hook',
+  }).then( (response) => {
+      if (!response || response.code > 1) {
+        this.props.dispatch(setIsMounted());
+        return false;
+      }
+      if(response.ok) {
+        this.props.dispatch(setStatus(response.ok));
+        let searchProps = getSearchPropsFromUrl(window.location);
+        let typeToUpper = searchProps.searchType.toUpperCase();
+        this.props.dispatch({
+          type: !searchProps.faceType ? typeToUpper + '_FETCH_PAGING_REQUESTED' : typeToUpper + '_FETCH_REQUESTED', 
+          value: {
+            searchUri: searchProps.searchUri,
+            searchType: searchProps.searchType,
+            searchValue: searchProps.searchValue,
+            pages: !searchProps.faceType ? getCubeFaces().length : false,
+            face: searchProps.faceType ? searchProps.faceType : null,
+            isFirstRequest: true,
+          }
+        });
+      } else {
+        this.props.dispatch(setIsMounted());
+        return false;
+      }
+    }
+  );
 }
 
 InstaProxy.propTypes = {

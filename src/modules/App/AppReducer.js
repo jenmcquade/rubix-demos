@@ -1,7 +1,11 @@
+import queryString from 'query-string';
+
 // Import Actions
 import { 
   RESIZE,
   SET_IS_MOUNTED,
+  SET_QS,
+  TOGGLE_INFO_PANEL,
 } from './AppActions';
 
 let updateWidth = window.innerWidth
@@ -31,6 +35,8 @@ const initialState = {
   screenSize: screenSize,
   width: updateWidth,
   height: updateHeight,
+  qs: {...queryString.parse(window.location.search)},
+  infoPanelIsOpen: false,
 };
 
 const AppReducer = (state = initialState, action) => {
@@ -38,10 +44,8 @@ const AppReducer = (state = initialState, action) => {
 
     case SET_IS_MOUNTED:
       return {
-        isMounted: true,
-        width: state.width,
-        height: state.height,
-        screenSize: state.screenSize,
+        ...state,
+        isMounted: true
       }
 
     case RESIZE:
@@ -61,11 +65,24 @@ const AppReducer = (state = initialState, action) => {
       || document.body.clientHeight;
       
       return {
-        isMounted: state.isMounted,
+        ...state,
         width: updateWidth,
         height: updateHeight,
         screenSize: screenSize,
-      };
+      }
+
+    case SET_QS: 
+      let qs = {...queryString.parse(window.location.search)};
+      return {
+        ...state,
+        qs: qs,
+      }
+
+    case TOGGLE_INFO_PANEL:
+      return {
+        ...state,
+        infoPanelIsOpen: action.value !== null ? action.value : !state.infoPanelIsOpen,
+      }
 
     default:
       return state;
@@ -77,6 +94,7 @@ const AppReducer = (state = initialState, action) => {
 // Getters
 export const getWidth = state => state.width;
 export const getHeight = state => state.height;
+export const getQs = state => state.qs;
 
 // Export Reducer
 export default AppReducer;

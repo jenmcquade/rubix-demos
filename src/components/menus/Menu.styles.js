@@ -1,4 +1,5 @@
 import styled, { css, keyframes } from 'styled-components';
+import { Link } from 'react-router-dom'
 import animations from '../../animations/menu';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { 
@@ -93,7 +94,7 @@ class Styles {
     // Buttons to open menu items
     //
 
-    this.trigger = styled.a`
+    this.trigger = styled(Link)`
       cursor: pointer;
       color: rgba(255,255,255,1);
       text-decoration: none;
@@ -110,6 +111,8 @@ class Styles {
 
       > :focus {
         border: 1px solid white;
+        outline: 0px;
+        outline-offset: 0px;
       }
 
       > :focus, :hover {
@@ -117,11 +120,11 @@ class Styles {
         color: rgba(255,255,255,0.8) !important;
       }
 
-      ${props => !props.active && !props.default && css`
+      ${props => props.active === 'false' && props.default !== 'true' && css`
         animation: ${anims.menuTitleFlipUp} 1s forwards ease-out;
       `}
 
-      ${props => props.active && css`
+      ${props => props.active === 'true' && props.default !== 'true' && css`
         animation: ${anims.menuTitleDrop}  1s forwards ease-out;
       `}
 
@@ -146,6 +149,7 @@ class Styles {
       and (max-width: 1023px) { 
         width: 5em;
         padding: 0.5em 1em 0.5em .5em;
+
       }
 
       @media only screen 
@@ -263,15 +267,15 @@ class Styles {
         left: 0%;
         display: table-row;
 
+        ${props => props.active === 'true' && props.default === 'false' && css`
+          transform: rotateX(0deg);
+        `}
+
         ${props => props.scrollable && css`
           :after {
             font-family: "FontAwesome";
             content: "\f078"
           }
-        `}
-
-        ${props => props.active && !props.default && css`
-          transform: rotateX(0deg);
         `}
 
         ${props => props.backgroundColor && css`
@@ -286,25 +290,29 @@ class Styles {
         padding: 0.25em;
         margin-top: -2.42em;
         min-height: 22em;
-        ${props => props.active && !props.default && css`
+
+        ${props => props.active === 'true' && props.default === 'false' && css`
           animation: ${anims.menuOpenContent} 1s forwards ease-out;
         `}
 
-        ${props => !props.active && !props.default && css`
+        ${props => props.active === 'false' && props.default === 'false' && css`
           animation: ${anims.menuCloseContent} 1s forwards ease-out;
         `}
+
       }
 
       @media only screen 
       and (min-width: 1024px) { 
         padding: 1em 0.25em 1em 0;
-        ${props => props.active && !props.default && css`
+
+        ${props => props.active === 'true' && props.default === 'false' && css`
           animation: ${anims.menuOpenContent} 1s forwards ease-out;
         `}
 
-        ${props => !props.active && !props.default && css`
+        ${props => props.active === 'false' && props.default === 'false' && css`
           animation: ${anims.menuCloseContent} 1s forwards ease-out;
         `}
+
       }
     `;
 

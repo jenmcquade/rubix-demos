@@ -14,11 +14,20 @@ import Menu from '../../components/containers/Menu';
 // Import Actions
 import {
   setIsMounted,
+  toggleInfoPanel,
   resize,
+  setQs,
 } from './AppActions'
 
 // CONSTANTS
 const DURATION_RESIZE_DISPATCH = 200;
+
+/** 
+ * Keep the query string fresh in the store
+*/
+function updateQs() {
+  this.props.dispatch(setQs());
+}
 
 export class App extends Component {
   constructor(props) {
@@ -27,7 +36,10 @@ export class App extends Component {
       ...props,
       igProxyIsOnline: false,
     }
+
+    this.fetchOnLoad = this.props.app.qs.hasOwnProperty('offline') ? false : true;
     this.shouldUpdateStoreWithNewDims = true;
+    this.updateQs = updateQs.bind(this);
   }
 
   /**
@@ -52,16 +64,29 @@ export class App extends Component {
     if(loadingImg) {
       loadingImg.style.display = 'none';
     }
+    if(this.props.router.location.hash === '#info') {
+      this.props.dispatch(toggleInfoPanel());
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if(this.props.router.location.key !== nextProps.router.location.key && nextProps.router.location.hash === '#info') {
+      this.props.dispatch(toggleInfoPanel(true));
+    } else if (this.props.router.location.key !== nextProps.router.location.key && nextProps.router.location.hash !== '#info') {
+      this.props.dispatch(toggleInfoPanel(false));
+    }
   }
 
   componentDidMount() {
     window.addEventListener('resize', this.updateDimensions.bind(this));
+    window.addEventListener('hashchange', this.updateQs.bind(this));
     this.setState({isMounted: true}); // For immediate state checking
     this.props.dispatch(setIsMounted()); // For state checking in store
   }
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.updateDimensions.bind(this));
+    window.removeEventListener('hashchange', this.updateQs.bind(this));
   }
 
   render() {
@@ -86,11 +111,14 @@ export class App extends Component {
           />
 
           <Menu />
+
           <a href="https://github.com/jonmcquade/rubix-demos">
             <img style={{position: 'absolute', top: 0, right: 0, border: 0}} src="https://camo.githubusercontent.com/52760788cde945287fbb584134c4cbc2bc36f904/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" />
           </a>
-          <Stage />
-          <InstaProxy fetchOnLoad={true} />
+
+          <Stage appInfoIsOpen={this.props.app.infoPanelIsOpen} />
+
+          <InstaProxy fetchOnLoad={this.fetchOnLoad} />
         </div>
       </div>
     );
@@ -105,6 +133,7 @@ App.propTypes = {
 function mapStateToProps(store) {
   return {
     app: store.app,
+    router: store.routerReducer,
     menu: store.menu,
     ig: store.instaProxy,
   };

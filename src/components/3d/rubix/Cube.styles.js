@@ -148,6 +148,23 @@ class Styles {
       transition: background 0.8s linear, transform 1s ease-in-out;
     `;
 
+    this.itemImage = styled.div`
+      align-items: center;
+      border-radius: 0%;
+      justify-content: center;
+      border-radius: 25%;
+      width: 100px;
+      height: 100px;
+      display: flex;
+      text-transform: uppercase;
+      font-size: 0.8em;
+      opacity: 0.5;
+
+      >label {
+        display: none;
+      }
+    `
+
   }
 }
 

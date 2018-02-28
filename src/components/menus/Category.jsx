@@ -1,3 +1,10 @@
+/**
+ * This Component is applied
+ *  to menu categories in their individual
+ *  constructors to build menu items with shared functionality
+ * See this file and Common.js for logic applied to all menu items
+ */
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
@@ -13,6 +20,8 @@ import Common, {
   CategoryLabel,
 } from '../menus/Common';
 
+import { toggleMenu } from './MenuActions';
+
 class Category extends Component {
   /**
    * Constructor
@@ -26,10 +35,18 @@ class Category extends Component {
    */
   constructor(props) {
     super(props);
-    Object.assign(this, new Common(this));
+    Object.assign(this, new Common(this)); // Import common functions as methods
     this.id = props.id.toLowerCase();
-    this.setTheme(props, true);
+    this.setScreenTheme(props, true); // See Common.js
+    let route = this.props.router.location.pathname;
+    this.triggerUrl = route.indexOf('/' + this.id + '/') !== -1 ? 
+      '/' + window.location.search + window.location.hash : 
+      '/' + this.id + window.location.search + window.location.hash
 
+    // If we loaded the app with this menu item listed in the url, open the item on load
+    this.openOnLoad = route.split('/')[1] && route.split('/')[1].toLowerCase() === this.id ? true : false;
+    
+    // Menu id and theming
     this.category = this.props.menu.categories[this.id];
     this.themeColor = this.category.backgroundColor; 
     this.triggerColor = this.category.triggerColor;
@@ -42,13 +59,25 @@ class Category extends Component {
     }
   }
 
+  componentDidMount() {
+    let route = this.state.router.location.pathname;
+    if(route.split('/')[1] && route.split('/')[1].toLowerCase() === this.id) {
+      this.props.dispatch(toggleMenu(this.id, true));
+    }
+  }
  
   //
   // Lifecycle handlers
   //
+  componentWillReceiveProps(nextProps) {
+    this.updateUrl(nextProps);
+    this.updateMenuState(nextProps);
+  }
+
   componentDidUpdate() {
+    // Re-theme when dimensions change
     if(this.props.id) {
-      this.setTheme(this.props);
+      this.setScreenTheme(this.props); // See Common.js
       document.querySelector('#' + this.props.id + ' a').style.backgroundColor = this.themeColor;
       document.querySelector('#' + this.props.id + ' a').style['color'] = this.triggerColor;
     }
@@ -61,27 +90,30 @@ class Category extends Component {
     if(!this.props.id) {
       return false;
     }
+    let category = this.state.menu.categories[this.id];
     let label = this.props.label;
     let baseColor = this.category.baseColor;
-    let menuIsOpen = this.category.menuIsOpen; 
+    let menuIsOpen = category.isDefaultState && this.openOnLoad ? true : this.category.menuIsOpen; 
     let iconType = this.props.iconType;
     let inlineContentTransform = this.category.inlineContentTransform;
     return (
       <Item id={this.id} style={{backgroundColor: this.themeColor}}>
         <Trigger 
-          tabindex="-1"
-          default={this.state.isDefaultState}
-          active={menuIsOpen}
+          default={category.isDefaultState.toString()}
+          openonload={this.openOnLoad.toString()}
+          active={menuIsOpen.toString()}
           onClick={this.handleTrigger}
           id={this.id + '-trigger'}
+          to={this.triggerUrl}
         >
           <Icon className={iconType} />
           <CategoryLabel>{label}</CategoryLabel>
         </Trigger>
         <Content
           scrollable={this.props.id === 'theme' ? true : false}
-          default={this.state.isDefaultState}
-          active={menuIsOpen} 
+          default={category.isDefaultState.toString()}
+          openonload={this.openOnLoad.toString()}
+          active={menuIsOpen.toString()} 
           backgroundColor={baseColor}
           style={{ 
             transform: inlineContentTransform,
@@ -96,10 +128,13 @@ class Category extends Component {
 }
 
 // Retrieve data from store as props
-function mapStateToProps(store) {
+function mapStateToProps(store, ownProps) {
   return {
+    router: store.routerReducer,
     app: store.app,
+    ig: store.instaProxy,
     menu: store.menu,
+    rubix: store.rubix,
   };
 }
 

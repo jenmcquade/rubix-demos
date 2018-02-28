@@ -71,7 +71,7 @@ class Theme extends Component {
     Object.assign(this, new Common(this));
     this.faces = getCubeFaces();
     this.faces.unshift('all'); // add an additional 'all' face to the top of the array
-    this.formsState = getInitialFormsState(this.faces);
+    this.formsState = getInitialFormsState(this.faces, props);
 
     this.state = {
       ...props,
@@ -79,7 +79,6 @@ class Theme extends Component {
       searchType: 'color',
       themeFace: 'top',
       forms: this.formsState,
-      igProxyIsOnline: false,
       faceId: 'all',
     }
 
@@ -104,37 +103,23 @@ class Theme extends Component {
     this.updateFormsDisplay = updateFormsDisplay.bind(this);
   }
 
-  /**
-   * componentWillReceiveProps
-   * Menu style setup is included here, to wait for IG Proxy status
-   */
-  componentWillReceiveProps(nextProps) {
-    if(nextProps.ig.status) {
-      this.setState({igProxyIsOnline: true });
-      // If this our first time, continue. 
-      //  otherwise, we're done
-      if(!nextProps.menu.isInSetup) {
+  componentDidMount() {
+    // If this our first time, continue. 
+    //  otherwise, we're done
+    if(this.state.isDefaultState) {
+      if(!this.props.menu.isInSetup) {
         return true;
       }
       this.props.dispatch(toggleMenuSetup());
-      this.updateFormsDisplay();  
-    } else {
-      this.formsState = {};
-      for(let face in this.faces) {
-        face = face.toLowerCase();
-      }
-    }
-  }
-
-  componentDidUpdate() {
-    this.setTheme(this.props);
+      this.setState({isDefaultState: false});
+    } 
   }
 
   //
   // Render to the Menu container
   //
   render() {
-    let proxyIsOnline = this.state.igProxyIsOnline;
+    let proxyIsOnline = this.props.ig.status;
     return (
       <ScrollBar
         autoHide 
@@ -198,7 +183,7 @@ class Theme extends Component {
                     <DropdownItem display={proxyIsOnline.toString()} eventKey={face + '-user'}>@ (user)</DropdownItem>
                     <DropdownItem display={proxyIsOnline.toString()} eventKey={face + '-hashTag'}># (hashtag)</DropdownItem>
                     <DropdownItem display="true" eventKey={face + '-bgColor'}>Background</DropdownItem>
-                    <DropdownItem display="true" eventKey={face + '-imageOpacity'}>Image Opacity</DropdownItem>
+                    <DropdownItem display={proxyIsOnline.toString()} eventKey={face + '-imageOpacity'}>Image Opacity</DropdownItem>
                     <DropdownItem display="true" eventKey={face + '-txtColor'}>Text Color</DropdownItem>
                   </DropdownButton>
                   <TextBox
@@ -206,6 +191,7 @@ class Theme extends Component {
                     id={'searchTextUser-' + face}
                     type="text"
                     style={this.state.forms[face].text.user.style}
+                    placeholder={this.state.router.location.pathname.indexOf('/@/') ? this.props.router.location.pathname.split('/@/')[1] : ''}
                     onChange={isAll ? this.searchByUserPaging : this.searchByUser}
                   />
                   <TextBox
@@ -213,6 +199,7 @@ class Theme extends Component {
                     id={'searchTextHashtag-' + face}
                     type="text"
                     style={this.state.forms[face].text.hashTag.style}
+                    placeholder={this.props.router.location.hash.indexOf('/#/') ? this.props.router.location.hash.split('/#/')[1] : ''}
                     onChange={isAll ? this.searchByHashTagPaging : this.searchByHashTag}
                   />
                   <TextBox
@@ -258,31 +245,35 @@ class Theme extends Component {
 //
 // Templating
 //
-function getInitialFormsState(faces) {
+function getInitialFormsState(faces, props) {
   let formsState = {};
+  let fieldWidth = props.app.screenSize === 'xlarge' ? '10em' : '7em';
+  let sliderStyle = getSliderStyle(props.app.screenSize);
   for(var face in faces) {
     face = face.toLowerCase();
     formsState[faces[face]] = {
       searchType: 'color',
       text:{
-        user:{value: '', style:{marginRight: '1em', width: '9em', display:'none'}},
-        hashTag:{value: '', style:{marginRight: '1em', width: '9em', display:'none'}},
-        bgColor:{value: '', style:{marginRight: '1em', width: '9em', display:'inline'}},
-        txtColor:{value: '', style:{marginRight: '1em', width: '9em', display:'none'}}
+        user:{value: '', style:{margin: '0 0.25em 0 0.25em', width: fieldWidth, display:'none'}},
+        hashTag:{value: '', style:{margin: '0 0.25em 0 0.25em', width: fieldWidth, display:'none'}},
+        bgColor:{value: '', style:{margin: '0 0.25em 0 0.25em', width: fieldWidth, display:'inline'}},
+        txtColor:{value: '', style:{margin: '0 0.25em 0 0.25em', width: fieldWidth, display:'none'}}
       },
       slider:{
-        imageOpacity: {value: .5, style: getSliderStyle()}
+        imageOpacity: {value: .5, style: sliderStyle}
       }
     }
   }
   return formsState;
 }
 
-function getSliderStyle() {
-  return { width: '8.2em', 'margin': '0.8em 1em 0 0', display:'none' }
+function getSliderStyle(screenSize) {
+  let fieldWidth = screenSize === 'xlarge' ? '8.7em' : '5.8em';
+  let style = { width: fieldWidth, 'margin': '0.8em 0.5em 0 0.5em', display:'none' }
+  return style;
 }
 
-function updateFormsDisplay() {
+function updateFormsDisplay(props) {
   let formsState = {};
   for(var face in this.faces) {
     face = face.toLowerCase();
@@ -299,7 +290,7 @@ function updateFormsDisplay() {
         txtColor: {value: '', style: Object.assign(...thisFace.text.txtColor.style, {display:'none'})},
       },
       slider:{
-        imageOpacity: {value: thisFace.slider.imageOpacity.value, style: getSliderStyle()},
+        imageOpacity: {value: thisFace.slider.imageOpacity.value, style: getSliderStyle(props.app.screenSize)},
       }
     }
   }      

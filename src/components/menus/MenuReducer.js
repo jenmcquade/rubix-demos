@@ -57,7 +57,7 @@ const MenuReducer = (state = initialState, action) => {
 
     case TOGGLE_SETUP:
       newState.isInSetup = !newState.isInSetup;
-      return {...newState, state};
+      return {...newState, ...state};
 
     case TOGGLE_MENU_PERSPECTIVE:
       for(menu in newState.categories) {
@@ -67,6 +67,9 @@ const MenuReducer = (state = initialState, action) => {
         newState.categories[menu].menuIsOpen = false;
       }
       newState.categories['perspective'].menuIsOpen = !newState.categories['perspective'].menuIsOpen;
+      if(action.forceOn) {
+        newState.categories['perspective'].menuIsOpen = true;
+      }
       newState.categories['perspective'].isDefaultState = false;
       newState.isDefaultState = false;
       return {...newState, state};
@@ -79,6 +82,9 @@ const MenuReducer = (state = initialState, action) => {
         newState.categories[menu].menuIsOpen = false;
       }
       newState.categories['theme'].menuIsOpen = !newState.categories['theme'].menuIsOpen;
+      if(action.forceOn) {
+        newState.categories['theme'].menuIsOpen = true;
+      }
       newState.categories['theme'].isDefaultState = false;
       newState.isDefaultState = false;
       return {...newState, state};

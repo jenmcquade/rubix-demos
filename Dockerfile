@@ -3,19 +3,16 @@ FROM node:8.9.4-alpine
 ARG build_type
 ARG node_env
 ARG build_ver
-ARG local_prod
 ARG search_default_value
 ARG search_default_type
 ENV BUILD_TYPE=$build_type
 ENV BUILD_VER=$build_ver
 ENV NODE_ENV=$node_env
-ENV LOCAL_PROD=$local_prod
 ENV SEARCH_DEFAULT_VALUE=$search_default_value
 ENV SEARCH_DEFAULT_TYPE=$search_default_type
 ENV CLIENT=true
 
 COPY ./entrypoint /usr/local/bin/
-COPY ./gen_local_ssl.sh /usr/local/bin/
 COPY ./server.js /
 COPY ./package.json /
 COPY ./package.prod.json /
@@ -30,14 +27,13 @@ RUN  apk add --no-cache \
         libpng-dev \
         automake \
         autoconf \
-        libtool \
+        libtool \ 
         gettext-dev \
         g++ \
         file \
         nasm \
         make && \
-        npm install && \
-        sh /usr/local/bin/gen_local_ssl.sh
+        npm install 
 
 RUN if [ "$BUILD_TYPE" = "development" ]; then \
         echo "Building ./public folder for fallback to static files ..." && \

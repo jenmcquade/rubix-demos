@@ -80,7 +80,7 @@ class Perspective extends Component {
   // Lifecycle handlers
   //
   componentDidUpdate() {
-    this.setTheme(this.props);
+    this.setScreenTheme(this.props);
   }
 
   //

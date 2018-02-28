@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import 'html-gl/dist/htmlgl.min';
 
 import { MenuWrapper } from '../menus/Common'
-import Category from './Category';
+import Category from '../menus/Category';
 import Perspective from '../menus/Perspective';
 import Theme from '../menus/Theme';
 

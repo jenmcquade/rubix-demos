@@ -4,9 +4,9 @@ import Styles from './Cube.styles';
 import 'html-gl/dist/htmlgl.min';
 import Draggable from 'react-draggable';
 
-import Spinner from '../../../assets/loader.svg';
-
 const Style = new Styles();
+
+const defaultImage = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
 
 /**
  * Styled Wrappers
@@ -15,7 +15,7 @@ const CubeWrapper = Style.wrapper;
 const DraggableHandle = Style.handle;
 const Box = Style.cube;
 const Item = Style.item;
-const SolidColor = Style.item;
+const ItemImage = Style.itemImage;
 const Face = Style.face;
 
 class Cube extends React.Component {
@@ -26,7 +26,7 @@ class Cube extends React.Component {
       ...props,
       igProxyIsOnline: false,
       wrapperStyle: {},
-      hasImagesOnLoad: props.hasImagesOnLoad,
+      hasImagesOnLoad: props.app.qs.offline ? false : props.hasImagesOnLoad,
       isMounted: false
     };
 
@@ -42,6 +42,9 @@ class Cube extends React.Component {
   componentDidMount() {
     this.setState({isMounted: true});
     let faces = getCubeFaces();
+    if(!this.state.ig.status) {
+      return false;
+    }
     for(let face in faces) {
       setImagesToLoading(faces[face]);
     }
@@ -50,6 +53,7 @@ class Cube extends React.Component {
   componentWillReceiveProps(nextProps) {
     if(nextProps.ig.status) {
       this.setState({igProxyIsOnline: true });
+      this.setState({hasImagesOnLoad: nextProps.ig.status});
       this.loadImages(nextProps.object);
       this.showImages();
       this.popInImages();
@@ -76,6 +80,7 @@ class Cube extends React.Component {
       {type: 'side', position: ['bottom']},
       {type: 'corner', position: ['bottom', 'left']},
     ]
+    let hasImages = this.state.hasImagesOnLoad;
     return(
       <Draggable
         handle=".handle"
@@ -92,7 +97,6 @@ class Cube extends React.Component {
               <Box flat={this.props.object.objectIsFlat}>
                 { 
                   this.faces.map((face) => {
-                    let hasImages = this.state.hasImagesOnLoad;
                     return <Face draggable="false" id={face} key={face}
                       itemBgColor={this.props.object.theme[face].bgColor}
                       itemColor={this.props.object.theme[face].txtColor}
@@ -107,9 +111,11 @@ class Cube extends React.Component {
                           position={position}
                           type={item.type}>
                           { !hasImages || !this.state.object.theme[face].images[i] ? positionTxt : 
-                            <div draggable="false" alt={positionTxt} id={face + '-' + (i+1).toString() + '-image'}
+                            <ItemImage draggable="false" alt={positionTxt} id={face + '-' + (i+1).toString() + '-image'}
                               style={this.state.object.theme[face].imageStyle}
-                            />
+                            >
+                              <label>{positionTxt}</label>
+                            </ItemImage>
                           }
                         </Item>
                       })
@@ -170,7 +176,6 @@ export function setImagesToLoading(face) {
     let img = document.getElementById(face + '-' + i + '-image');
     let item = document.getElementById(face + '-' + i);
     if(img && item){
-      img = { Spinner };
       item.style.transform = 'scale(0,0) rotate(360deg)';
     }
   }

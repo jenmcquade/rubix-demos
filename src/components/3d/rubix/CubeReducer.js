@@ -14,9 +14,8 @@ import {
   SET_THEME_CUBE_IMAGE_OPACITY
 } from './CubeActions';
 
-import '../../../assets/loader.svg';
-
-const DEFAULT_IMG = 'static/media/loader.svg';
+// Default image is a Base64 Encoded Pixel
+const DEFAULT_IMG = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
 const IMAGE_COUNT = 9;
 const IMAGE_STYLE = {
   userDrag: 'none',
@@ -24,8 +23,7 @@ const IMAGE_STYLE = {
   width: '100%',
   height: '100%',
   display: 'default',
-  borderRadius: '25%',
-  background: 'url()',
+  background: 'url(' + DEFAULT_IMG + ')',
 }
 
 //

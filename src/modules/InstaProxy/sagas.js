@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { callIg } from './InstaProxy';
-import { URL_DEFAULT_SEARCH_URL, SEARCH_RETURN_COUNT, PROXY_SERVER } from './InstaProxyActions';
+import { URL_DEFAULT_SEARCH_URL, SEARCH_RETURN_COUNT, PROXY_SERVER, URL_BASE_USER, URL_BASE_HASHTAG } from './InstaProxyActions';
 import { getCubeFaces, popOutImages, popInImages } from '../../components/3d/rubix/Cube';
 
 // worker Saga: will be fired on USER_FETCH_REQUESTED actions
@@ -21,7 +21,9 @@ function* fetchData(action) {
     // Pre-dispatch query settings; overrides defaults
     yield put({type: 'SET_IG_SEARCH_TYPE', value: action.value.searchType});
     yield put({type: 'SET_IG_SEARCH_VALUE', value: action.value.searchValue});
-    yield put({type: 'SET_IG_SEARCH_URL', value: action.value.searchUri});
+    if(action.value.searchUri) {
+      yield put({type: 'SET_IG_SEARCH_URL', value: action.value.searchUri});
+    }
 
     // Hide images while search is performed
     // TODO: Make this a dispatch to a cube action
@@ -31,6 +33,11 @@ function* fetchData(action) {
 
     // Make the fetch call via InstaProxy module's callIg function
     let data = yield call(callIg, action.value);
+
+    if(Object.keys(data).length === 0 || data.code && data.code > 1) {
+      yield call(onFetchFailure, action);
+      return false;
+    }
 
     // Some additional flight checks before departure back to the store...
     if (data.posts) {
@@ -69,7 +76,7 @@ function* fetchData(action) {
  */
 function *onFetchSuccess(props) {
   try{
-    if(props.action.value.isFirstRequest) {
+    if(props.action.value.first) {
       yield put({type: 'SET_IS_ONLINE', value: true});
     }
     // If we have images, put them in the store
