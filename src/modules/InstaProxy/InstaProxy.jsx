@@ -171,6 +171,7 @@ function getSearchPropsFromUrl(location) {
   const pathArray = path.split('/');
   const helperPathArray = helperPath.split('/');
   const searchUrlIndex = pathArray.indexOf('@') ? pathArray.indexOf('@') : pathArray.indexOf('#')
+  let firstPropIsFace = false;
 
   // Get face to determine
   //  if this is a paged request to all sides
