@@ -24,6 +24,8 @@ COPY ./src/ /src/
 COPY ./.babelrc /
 COPY ./.eslintrc /
 COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+COPY ./ops/env.js ./env.js
+COPY ./ops/env.staging.js ./env.staging.js
 
 RUN apk update && \
     apk --no-cache add  \
@@ -54,7 +56,12 @@ RUN if [ "$BUILD_TYPE" = "development" ]; then \
         node /node_modules/webpack/bin/webpack.js && \
         cd /public; ls -l; \
     else \
-        echo "Building ./build folder for serving static files ..." && \
+        echo "Building ./build folder for serving static files via Nginx ..." && \
+        if [ "$BUILD_TYPE" = "staging" ]; then \
+            mv ./env.staging.js ./src/modules/InstaProxy/env.js \
+        else \
+            mv ./env.js ./src/modules/InstaProxy/env.js \
+        fi && \
         export BUILD_TIME=`date +'%y.%m.%d %H:%M:%S'` && \
         BUILD_VER=$BUILD_VER BUILD_TIME=$BUILD_TIME node /node_modules/webpack/bin/webpack.js -p --config /webpack.production.config.js && \
         node /node_modules/react-scripts/scripts/build.js && \
