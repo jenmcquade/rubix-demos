@@ -12,10 +12,12 @@
 # Declare files that will always have CRLF line endings on checkout.
 *.js* eol=lf
 *.json* eol=lf
+*.conf* eol=lf
 *Docker* eol=lf
 *docker* eol=lf
 *entrypoint* eol=lf
-*public_build* eol=lf
+*ops/prod_build* eol=lf
+*ops/staging_build* eol=lf
 
 # misc
 .DS_Store

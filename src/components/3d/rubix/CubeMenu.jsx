@@ -38,9 +38,7 @@ class CubeMenu extends React.Component {
 // Retrieve data from store as props
 function mapStateToProps(store) {
   return {
-    app: store.app,
     object: store.rubix,
-    ig: store.instaProxy,
   };
 }
 

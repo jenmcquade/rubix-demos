@@ -1,6 +1,6 @@
 {
   "name": "rubix-demos",
-  "version": "v0.2.17",
+  "version": "BUILD_VER",
   "repository": "https://github.com/jonmcquade/rubix-demos",
   "description": "Open 3D Object Viewer",
   "license": "MIT",

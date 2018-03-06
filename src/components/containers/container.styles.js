@@ -4,6 +4,12 @@ import { Link } from 'react-router-dom'
 class Styles {
   constructor() {
 
+    this.wrapper = styled.div`
+      min-height: 100%;
+      min-width: 100%;
+      position: absolute;
+    `;
+
     this.info = styled(Link)`
       position: relative;
       bottom: 1em;
@@ -38,6 +44,10 @@ class Styles {
       ${props => !props.isOpen && css`
         transform: translateY(${process.env.NODE_ENV === 'development' ? '17em' : '10em'});
       `}
+    `
+
+    this.hrule = styled.div`
+      border-bottom: 1px solid white;
     `
 
   }

@@ -14,11 +14,17 @@ import {
   PATH_USER,
   PATH_HASHTAG,
   SET_IG_SEARCH_URL,
-  URL_DEFAULT_SEARCH_URL
+  URL_DEFAULT_SEARCH_URL,
+  TOGGLE_HISTORY_PANEL,
 } from './InstaProxyActions';
 
-// Constants
+import { getCubeFaces } from '../../components/3d/rubix/Cube';
 
+const faces = getCubeFaces();
+const payloadHistoryEmptySet = {}
+for(let face in faces) {
+  payloadHistoryEmptySet[faces[face]] = [];
+}
 
 // Initial State
 const initialState = {
@@ -33,6 +39,8 @@ const initialState = {
   status: false,
   returnCount: SEARCH_RETURN_COUNT,
   inProcess: false,
+  payloadHistory: payloadHistoryEmptySet,
+  historyPanelIsOpen: false,
 };
 
 const InstaProxyReducer = (state = initialState, action) => {
@@ -43,6 +51,7 @@ const InstaProxyReducer = (state = initialState, action) => {
       return {...state, ...newState};
 
     case SETUP:
+      newState.inProcess = true;
       return {state, ...newState};
 
     case SET_IS_ONLINE:
@@ -73,10 +82,20 @@ const InstaProxyReducer = (state = initialState, action) => {
       if(!action.value.data || state.inProcess) {
         return {...state};
       }
-      newState.status = true;
       newState.inProcess = false;
       newState.lastPayload = action.value.data;
+      newState.payloadHistory[action.value.face].push(action.value.data.posts)
       return {...state, ...newState};
+
+    case TOGGLE_HISTORY_PANEL:
+      newState.historyPanelIsOpen = !newState.historyPanelIsOpen;
+      if(action.value.forceOff) {
+        newState.historyPanelIsOpen = false; 
+      }
+      if(action.value.forceOn) {
+        newState.historyPanelIsOpen = true; 
+      }
+      return {...newState, state};
 
     case NULL_REQUEST:
       return {...state}
