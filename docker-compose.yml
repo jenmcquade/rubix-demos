@@ -4,7 +4,9 @@ services:
   # Instagram Proxy
   igdata:
     container_name: instaproxy_dev
-    image: instaproxy:latest
+    image: jonmcquade/instaproxy:latest
+    environment:
+     - "PORT=80"
     ports: 
      - "3000:80"
      - "3443:443"
