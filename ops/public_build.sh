@@ -8,21 +8,21 @@
 #   then returns to the original branch
 #
 
-rm -rf public_build
+rm -rf ../public_build
 
-docker-compose -f docker-compose.prod.yml down
+docker-compose -f ../docker-compose.prod.yml down
 
 date=`date +'%y.%m.%d %H:%M:%S'`
 
-docker-compose -f docker-compose.prod.yml up --build -d
+docker-compose -f ../docker-compose.prod.yml up --build -d
 
-docker cp o3dv:/build/. ./public_build/
+docker cp o3dv:/build/. ../public_build/
 
 read -n1 -r -p "You can view the build at http://localhost:8080.  Or press space to continue the release..." key
 
 if [ "$key" = '' ]; then
 
-  docker-compose -f docker-compose.prod.yml down
+  docker-compose -f ../docker-compose.prod.yml down
 
   heroku container:login
 
@@ -39,7 +39,7 @@ if [ "$key" = '' ]; then
 
   git add public_build 
 
-  git commit -m "Production Release at $date" .env ./public_build
+  git commit -m "Production Release at $date" ../.env ../public_build
 
   git push origin master
 
