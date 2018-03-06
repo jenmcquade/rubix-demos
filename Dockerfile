@@ -50,9 +50,9 @@ RUN apk update && \
     chmod -Rf 755 /etc/nginx /tmp/nginx.pid
 
 RUN if [ "$BUILD_TYPE" = "staging" ]; then \
-        mv ./ops/env.staging.js ./src/modules/InstaProxy/env.js; \
+        mv ./env.staging.js ./src/modules/InstaProxy/env.js; \
     elif [ "$BUILD_TYPE" = "production" ]; then \
-        mv ./ops/env.js ./src/modules/InstaProxy/env.js; \
+        mv ./env.js ./src/modules/InstaProxy/env.js; \
     fi
 
 RUN if [ "$BUILD_TYPE" = "development" ]; then \
