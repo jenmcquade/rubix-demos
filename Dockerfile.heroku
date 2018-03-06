@@ -1,6 +1,5 @@
 FROM jonmcquade/alpine-nginx-nodejs
 
-COPY ./server.js /
 COPY ./package.prod.json /
 COPY ./public_build/ /build/ 
 COPY ./conf/nginx.conf /etc/nginx/nginx.conf
