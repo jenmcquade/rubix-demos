@@ -19,6 +19,7 @@ class Styles {
     this.wrapper = styled.div`
       top: 50%;
       left: 50%;
+      margin-left: 2em;
       position: absolute;
       z-index: 5;
       transform: scale(0.4); 
@@ -40,6 +41,7 @@ class Styles {
       and (min-width: 720px) 
       and (max-width: 1023px) { 
         margin-top: -5%;
+        margin-left: -1%;
         transform: scale(0.8);
       }
       @media only screen 

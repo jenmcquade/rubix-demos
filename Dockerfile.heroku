@@ -1,14 +1,18 @@
-FROM node:8.9.4-alpine
+FROM jonmcquade/alpine-nginx-nodejs
 
 COPY ./server.js /
 COPY ./package.prod.json /
 COPY ./public_build/ /build/ 
+COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+
+RUN sed -i "s/PORT/$PORT/g" /etc/nginx/nginx.conf
 
 RUN mv /package.prod.json /package.json && \
+    rm -f /build/app.js && \
     npm install --save cross-env compression express express-history-api-fallback && \
     cd /build; ls -l
 
-CMD NODE_ENV=production node /server.js --bind 0.0.0.0:$PORT
+CMD nginx -g "daemon off;"
 
  
 

@@ -60,6 +60,8 @@ const MenuReducer = (state = initialState, action) => {
       return {...newState, ...state};
 
     case TOGGLE_MENU_PERSPECTIVE:
+      newState.categories['perspective'].isDefaultState = false;
+      newState.isDefaultState = false;
       for(menu in newState.categories) {
         if (menu === 'perspective') {
           continue;
@@ -70,11 +72,14 @@ const MenuReducer = (state = initialState, action) => {
       if(action.forceOn) {
         newState.categories['perspective'].menuIsOpen = true;
       }
-      newState.categories['perspective'].isDefaultState = false;
-      newState.isDefaultState = false;
+      if(action.forceOff) {
+        newState.categories['perspective'].menuIsOpen = false;
+      }
       return {...newState, state};
 
     case TOGGLE_MENU_THEME:
+      newState.categories['theme'].isDefaultState = false;
+      newState.isDefaultState = false;
       for(menu in newState.categories) {
         if (menu === 'theme') {
           continue;
@@ -85,8 +90,9 @@ const MenuReducer = (state = initialState, action) => {
       if(action.forceOn) {
         newState.categories['theme'].menuIsOpen = true;
       }
-      newState.categories['theme'].isDefaultState = false;
-      newState.isDefaultState = false;
+      if(action.forceOff) {
+        newState.categories['theme'].menuIsOpen = false;
+      }
       return {...newState, state};
 
     case SET_MOBILE_THEME:

@@ -23,9 +23,12 @@ export function setQs() {
   }
 }
 
-export function toggleInfoPanel(force = null) {
+export function toggleInfoPanel(forceOn = false, forceOff = false) {
   return {
     type: TOGGLE_INFO_PANEL,
-    value: force,
+    value: {
+      forceOn: forceOn,
+      forceOff: forceOff,
+    }
   }
 }

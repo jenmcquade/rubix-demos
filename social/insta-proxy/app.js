@@ -32,7 +32,7 @@ const InstaProxy = {
   GRAPH_USER_QUERY_ID: '17888483320059182',
   GRAPH_TAG_QUERY_ID: '17875800862117404',
   GITHUB_REPO: 'https://github.com/whizzzkid/instagram-reverse-proxy',
-  SERVER_PORT: process.env.PORT ? process.env.PORT : 3000,
+  SERVER_PORT: 3000,
   TIMEOUT: 15000,
 };
 
@@ -114,6 +114,7 @@ InstaProxy.errorMessageGenerator = function (mesg, info) {
 /**
  * Constructs New Url
  * @param {String} protocol
+ * @param {String} port
  * @param {String} host
  * @param {String} path
  * @param {String} query
@@ -209,9 +210,12 @@ InstaProxy.fetchFromInstagramGQL = function (param, request, response) {
 
       if (json.page_info.has_next_page) {
         query.cursor = json.page_info.end_cursor;
+        let port = '';
+        if(process.env.NODE_ENV === 'development') {
+          port = ':' + InstaProxy.SERVER_PORT
+        } 
         response.next = this.constructURL(
-          request.protocol, request.get('host'), request.path, query);
-        
+          request.protocol, request.get('host') + port, request.path, query );
       }
 
       response.posts = [];
@@ -455,11 +459,11 @@ InstaProxy.serverCheck = function (request, response) {
 InstaProxy.serve = function () {
   let isLocalProd = process.env.LOCAL_PROD ? process.env.LOCAL_PROD : 'false';
   if(isLocalProd === 'true') {
-    Https.createServer(this.options, this.app).listen(process.env.PORT || this.SERVER_PORT, function(){
-      console.log('Now serving with SSL on port ' + process.env.PORT || this.SERVER_PORT);
+    Https.createServer(this.options, this.app).listen(this.SERVER_PORT, function(){
+      console.log('Now serving with SSL on port ' + this.SERVER_PORT);
     });
   } else {
-    this.app.listen(process.env.PORT || this.SERVER_PORT);
+    this.app.listen(this.SERVER_PORT);
     this.log('Starting server.');
   }
 

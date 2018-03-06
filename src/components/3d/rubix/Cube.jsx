@@ -6,8 +6,6 @@ import Draggable from 'react-draggable';
 
 const Style = new Styles();
 
-const defaultImage = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
-
 /**
  * Styled Wrappers
  */

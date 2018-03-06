@@ -1,3 +1,10 @@
+/**
+ * This Saga manages the synchronous calls to the InstaProxy module
+ *   and the after-effects of returned query data, like
+ *   hiding/showing images on the cube
+ * TODO: Either make this more generic or make this a Rubix saga
+ */
+
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { callIg } from './InstaProxy';
 import { URL_DEFAULT_SEARCH_URL, SEARCH_RETURN_COUNT, PROXY_SERVER } from './InstaProxyActions';
@@ -34,18 +41,19 @@ function* fetchData(action) {
     // Make the fetch call via InstaProxy module's callIg function
     let data = yield call(callIg, action.value);
 
-    if(Object.keys(data).length === 0 || data.code && data.code > 1) {
+    if((Object.keys(data).length === 0) || (data.code && data.code > 1)) {
       yield call(onFetchFailure, action);
       return false;
     }
 
     // Some additional flight checks before departure back to the store...
     if (data.posts) {
+      let face = action.value.face ? action.value.face : 'all';
       if(data.posts.length < SEARCH_RETURN_COUNT) {
         yield put({type: 'UPDATE_IG_DATA_LIMITED_RETURN'});
-        yield put({type: 'UPDATE_IG_DATA', value: {data: data}});
-      } else if (data.posts.length === SEARCH_RETURN_COUNT) {
-        yield put({type: 'UPDATE_IG_DATA', value: {data: data}});
+        yield put({type: 'UPDATE_IG_DATA', value: {face: face, data: data}});
+      } else {
+        yield put({type: 'UPDATE_IG_DATA', value: {face: face, data: data}});
       }
     }
 

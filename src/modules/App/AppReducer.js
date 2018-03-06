@@ -29,17 +29,20 @@ for (var q in mediaQueries) {
   }
 }
 
+let qs = {...queryString.parse(window.location.search)};
+
 // Initial State
 const initialState = {
   isMounted: false,
   screenSize: screenSize,
   width: updateWidth,
   height: updateHeight,
-  qs: {...queryString.parse(window.location.search)},
-  infoPanelIsOpen: false,
+  qs: qs,
+  infoPanelIsOpen: qs && qs.hasOwnProperty('__info') ? true : false,
 };
 
 const AppReducer = (state = initialState, action) => {
+  let newState = Object.assign({}, state);
   switch (action.type) {
 
     case SET_IS_MOUNTED:
@@ -79,10 +82,18 @@ const AppReducer = (state = initialState, action) => {
       }
 
     case TOGGLE_INFO_PANEL:
-      return {
-        ...state,
-        infoPanelIsOpen: action.value !== null ? action.value : !state.infoPanelIsOpen,
+      if(!action.value) {
+        return false;
       }
+      newState.infoPanelIsOpen = !newState.infoPanelIsOpen;
+
+      if(action.value.forceOn) {
+        newState.infoPanelIsOpen = true;
+      }
+      if(action.value.forceOff) {
+        newState.infoPanelIsOpen = false;
+      }
+      return {...state, ...newState};
 
     default:
       return state;

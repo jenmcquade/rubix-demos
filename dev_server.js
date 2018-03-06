@@ -1,16 +1,17 @@
 /** 
- * Express server that serves either:
+ * Express server that serves:
  *  -- BrowserSync and Webpack middleware in development
- *  OR
- *  -- /build directory of static files in production
+ * This file is run from the 'npm start' command
+ * It is not executed in production; Nginx serves the /build directory instead
 */
 
 var compression = require('compression')
 var express = require('express');
 var Path = require('path');
-var http = require('http');
 
+// Express is served over 3002, but is proxied by BrowserSync over 8080
 var LOCAL_HOST = 'http://localhost:3002';
+var dev_port = 3002; 
 
 var app = express();
 app.use(compression({threshold: 0}));
@@ -20,13 +21,6 @@ app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept');
   next();
 });
-
-var forceSsl = function(req, res, next) {
-  if (req.headers['x-forwarded-proto'] !== 'https') {
-    return res.redirect(['https://', req.get('Host'), req.url].join(''));
-  }
-  return next();
-}
 
 /**
 * Run Browsersync and use middleware for Hot Module Replacement
@@ -84,27 +78,9 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
 
-var buildDir = __dirname+'build';
-var prod_port = process.env.PORT ? process.env.PORT : 80;
-var dev_port = 3002; // Express is served over 3002, but is proxied by BrowserSync
-var isLocalProd = process.env.LOCAL_PROD ? process.env.LOCAL_PROD : 'false'
-
 if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging') {
   app.listen(dev_port, () => console.log('Now serving with WebPack Middleware on port ' + dev_port + '!'))
   app.get('*', function (request, response){
     response.sendFile(Path.resolve(__dirname, 'public', 'index.html'))
   })
-} else {
-  app.use(forceSsl);
-  app.use(express.static(__dirname + 'build'))
-  app.get('*', function (request, response){
-    response.sendFile(Path.resolve(__dirname, 'build', 'index.html'))
-  })
-  if(isLocalProd === 'false') {
-    app.listen(prod_port, () => console.log('Now serving on port ' + prod_port + ' using the ' + buildDir + ' directory!'));
-  } else {
-    http.createServer(app).listen(prod_port, function(){
-      console.log('Now serving HTTP on port ' + prod_port + ' using the ' + buildDir + ' directory!');
-    });
-  }
-}
+} 
