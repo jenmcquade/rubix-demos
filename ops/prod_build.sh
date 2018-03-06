@@ -16,6 +16,9 @@ docker-compose -f ./docker-compose.prod.yml down
 
 date=`date +'%y.%m.%d %H:%M:%S'`
 
+docker-compose -f docker-compose.prod.yml up --build -d
+docker cp o3dv:/build/. ./public_build/
+
 read -n1 -r -p "You can view the build at http://localhost:8080.  Or press space to continue the release..." key
 
 if [ "$key" = '' ]; then
