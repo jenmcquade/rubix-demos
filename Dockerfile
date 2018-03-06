@@ -85,7 +85,7 @@ RUN apk del \
 
 WORKDIR /
 
-CMD sh ./entrypoint
+CMD sh $BUILD_VER $BUILD_TYPE $BUILD_TIME ./entrypoint
 
 EXPOSE 80
 EXPOSE 443
