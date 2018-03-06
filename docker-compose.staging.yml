@@ -19,7 +19,7 @@ services:
     ports: 
      - "3000:80"
      - "3443:443"
-  # Frontend/UI (Nginx proxy for development)
+  # Frontend/UI (Nginx proxy)
   o3dv:
     image: open3dviewer:latest
     environment:
@@ -37,7 +37,7 @@ services:
     container_name: o3dv
     ports:
      - "8080:8080"
-     - "443:443"
+     - "8443:443"
     networks:
      - app
      
