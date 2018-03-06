@@ -10,7 +10,7 @@ import FontAwesome from 'font-awesome/css/font-awesome.css'; // eslint-disable-l
 const ASSETS_PATH = './assets/';
 
 require(ASSETS_PATH + 'loader.gif');
-
+require(ASSETS_PATH + 'icon.png');
 require(ASSETS_PATH + 'android-icon-48x48.png');
 require(ASSETS_PATH + 'android-icon-72x72.png');
 require(ASSETS_PATH + 'android-icon-96x96.png');

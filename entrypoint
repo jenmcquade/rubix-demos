@@ -14,8 +14,7 @@ echo "BUILD_VER: $3"
 sed -i "s/listen 80/listen ${PORT}/g" /etc/nginx/nginx.conf && \
 
 if [ "$BUILD_TYPE" == "development" ]; then
-    set -- npm run start "$@"
-    exec "$@"
+    npm run start
 else    
     nginx -g "daemon off;"
 fi
