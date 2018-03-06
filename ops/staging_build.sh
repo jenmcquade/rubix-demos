@@ -8,26 +8,23 @@
 #   then returns to the original branch
 #
 
-rm -rf ../public_build
+cd $PWD
 
-docker-compose -f ../docker-compose.staging.yml down
+rm -rf ./public_build
+
+docker-compose -f docker-compose.staging.yml down
 
 date=`date +'%y.%m.%d %H:%M:%S'`
 
-docker-compose -f ../docker-compose.staging.yml up --build -d
+docker-compose -f docker-compose.staging.yml up --build -d
 
-docker cp o3dv:/build/. ../public_build/
-
-heroku container:login
-
-docker tag instaproxy registry.heroku.com/igdata-stg/web
-docker push registry.heroku.com/igdata-stg/web
+docker cp o3dv:/build/. ./public_build/
 
 read -n1 -r -p "You can view the build at http://localhost:8080.  Or press space to continue the release..." key
 
 if [ "$key" = '' ]; then
 
-  docker-compose -f ../docker-compose.staging.yml down
+  docker-compose -f ./docker-compose.staging.yml down
 
   original_branch=`git branch | grep \*`
 
@@ -35,11 +32,11 @@ if [ "$key" = '' ]; then
 
   git pull origin staging
 
-  git rm -r ../public_build
+  git rm -r ./public_build
 
-  git add ../public_build 
+  git add ./public_build 
 
-  git commit -m "Staging Release at $date" ../.env ../public_build
+  git commit -m "Staging Release at $date" ./.env ./public_build
 
   git push origin staging
 

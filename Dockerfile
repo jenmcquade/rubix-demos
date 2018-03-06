@@ -12,7 +12,6 @@ ENV NODE_ENV=$node_env
 ENV SEARCH_DEFAULT_VALUE=$search_default_value
 ENV SEARCH_DEFAULT_TYPE=$search_default_type
 ENV CLIENT=true
-ENV PORT=$port
 
 COPY ./entrypoint /usr/local/bin/
 COPY ./dev_server.js /
@@ -26,6 +25,7 @@ COPY ./.eslintrc /
 COPY ./conf/nginx.conf /etc/nginx/nginx.conf
 COPY ./ops/env.js ./env.js
 COPY ./ops/env.staging.js ./env.staging.js
+COPY ./entrypoint /entrypoint
 
 RUN apk update && \
     apk --no-cache add  \
@@ -49,12 +49,10 @@ RUN apk update && \
     touch /tmp/nginx.pid && \
     chmod -Rf 755 /etc/nginx /tmp/nginx.pid
 
-RUN sed -i "s/PORT/$PORT/g" /etc/nginx/nginx.conf
-
 RUN if [ "$BUILD_TYPE" = "staging" ]; then \
-        mv ./env.staging.js ./src/modules/InstaProxy/env.js; \
+        mv ./ops/env.staging.js ./src/modules/InstaProxy/env.js; \
     elif [ "$BUILD_TYPE" = "production" ]; then \
-        mv ./env.js ./src/modules/InstaProxy/env.js; \
+        mv ./ops/env.js ./src/modules/InstaProxy/env.js; \
     fi
 
 RUN if [ "$BUILD_TYPE" = "development" ]; then \
@@ -87,8 +85,7 @@ RUN apk del \
 
 WORKDIR /
 
-CMD nginx -g "daemon off;"
-ENTRYPOINT PORT=$PORT BUILD_TIME=`date +'%y.%m.%d %H:%M:%S'` BUILD_VER=$BUILD_VER entrypoint
+CMD sh ./entrypoint
 
 EXPOSE 80
 EXPOSE 443

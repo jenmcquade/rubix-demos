@@ -6,11 +6,9 @@
   "license": "MIT",
   "scripts": {
     "start": "cross-env CLIENT=true NODE_ENV=development node dev_server.js",
-    "start:igproxy": "cd ./social/insta-proxy && npm run start",
     "build": "cross-env NODE_ENV=production CLIENT=true webpack -p --config webpack.production.config.js && node ./node_modules/react-scripts/scripts/build.js",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "postinstall": "cd ./social/insta-proxy && npm install"
+    "eject": "react-scripts eject"
   },
   "homepage": "/",
   "dependencies": {

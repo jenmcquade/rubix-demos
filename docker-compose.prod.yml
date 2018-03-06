@@ -4,13 +4,6 @@ services:
   # Instagram Proxy
   igdata:
     image: instaproxy:latest
-    build: 
-      context: ./social/insta-proxy
-      dockerfile:  Dockerfile
-      args: 
-        build_type: production
-        node_env: production
-        port: 80
     environment:
       - "PORT=80"
     container_name: instaproxy

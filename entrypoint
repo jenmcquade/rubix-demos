@@ -13,6 +13,8 @@ echo "BUILD_TIME: $BUILD_TIME"
 echo "BUILD_TYPE: $BUILD_TYPE"
 echo "BUILD_VER: $BUILD_VER"
 
+sed -i "s/listen 80/listen ${PORT}/g" /etc/nginx/nginx.conf && \
+
 if [ "$BUILD_TYPE" == "development" ]; then
     set -- npm run start "$@"
     exec "$@"
