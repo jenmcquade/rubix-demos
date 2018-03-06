@@ -71,6 +71,13 @@ export class App extends Component {
     this.updateQs = updateQs.bind(this);
     this.resetMenus = resetMenus.bind(this);
     this.toggleAppInfoPanel = toggleAppInfoPanel.bind(this);
+    let loadingImg = document.querySelector('#loadingSpinner');
+    let rootNode = document.querySelector('#root');
+    rootNode.style.overflow = 'hidden';
+    rootNode.style.position = 'fixed'; 
+    if(loadingImg) {
+      loadingImg.style.display = 'none';
+    }
   }
 
   /**
@@ -85,16 +92,6 @@ export class App extends Component {
         this.props.dispatch(resize());
         this.shouldUpdateStoreWithNewDims = true;
     }, DURATION_RESIZE_DISPATCH);
-  }
-
-  componentWillMount() {
-    let loadingImg = document.querySelector('#loadingSpinner');
-    let rootNode = document.querySelector('#root');
-    rootNode.style.overflow = 'hidden';
-    rootNode.style.position = 'fixed'; 
-    if(loadingImg) {
-      loadingImg.style.display = 'none';
-    }
   }
 
   componentDidMount() {
