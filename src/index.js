@@ -45,6 +45,14 @@ const render = (Component) => {
   );
 };
 
+let loadingImg = document.querySelector('#loadingSpinner');
+let rootNode = document.querySelector('#root');
+rootNode.style.overflow = 'hidden';
+rootNode.style.position = 'fixed'; 
+if(loadingImg) {
+  loadingImg.style.display = 'none';
+}
+
 render(App);
 
 // Webpack Hot Module Replacement API
