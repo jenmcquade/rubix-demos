@@ -110,6 +110,7 @@ class Styles {
       border: none;
 
       > :focus {
+        text-decoration: none;
         border: 1px solid white;
         outline: 0px;
         outline-offset: 0px;
@@ -229,6 +230,11 @@ class Styles {
       and (max-width: 1023px) { 
         margin: 0 40%;
       }
+
+      ${props => props.active && css`
+        font-size: 2em;
+      `}
+
     `;
 
     //
@@ -459,6 +465,102 @@ class Styles {
       ${props => props.className && props.className === 'true' && css`
         color: green;
       `}
+    `
+
+    //
+    // IgHistory Component
+    //
+    this.igHistory = styled.div`
+      height: 8em;
+      width: 50%;
+      margin: auto auto;
+      padding: 0.8em;
+      display: flex;
+      position: absolute;
+      left: -3%;
+      right: 0%;
+      bottom: 0em;
+      transform: translateY(8em);
+      transition: transform 0.8s;
+
+      ${props => props.active && css`
+        transform: translateY(-3em);
+      `}
+
+      @media only screen
+      and (min-width : 75px) 
+      and (max-width : 719px) {
+        left: 3%;
+        margin-left: 0em;
+        width: 80%;
+        ${props => props.active && css`
+          transform: translateY(-2em);
+        `}
+      }
+
+      @media only screen 
+      and (min-width: 720px) 
+      and (max-width: 1023px) { 
+        left: 0%;
+        width: 65%;
+      }
+    `
+
+    this.igHistorySide = styled.div`
+      display: flex;
+      min-width: 2em;
+      background-color: rgba(255,255,255,0.8);
+      
+      ${props => props.id === 'wrap-left' && css`
+        border-top-left-radius: 1em;
+        border-bottom-left-radius: 1em;
+      `}
+
+      ${props => props.id === 'wrap-right' && css`
+        border-top-right-radius: 1em;
+        border-bottom-right-radius: 1em;
+      `}
+    `
+
+    this.igHistoryContent = styled.div`
+      display: flex;
+      min-width: 100%;
+      align-items: center;
+      background-color: rgba(255,255,255,0.8);
+    `
+
+    this.pagingWrapper = styled.div`
+      cursor: pointer;
+      cursor: hand;
+      width: 100%;
+      display: flex;
+      margin: auto auto;
+      padding: 0 0.25em;
+      position: absolute;
+      transform: translate(50%, -5em);
+      transition: transform 0.8s linear;
+      align-items: center;
+
+      @media only screen
+      and (min-width : 75px) 
+      and (max-width : 719px) {
+        bottom: 2em;
+      }
+      
+      > i {
+        margin: 2%;
+
+        ${props => props.active && css`
+          transform: scale(2, 2);
+        `}
+
+        @media only screen
+          and (min-width : 75px) 
+          and (max-width : 719px) {
+            margin: 2%;
+          }
+        }
+      }
     `
   }
 }

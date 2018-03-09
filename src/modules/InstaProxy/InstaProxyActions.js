@@ -12,6 +12,7 @@ export const SET_IG_SEARCH_VALUE = 'SET_IG_SEARCH_VALUE';
 export const SET_IG_SEARCH_URL = 'SET_IG_SEARCH_URL';
 export const SET_SEARCH_TYPE = 'SET_SEARCH_TYPE';
 export const UPDATE_IG_DATA = 'UPDATE_IG_DATA';
+export const TOGGLE_HISTORY_PANEL = 'TOGGLE_HISTORY_PANEL';
 export const SEARCH_RETURN_COUNT = 9;
 export const SEARCH_DEFAULT_TYPE = DEFAULT_TYPE ? DEFAULT_TYPE : 'user';
 export const SEARCH_DEFAULT_VALUE = DEFAULT_VALUE ? DEFAULT_VALUE : 'jonorjen';
@@ -81,6 +82,16 @@ export function setServerError(data) {
   return {
     type: SET_ERROR,
     error: data,
+  }
+}
+
+export function toggleHistoryPanel(forceOn = false, forceOff = false) {
+  return {
+    type: TOGGLE_HISTORY_PANEL,
+    value: {
+      forceOn: forceOn,
+      forceOff: forceOff,
+    }
   }
 }
 

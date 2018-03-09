@@ -5,19 +5,16 @@
 # Use this file for customizing the default behavior when a container is created
 
 set -e
-export BUILD_TIME=$BUILD_TIME
-export BUILD_TYPE=$BUILD_TYPE
-export BUILD_VER=$BUILD_VER
+BUILD_TIME=`date +'%y.%m.%d %H:%M:%S'`
 
-echo "BUILD_TIME: $BUILD_TIME"
-echo "BUILD_TYPE: $BUILD_TYPE"
-echo "BUILD_VER: $BUILD_VER"
+echo "BUILD_TIME: $1"
+echo "BUILD_TYPE: $2"
+echo "BUILD_VER: $3"
 
-if [ "$BUILD_TYPE" == "development" ]; then    
-    set -- npm run start "$@"
-    exec "$@"
+sed -i "s/80/${PORT}/g" /etc/nginx/nginx.conf && \
+
+if [ "$BUILD_TYPE" == "development" ]; then
+    npm run start
 else    
-    BUILD_TIME=`date +'%y.%m.%d %H:%M:%S'` LOCAL_PROD=true BUILD_VER=$BUILD_VER node /server.js --bind 0.0.0.0:$PORT
+    nginx -g "daemon off;"
 fi
-
-

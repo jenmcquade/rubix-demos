@@ -116,7 +116,7 @@ export function getPushUrl(props) {
   // If we have no value or empty value, it's usually because a form field was wiped
   let searchChar = props.type === 'hashTag' ? '#' : '@';
   if(!props.value || props.value === '') {
-    return window.location.pathname.split('/' + searchChar + '/')[0] + window.location.search + window.location.hash;
+    return window.location.pathname.split('/' + searchChar + '/')[0]  + window.location.search + window.location.hash;
   }
 
   // Searches can be part of location.pathname or location.hash
@@ -124,8 +124,13 @@ export function getPushUrl(props) {
   let pathname = window.location.pathname;
   let pathRoot = pathname.split('/@/')[0] || pathname.split('/#/')[0];
   let extraSlash = pathname.slice(-1) !== '/' ? '/' : '';
-
-  let pushUrl = pathRoot + extraSlash + searchChar + '/' + props.value + window.location.search; 
+  let hashValue = window.location.hash !== '' ? '' : window.location.hash
+  let pushUrl = '';
+  if(props.type === 'hashTag') {
+    pushUrl = pathRoot + window.location.search + searchChar + '/' + props.value; 
+  } else {
+    pushUrl = pathRoot + extraSlash + searchChar + '/' + props.value + window.location.search + hashValue; 
+  }
   return pushUrl;
 }
 

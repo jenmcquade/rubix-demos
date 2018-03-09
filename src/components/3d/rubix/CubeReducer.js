@@ -14,8 +14,10 @@ import {
   SET_THEME_CUBE_IMAGE_OPACITY
 } from './CubeActions';
 
+const TRANSPARENT_PIXEL = require('../../../assets/transparent_square.svg')
+
 // Default image is a Base64 Encoded Pixel
-const DEFAULT_IMG = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+const DEFAULT_IMG = TRANSPARENT_PIXEL;
 const IMAGE_COUNT = 9;
 const IMAGE_STYLE = {
   userDrag: 'none',
@@ -23,7 +25,7 @@ const IMAGE_STYLE = {
   width: '100%',
   height: '100%',
   display: 'default',
-  background: 'url(' + DEFAULT_IMG + ')',
+  background: 'url(' + TRANSPARENT_PIXEL + ')',
 }
 
 //
