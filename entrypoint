@@ -7,14 +7,16 @@
 set -e
 BUILD_TIME=`date +'%y.%m.%d %H:%M:%S'`
 
-echo "BUILD_TIME: $1"
-echo "BUILD_TYPE: $2"
-echo "BUILD_VER: $3"
+echo "BUILD_TIME: $BUILD_TIME"
+echo "BUILD_TYPE: $BUILD_TYPE"
+echo "BUILD_VER: $BUILD_VER"
 
-sed -i "s/80/${PORT}/g" /etc/nginx/nginx.conf && \
+nginx -t
 
 if [ "$BUILD_TYPE" == "development" ]; then
+    nginx -g 'daemon off;' & 
     npm run start
-else    
+else
+    sed -i "s/443/${PORT}/g" /etc/nginx/nginx.conf && \
     nginx -g "daemon off;"
 fi

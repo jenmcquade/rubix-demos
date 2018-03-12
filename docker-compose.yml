@@ -1,21 +1,51 @@
 version: '3'
       
 services:
+  # Reverse Proxy provided by traefik 
+  # In local hosts file, point igdata.docker.localhost
+  #  and o3dv.docker.localhost to 127.0.0.1 to access
+  traefik:
+    container_name: app_proxy
+    image: traefik:alpine
+    restart: always
+    ports:
+      - '80:80'
+      - '443:443'
+      - '8081:8080' # Dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./conf/traefik/traefik.toml:/traefik.toml
+      - ./conf/traefik/docker.local.json:/docker.local.json
+    networks:
+      - o3dv_app_dev
+    command: --logLevel=INFO
   # Instagram Proxy
   igdata:
     container_name: instaproxy_dev
     image: jonmcquade/instaproxy:latest
+    restart: on-failure:5
     environment:
-     - "PORT=80"
-    ports: 
-     - "3000:80"
-     - "3443:443"
+     - "PORT=443" # Internally used
     networks:
-     - app
-  # Frontend/UI (No nginx proxy for development)
+      - o3dv_app_dev 
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.domain=igdata.docker.localhost'
+      - 'traefik.backend=igdata'
+      - 'traefik.port=443'
+      - 'traefik.docker.network=rubixdemos_o3dv_app_dev'
+      - 'traefik.frontend.rule=Host:igdata.docker.localhost'
+      - 'traefik.frontend.redirect.entryPoint=https'
+      - 'traefik.frontend.headers.SSLRedirect=true'
+    volumes:
+      - ssl:/ssl
+    ports:
+      - "3443:443" # Localhost HTTPS access to Nginx proxying the app
+  # Frontend/UI 
   o3dv:
     container_name: o3dv_dev
     image: open3dviewer:dev
+    restart: on-failure:5
     build: 
       context: .
       dockerfile: Dockerfile
@@ -24,15 +54,30 @@ services:
         node_env: development
     environment:
       - "BUILD_VER=$BUILD_VER"
+      - "PORT=443" # Internally used
     volumes:
       - ./src:/src
+      - ./conf/nginx.dev.conf:/etc/nginx/nginx.conf
+      - ssl:/ssl
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.domain=o3dv.docker.localhost'
+      - 'traefik.port=443'
+      - 'traefik.backend=o3dv'
+      - 'traefik.docker.network=rubixdemos_o3dv_app_dev'
+      - 'traefik.frontend.rule=Host:o3dv.docker.localhost'
+      - 'traefik.frontend.redirect.entryPoint=https'
+      - 'traefik.frontend.headers.SSLRedirect=true'
     ports:
-     - "8080:8080"
-     - "8443:443"
-     - "3001:3001"
-     - "3002:3002"
+     - "8080:8080" # localhost HTTP access to dev_server.js process
+     - "3001:3001" # Browsersync HTTP Admin access
+     - "3002:3002" # HTTP Direct access to WebPack behind Browersync proxy 
     networks:
-     - app
+     - o3dv_app_dev 
      
 networks:
-  app:  
+  o3dv_app_dev:
+
+volumes:
+  ssl:
+

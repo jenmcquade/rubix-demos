@@ -1,24 +1,18 @@
+# This is for building and deploying containers to the Heroku staging pipeline
+
 version: '3'
       
 services:
   # Instagram Proxy
   igdata:
     image: instaproxy:latest
-    build: 
-      context: ./social/insta-proxy
-      dockerfile:  Dockerfile
-      args: 
-        build_type: staging
-        node_env: production
-        port: 80
     environment:
-      - "PORT=80"
+      - "PORT=80" # Internally used
     container_name: instaproxy
     networks:
-     - app
+     - o3dv_app_stg
     ports: 
-     - "3000:80"
-     - "3443:443"
+     - "3000:443" # Externally used
   # Frontend/UI (Nginx proxy)
   o3dv:
     image: open3dviewer:latest
@@ -28,18 +22,17 @@ services:
       context: .
       dockerfile: Dockerfile
       args: 
-        build_type: staging
+        build_type: staging 
         node_env: production
         build_ver: ${BUILD_VER}
-        port: 8080
+        port: 443 # internally used
     environment:
-      - "PORT=8080"
+      - "PORT=443" # internally used
     container_name: o3dv
     ports:
-     - "8080:8080"
-     - "8443:443"
+     - "8080:443" # externally used
     networks:
-     - app
+     - o3dv_app_stg
      
 networks:
-  app:  
+  o3dv_app_stg:  

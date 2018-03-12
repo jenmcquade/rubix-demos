@@ -1,0 +1,112 @@
+################################################################
+# Global configuration
+################################################################
+
+# Enable debug mode
+#
+# Optional
+# Default: false
+#
+# debug = true
+
+# Log level
+#
+# Optional
+# Default: "ERROR"
+#
+logLevel = "ERROR"
+
+# Entrypoints to be used by frontends that do not specify any entrypoint.
+# Each frontend can specify its own entrypoints.
+#
+# Optional
+# Default: ["http"]
+#
+defaultEntryPoints = ["http", "https"]
+
+# Format is either "json" or "common".
+#
+# Optional
+# Default: "common"
+#
+format = "json"
+
+# Enable access logs
+# By default it will write to stdout and produce logs in the textual
+# Common Log Format (CLF), extended with additional fields.
+#
+# Optional
+#
+[accessLog]
+
+#
+# Entrypoints
+#  - Redirects HTTP requests to HTTPS
+#
+[entryPoints]
+  [entryPoints.http]
+  address = ":80"
+    [entryPoints.http.redirect]
+      entryPoint = "https"
+  [entryPoints.https]
+  address = ":443"
+    [entryPoints.https.tls]
+
+[acme]
+email = "test@traefik.io"
+storageFile = "docker.local.json"
+entryPoint = "https"
+[[acme.domains]]
+   main = "docker.localhost"
+   sans = ["igdata.docker.localhost", "o3dv.docker.localhost"]
+
+#
+# Frontends
+#
+[frontends]
+  [frontends.igdata]
+    backend = "igdata"
+    SSLRedirect = true
+    passHostHeader = true
+    passTLSCert = true
+    entrypoints = ["https"] # overrides defaultEntryPoints
+    [frontends.igdata.routes.test_1]
+     rule = "Host:igdata.docker.localhost"
+  [frontends.o3dv]
+    backend = "o3dv"
+    SSLRedirect = true
+    passHostHeader = true
+    passTLSCert = true
+    entrypoints = ["https"] # overrides defaultEntryPoints
+    [frontends.o3dv.routes.test_1]
+     rule = "Host:o3dv.docker.localhost"
+
+################################################################
+# Docker configuration backend
+################################################################
+
+# Enable Docker configuration backend
+[docker]
+  Endpoint = "unix:///var/run/docker.sock"
+  Domain = "docker.localhost"
+  Watch = true
+  SwarmMode = false
+  ExposedByDefault = false
+
+# API definition
+[api]
+  # Name of the related entry point
+  #
+  # Optional
+  # Default: "traefik"
+  #
+  entryPoint = "traefik"
+
+  # Enabled Dashboard
+  #
+  # Optional
+  # Default: true
+  #
+  dashboard = true
+
+

@@ -1,26 +1,20 @@
 /** 
  * Express server that serves:
- *  -- BrowserSync and Webpack middleware in development
+ *  -- BrowserSync with Webpack middleware in development
  * This file is run from the 'npm start' command
  * It is not executed in production; Nginx serves the /build directory instead
 */
 
-var compression = require('compression')
-var express = require('express');
-var Path = require('path');
+// Modules
+const express = require('express');
+const Path = require('path');
 
 // Express is served over 3002, but is proxied by BrowserSync over 8080
-var LOCAL_HOST = 'http://localhost:3002';
-var dev_port = 3002; 
+// Nginx proxies to 8080 and has a dynamic port of its own
+const LOCAL_HOST = 'http://localhost:3002';
+const DEV_PORT = 3002; 
 
 var app = express();
-app.use(compression({threshold: 0}));
-
-app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept');
-  next();
-});
 
 /**
 * Run Browsersync and use middleware for Hot Module Replacement
@@ -34,7 +28,7 @@ if (process.env.NODE_ENV === 'development') {
   var compiler = webpack(webpackConfig);
   require('react-hot-loader/patch');
   browserSync.init({
-    port: process.env.PORT ? process.env.PORT : 8080,
+    port: 8080,
     proxy: {
       target: LOCAL_HOST,
       middleware: [
@@ -78,8 +72,8 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
 
-if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging') {
-  app.listen(dev_port, () => console.log('Now serving with WebPack Middleware on port ' + dev_port + '!'))
+if (process.env.NODE_ENV === 'development') {
+  app.listen(DEV_PORT, () => console.log('Now serving with WebPack Middleware on port ' + DEV_PORT + '!'))
   app.get('*', function (request, response){
     response.sendFile(Path.resolve(__dirname, 'public', 'index.html'))
   })

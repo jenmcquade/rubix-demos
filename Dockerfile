@@ -23,6 +23,7 @@ COPY ./src/ /src/
 COPY ./.babelrc /
 COPY ./.eslintrc /
 COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+COPY ./conf/nginx.dev.conf /etc/nginx/nginx.dev.conf
 COPY ./ops/env.js ./env.js
 COPY ./ops/env.staging.js ./env.staging.js
 COPY ./entrypoint /entrypoint
@@ -56,6 +57,11 @@ RUN if [ "$BUILD_TYPE" = "staging" ]; then \
     fi
 
 RUN if [ "$BUILD_TYPE" = "development" ]; then \
+        ls -al /ssl && \
+        echo "Using Nginx for reverse proxy to BrowserSync ..." && \
+        rm /etc/nginx/nginx.conf && \
+        sed -i "s/DOMAIN/${SSL_CONFIG_DOMAIN}/g" /etc/nginx/nginx.dev.conf && \
+        mv /etc/nginx/nginx.dev.conf /etc/nginx/nginx.conf && \
         echo "Building ./public folder for fallback to static files ..." && \
         node /node_modules/webpack/bin/webpack.js && \
         cd /public; ls -l; \
@@ -81,11 +87,12 @@ RUN apk del \
   file \
   nasm \
   make \
-  sed
+  sed && \
+  rm -rf /var/cache/apk/*
 
 WORKDIR /
 
-CMD sh $BUILD_VER $BUILD_TYPE $BUILD_TIME ./entrypoint
+CMD sh ./entrypoint
 
 EXPOSE 80
 EXPOSE 443
