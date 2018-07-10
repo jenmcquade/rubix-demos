@@ -13,8 +13,8 @@ import {
   SEARCH_DEFAULT_TYPE,
   SEARCH_DEFAULT_VALUE,
   SEARCH_RETURN_COUNT,
-  URL_BASE_USER,
   URL_BASE_HASHTAG,
+  URL_DEFAULT_SEARCH_URL,
 } from './InstaProxyActions'
 
 export class InstaProxy extends Component {
@@ -86,9 +86,7 @@ export function callIg({...props}) {
  */
 function getLatestData({...props}) {
   // Set our request configurations
-  let queryPath = props.searchType === 'user' 
-    ? URL_BASE_USER 
-    : URL_BASE_HASHTAG;
+  let queryPath = URL_BASE_HASHTAG;
   
   var initConfig = { 
     method: 'GET',
@@ -98,7 +96,7 @@ function getLatestData({...props}) {
   let path = ''
   // Build URL
   if(!props.searchUri) {
-    path = queryPath + props.searchValue.toLowerCase() + '/media/?count=' + props.returnCount;
+    path = queryPath + '?tag=' + props.searchValue.toLowerCase();
   }
 
   // If we are passed a searchUrl property, 
@@ -162,7 +160,7 @@ function getSearchPropsFromUrl(location) {
   const pathArray = path.split('/');
 
   const helperPathArray = helperPath.split('/');
-  const searchUrlIndex = pathArray.indexOf('@') !== -1 ? pathArray.indexOf('@') : pathArray.indexOf('#');
+  const searchUrlIndex = pathArray.indexOf('#');
   let firstPropIsFace = false;
 
   // Get face to determine
@@ -178,14 +176,11 @@ function getSearchPropsFromUrl(location) {
 
   // Set the searchType
   switch (pathArray[searchUrlIndex]) {
-    case '@':
-      searchType = 'user';
-      break;
     case '#':
       searchType = 'hashTag';
       break;
     default:
-      searchType = 'user';
+      searchType = 'hashTag';
   }
 
   try{
@@ -204,8 +199,7 @@ function getSearchPropsFromUrl(location) {
   searchValue = pathArray.length > 1 ? pathSearchValue : SEARCH_DEFAULT_VALUE;
 
   let searchUri = searchType === 'hashTag' ? 
-    URL_BASE_HASHTAG + searchValue + '/media/?count=' + SEARCH_RETURN_COUNT:
-    URL_BASE_USER + searchValue + '/media/?count=' + SEARCH_RETURN_COUNT;
+    URL_BASE_HASHTAG + '?tag=' + searchValue : URL_DEFAULT_SEARCH_URL;
   
   let returnProps = {
     faceType: faceType, 
@@ -223,24 +217,25 @@ function setup() {
   }
 
   this.getLatestData({
-    searchUri: URL_BASE_USER + 'server_check_hook',
+    searchUri: URL_BASE_HASHTAG + '?statusCheck&tag=tacoma',
   }).then( (response) => {
-      if (!response || response.code > 1) {
+      if (!response) {
         this.props.dispatch(setIsMounted());
         return false;
       }
-      if(response.ok) {
-        this.props.dispatch(setStatus(response.ok));
+      if(response.graphql) {
+        this.props.dispatch(setStatus(true));
         let searchProps = getSearchPropsFromUrl(window.location);
         let typeToUpper = searchProps.searchType.toUpperCase();
         this.props.dispatch({
-          type: !searchProps.faceType ? typeToUpper + '_FETCH_PAGING_REQUESTED' : typeToUpper + '_FETCH_REQUESTED', 
+          type: typeToUpper + '_FETCH_REQUESTED', 
           value: {
             searchUri: searchProps.searchUri,
             searchType: searchProps.searchType,
             searchValue: searchProps.searchValue,
-            pages: !searchProps.faceType ? getCubeFaces().length : false,
+            pages: false,
             face: searchProps.faceType ? searchProps.faceType : null,
+            faces: true,
             isFirstRequest: true,
           }
         });

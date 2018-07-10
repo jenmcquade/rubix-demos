@@ -1,17 +1,6 @@
 version: '3'
       
 services:
-  # Instagram Proxy
-  igdata:
-    container_name: instaproxy_dev
-    image: jonmcquade/instaproxy:latest
-    environment:
-     - "PORT=80"
-    ports: 
-     - "3000:80"
-     - "3443:443"
-    networks:
-     - app
   # Frontend/UI (No nginx proxy for development)
   o3dv:
     container_name: o3dv_dev

@@ -2,15 +2,16 @@ import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom'
 
 class Styles {
-  constructor() {
+    constructor() {
 
-    this.wrapper = styled.div`
+            this.wrapper = styled.div `
       min-height: 100%;
       min-width: 100%;
       position: absolute;
     `;
 
-    this.info = styled(Link)`
+            this.info = styled(Link)
+            `
       position: relative;
       bottom: 1em;
       z-index: 0;
@@ -22,7 +23,7 @@ class Styles {
       }
     `
 
-    this.infoWrap = styled.div`
+            this.infoWrap = styled.div `
       min-width: 15em; 
       font-size: 1em; 
       position: absolute; 
@@ -48,6 +49,14 @@ class Styles {
 
     this.hrule = styled.div`
       border-bottom: 1px solid white;
+    `
+
+    this.gitHubLink = styled.a`
+      right: 0em;
+      top: 0em;
+      position: absolute;
+      float: right;
+      z-index: 99;
     `
 
   }

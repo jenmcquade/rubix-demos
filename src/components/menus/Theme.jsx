@@ -38,10 +38,7 @@ import {
   changeSearchType,
   changeImageOpacity,
   changeAllImageOpacity,
-  searchByUser,
   searchByHashTag,
-  searchByUserPaging, 
-  searchByHashTagPaging
 } from './helpers/theme_search'
 
 //
@@ -93,10 +90,7 @@ class Theme extends Component {
     this.changeAllTxtColor = changeAllTxtColor.bind(this);
     this.changeTxtColor = changeTxtColor.bind(this);
     this.convertRGBAToString = convertRGBAToString.bind(this);
-    this.searchByUser = searchByUser.bind(this);
     this.searchByHashTag = searchByHashTag.bind(this);
-    this.searchByUserPaging = searchByUserPaging.bind(this);
-    this.searchByHashTagPaging = searchByHashTagPaging.bind(this);
     this.setIgSearchType = setIgSearchType.bind(this);
     this.changeAllImageOpacity = changeAllImageOpacity.bind(this);
     this.changeImageOpacity = changeImageOpacity.bind(this);
@@ -180,7 +174,6 @@ class Theme extends Component {
                       minWidth: '6em',
                     }}
                   >
-                    <DropdownItem display={proxyIsOnline.toString()} eventKey={face + '-user'}>@ (user)</DropdownItem>
                     <DropdownItem display={proxyIsOnline.toString()} eventKey={face + '-hashTag'}># (hashtag)</DropdownItem>
                     <DropdownItem display="true" eventKey={face + '-bgColor'}>Background</DropdownItem>
                     <DropdownItem display={proxyIsOnline.toString()} eventKey={face + '-imageOpacity'}>Image Opacity</DropdownItem>
@@ -188,19 +181,11 @@ class Theme extends Component {
                   </DropdownButton>
                   <TextBox
                     bsSize="large"
-                    id={'searchTextUser-' + face}
-                    type="text"
-                    style={this.state.forms[face].text.user.style}
-                    placeholder={this.state.router.location.pathname.indexOf('/@/') ? this.props.router.location.pathname.split('/@/')[1] : ''}
-                    onChange={isAll ? this.searchByUserPaging : this.searchByUser}
-                  />
-                  <TextBox
-                    bsSize="large"
                     id={'searchTextHashtag-' + face}
                     type="text"
                     style={this.state.forms[face].text.hashTag.style}
                     placeholder={this.props.router.location.hash.indexOf('/#/') ? this.props.router.location.hash.split('/#/')[1] : ''}
-                    onChange={isAll ? this.searchByHashTagPaging : this.searchByHashTag}
+                    onChange={this.searchByHashTag}
                   />
                   <TextBox
                     bsSize="large"
@@ -254,7 +239,6 @@ function getInitialFormsState(faces, props) {
     formsState[faces[face]] = {
       searchType: 'color',
       text:{
-        user:{value: '', style:{margin: '0 0.25em 0 0.25em', width: fieldWidth, display:'none'}},
         hashTag:{value: '', style:{margin: '0 0.25em 0 0.25em', width: fieldWidth, display:'none'}},
         bgColor:{value: '', style:{margin: '0 0.25em 0 0.25em', width: fieldWidth, display:'inline'}},
         txtColor:{value: '', style:{margin: '0 0.25em 0 0.25em', width: fieldWidth, display:'none'}}
@@ -277,14 +261,12 @@ function updateFormsDisplay(props) {
   let formsState = {};
   for(var face in this.faces) {
     face = face.toLowerCase();
-    let searchType = this.faces[face] === 'all' ? 'color' : 'user';
-    let userStyle = this.faces[face] === 'all' ? {display:'none'} : {display:'inline'};
+    let searchType = this.faces[face] === 'all' ? 'color' : 'hashtag';
     let bgColorStyle = this.faces[face] === 'all' ? {display:'inline'} : {display:'none'};
     let thisFace = this.state.forms[this.faces[face]];
     formsState[this.faces[face]] = {
       searchType: searchType,
       text:{
-        user: {value: '', style: Object.assign(...thisFace.text.user.style, userStyle)},
         hashTag: {value: '', style: Object.assign(...thisFace.text.bgColor.style, {display:'none'})},
         bgColor: {value: '', style: Object.assign(...thisFace.text.bgColor.style, bgColorStyle)},
         txtColor: {value: '', style: Object.assign(...thisFace.text.txtColor.style, {display:'none'})},

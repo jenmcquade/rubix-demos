@@ -46,7 +46,7 @@ class Cube extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if(this.props.igStatus) {
       this.loadImages(this.props.object);
       this.showImages();
@@ -191,7 +191,7 @@ export function popInImages(face) {
 }
 
 function hideImages() {
-  let faces = getCubeFaces();
+  let faces = this.getCubeFaces();
   for(let face in faces) {
     for(let i = 0; i < 10; i++) {
       let img = document.getElementById(faces[face] + '-' + i + '-image');
@@ -203,7 +203,7 @@ function hideImages() {
 }
 
 function showImages() {
-  let faces = getCubeFaces();
+  let faces = this.getCubeFaces();
   for(let face in faces) {
     for(let i = 0; i < 10; i++) {
       let img = document.getElementById(faces[face] + '-' + i + '-image');

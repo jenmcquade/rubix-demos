@@ -77,19 +77,21 @@ class IgHistory extends React.Component {
 }
 
 function getPagePosts(payloadHistory) {
+  let pagesCount = getPagesCount(payloadHistory);
+  if(pagesCount < 1) {
+    return [];
+  }
   let total = 0;
-  let historySections = Object.keys(payloadHistory);
   let images = [];
-  for(let page in historySections) {
-    let pageId = historySections[page];
-    let returnCount = payloadHistory[pageId].length;
-    for(let i=0; i < returnCount; i++) {
-      total += payloadHistory[pageId][i].length;
-      for(let post in payloadHistory[pageId][i]) {
-        images.push(payloadHistory[pageId][i][post].thumbnail_resources[0].src);
-      }
+  let returnCount = payloadHistory.length;
+
+  for(let i=0; i < returnCount; i++) {
+    total += payloadHistory[i].length;
+    for(let post in payloadHistory[i]) {
+      images.push(payloadHistory[i][post].node.thumbnail_resources[0].src);
     }
   }
+
   let PagePosts = [];
   for(let i=0; i < total; i++) {
     let active = i === 0 ? true : false;
@@ -137,14 +139,10 @@ function getPagingWrapperPosition(payloadHistory) {
 
 function getPagesCount(payloadHistory) {
   let total = 0;
-  let historySections = Object.keys(payloadHistory);
-  for(let page in historySections) {
-    let pageId = historySections[page];
-    let returnCount = payloadHistory[pageId].length;
-    for(let i=0; i < returnCount; i++) {
-      total += payloadHistory[pageId][i].length;
+  let historySections = payloadHistory.length;
+    for(let i=0; i < historySections; i++) {
+      total += payloadHistory[i];
     }
-  }
   return parseInt(total / SEARCH_RETURN_COUNT, 10);
 }
 

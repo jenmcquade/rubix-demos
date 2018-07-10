@@ -1,3 +1,3 @@
-export const PROXY_DOMAIN   = 'igdata.herokuapp.com';
-export const DEFAULT_TYPE   = 'user';
-export const DEFAULT_VALUE  = 'jonorjen';
+export const PROXY_DOMAIN = 'api.jonmcquade.com/ig';
+export const DEFAULT_TYPE = 'hashtag';
+export const DEFAULT_VALUE = 'catsofig';
