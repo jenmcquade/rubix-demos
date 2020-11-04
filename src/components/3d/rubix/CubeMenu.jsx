@@ -21,10 +21,6 @@ class CubeMenu extends React.Component {
 
   }
 
-  componentWillReceiveProps(nextProps) {
-
-  }
-
   render() {
     return(
       <CubeMenuWrapper>

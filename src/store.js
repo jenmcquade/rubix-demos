@@ -2,7 +2,6 @@
  * This file configures the Redux Store
  * Redux Middleware: 
  *  redux-saga: managing synchrounous calls to InstaProxy's paging URLs
- *  react-router-redux: keeping redux state in sync with react-router
  */
 
 /**
@@ -14,21 +13,14 @@ import DevTools from './components/DevTools';
 import rootReducer from './reducers';
 import rootSaga from './sagas';
 import instaProxySaga from './modules/InstaProxy/sagas';
-import createHistory from 'history/createBrowserHistory';
-import { routerMiddleware} from 'react-router-redux';
-
-// History is browser history
-const history = createHistory();
 
 // Define middleware
-const rMiddleware = routerMiddleware(history);
 const sagaMiddleware = createSagaMiddleware();
  
 // Enhancers array is passed to compose()
 //  And combined with reducers
 const enhancers = [
   applyMiddleware(sagaMiddleware),
-  applyMiddleware(rMiddleware),
 ];
 
 /**
@@ -37,7 +29,7 @@ const enhancers = [
  */
 export default function configureStore(initialState = {}) {
   
-  if (process.env.CLIENT && process.env.NODE_ENV === 'development') {
+  if (process.env.REACT_APP_CLIENT === 'browser' && process.env.NODE_ENV === 'development') {
     // Enable DevTools only when rendering on client and during development.
     enhancers.push(window.devToolsExtension ? window.devToolsExtension() : DevTools.instrument());
   }

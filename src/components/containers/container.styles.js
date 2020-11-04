@@ -1,29 +1,37 @@
 import styled, { css } from 'styled-components';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 class Styles {
     constructor() {
 
-            this.wrapper = styled.div `
+    this.wrapper = styled.div `
       min-height: 100%;
       min-width: 100%;
       position: absolute;
     `;
 
-            this.info = styled(Link)
-            `
+    this.info = styled(Link) `
       position: relative;
       bottom: 1em;
       z-index: 0;
+      padding: .25em .5em;
+      border: 2px solid rgb(0, 123, 255);
+      border-radius: 3px;
+      background-color: transparent;
+      &:hover {
+        border-color: rgba(0, 123, 255, .6);
+        color: rgba(0, 123, 255, .6);
+      }
       @media only screen 
       and (min-width : 75px) 
       and (max-width : 667px) 
       { 
         font-size: 0.5em;
+        padding: 1em 0.5em .5em;
       }
     `
 
-            this.infoWrap = styled.div `
+    this.infoWrap = styled.div `
       min-width: 15em; 
       font-size: 1em; 
       position: absolute; 
@@ -43,11 +51,12 @@ class Styles {
       `}
 
       ${props => !props.isOpen && css`
-        transform: translateY(${process.env.NODE_ENV === 'development' ? '17em' : '10em'});
+        transform: translateY(${process.env.NODE_ENV === 'development' ? '32em' : '10em'});
       `}
     `
 
     this.hrule = styled.div`
+      margin-top: 1em;
       border-bottom: 1px solid white;
     `
 
@@ -58,7 +67,6 @@ class Styles {
       float: right;
       z-index: 99;
     `
-
   }
 }
 export default Styles;

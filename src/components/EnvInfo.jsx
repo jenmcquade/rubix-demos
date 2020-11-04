@@ -12,7 +12,7 @@ export default class EnvInfo extends React.Component {
         </SubTitle>
         {
           Object.keys(process.env).map((type, i) => {
-            return <div key={type}><label>{type}:</label><span> {process.env[type]}</span></div>
+            return <div key={type}><label>{type}:</label><span>&nbsp;{process.env[type]}</span></div>
           })
         }
       </div>

@@ -5,6 +5,7 @@ import CubeStyles from './3d/rubix/Cube.styles';
 import { SEARCH_RETURN_COUNT, toggleHistoryPanel } from '../modules/InstaProxy/InstaProxyActions';
 import 'html-gl/dist/htmlgl.min';
 import Draggable from 'react-draggable';
+import { faCircle } from '@fortawesome/free-solid-svg-icons';
 
 // Create container styles
 const styles = new Styles();
@@ -23,7 +24,7 @@ const HistoryIcon = (props) => {
 
 const PageIcon = (props) => { 
   let fontSize = props.active ? '2em' : '1em';
-  return <Icon style={{fontSize: fontSize}} active={props.active} className="fa fa-circle"></Icon>;
+  return <Icon icon={faCircle} style={{fontSize: fontSize}} active={props.active.toString()}></Icon>;
 }
 
 class IgHistory extends React.Component {
@@ -157,7 +158,6 @@ function handleHistoryDrag(e, data) {
 // Retrieve data from store as props
 function mapStateToProps(store) {
   return {
-    router: store.routerReducer,
     ig: store.instaProxy,
   };
 }

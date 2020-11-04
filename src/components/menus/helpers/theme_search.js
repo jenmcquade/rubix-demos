@@ -1,4 +1,3 @@
-import { push } from 'react-router-redux'
 import { getCubeFaces } from '../../3d/rubix/Cube'
 import {
     SEARCH_RETURN_COUNT,
@@ -76,7 +75,6 @@ export function searchByHashTag(e) {
 
     setTimeout(() => {
         this.searchIsUnlocked = true;
-        dispatch(push(getPushUrl({ type: 'hashTag', value: e.target.value })));
         dispatch({
             type: 'HASHTAG_FETCH_REQUESTED',
             value: {

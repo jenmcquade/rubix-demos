@@ -1,11 +1,11 @@
+
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { AppContainer } from 'react-hot-loader';
 import App from './App';
 import configureStore from './store';
 /* Import Bootstrap style file, but that variable is useless for us. To import is enough */
-import Bootstrap from 'bootstrap/dist/css/bootstrap.css'; // eslint-disable-line no-unused-vars
-import FontAwesome from 'font-awesome/css/font-awesome.css'; // eslint-disable-line no-unused-vars
+import Bootstrap from './vendor/css/bootstrap/bootstrap.min.css'; // eslint-disable-line no-unused-vars
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 const ASSETS_PATH = './assets/';
 
@@ -38,10 +38,8 @@ const render = (Component) => {
     document.getElementById('prodBuildInfo').style.display = 'none';
   }
   ReactDOM.render(
-    <AppContainer>
-      <Component store={store}><ListAssets /></Component>  
-    </AppContainer>,
-    mountApp,
+    <Component store={store}><ListAssets /></Component>,
+    mountApp
   );
 };
 
@@ -52,7 +50,6 @@ rootNode.style.position = 'fixed';
 if(loadingImg) {
   loadingImg.style.display = 'none';
 }
-
 render(App);
 
 // Webpack Hot Module Replacement API
@@ -61,3 +58,5 @@ if (module.hot) {
     render(App);
   });
 }
+
+serviceWorkerRegistration.register();

@@ -232,7 +232,7 @@ const CubeReducer = (state = initialState, action) => {
                 }
                 let face = 0;
                 for (face in action.value.faces) {
-                    let newStyle = {...IMAGE_STYLE, ... { opacity: action.value.opacity <= 100 ? action.value.opacity.toString() : '0.5' } };
+                    let newStyle = {...IMAGE_STYLE, ...{ opacity: action.value.opacity <= 100 ? action.value.opacity.toString() : '0.5' } };
                     newState.theme[action.value.faces[face]].imageStyle = newStyle;
                 }
                 return {...state, ...newState };
@@ -243,7 +243,7 @@ const CubeReducer = (state = initialState, action) => {
                 if (!action.value) {
                     return state;
                 }
-                let newStyle = {...IMAGE_STYLE, ... { opacity: action.value.opacity <= 100 ? action.value.opacity.toString() : '0.5' } };
+                let newStyle = {...IMAGE_STYLE, ...{ opacity: action.value.opacity <= 100 ? action.value.opacity.toString() : '0.5' } };
                 newState.theme[action.value.faceId].imageStyle = newStyle;
                 return {...state, ...newState };
             }

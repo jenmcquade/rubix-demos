@@ -1,24 +1,25 @@
 import styled, { css, keyframes } from 'styled-components';
-import { Link } from 'react-router-dom'
 import animations from '../../animations/menu';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { 
   Button, 
   ButtonGroup,
   DropdownButton,
-  MenuItem, 
+  Dropdown,
   Form,
   FormGroup,
   FormControl,
   InputGroup,
 } from 'react-bootstrap';
-
+import {
+  Link
+} from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const anims = new animations(keyframes);
 
 class Styles {
   constructor() {
-
     //
     // Root 
     //
@@ -106,7 +107,7 @@ class Styles {
       height: 100%;
       display: table-caption;
       position: relative;
-      padding: 0.5em 0.5em 0.5em 0.5em;
+      padding: 0.5em 0.5em 0.4em 0.5em;
       border: none;
 
       > :focus {
@@ -138,7 +139,6 @@ class Styles {
         font-size: 1em;
         text-align: center;
         display: table;
-
         > :focus, :hover {
           text-decoration: none;
           color: rgba(0,0,0,0.2) !important;
@@ -149,7 +149,7 @@ class Styles {
       and (min-width: 720px) 
       and (max-width: 1023px) { 
         width: 5em;
-        padding: 0.5em 1em 0.5em .5em;
+        padding: 0.5em 1em 0.5em -1em;
 
       }
 
@@ -214,7 +214,7 @@ class Styles {
     // Trigger icon
     //
 
-    this.icon = styled.i`
+    this.icon = styled(FontAwesomeIcon)`
       font-size: 1em;
       display: inline-grid;
       transform: scale(0.9,0.9);
@@ -225,11 +225,7 @@ class Styles {
         margin-top: 0;
         font-size: 2em;
       }
-      @media only screen 
-      and (min-width: 720px) 
-      and (max-width: 1023px) { 
-        margin: 0 40%;
-      }
+
 
       ${props => props.active && css`
         font-size: 2em;
@@ -242,7 +238,7 @@ class Styles {
     //
 
     this.scrollBar = styled(Scrollbars)`
-
+      overflow-x: hidden !important;
     `
 
     //
@@ -250,7 +246,7 @@ class Styles {
     //
 
     this.content = styled.div`
-      min-width: 15em;
+      min-width: 16em;
       min-height: 18em;
       margin-top: -3em;
       transform: rotateX(-90deg);
@@ -259,7 +255,6 @@ class Styles {
       z-index: 10;
 
       ${props => props.backgroundColor && css`
-        bgColor = props.backgroundColor;
         background-color: rgba(${props.backgroundColor[0]},${props.backgroundColor[1]},${props.backgroundColor[2]},${props.backgroundColor[3]});
       `}
 
@@ -269,19 +264,12 @@ class Styles {
         position: absolute;
         min-height: 100%;
         min-width: 100%;
-        top: 184%;
+        top: 196%;
         left: 0%;
         display: table-row;
 
-        ${props => props.active === 'true' && props.default === 'false' && css`
+        ${props => props.active === 'true' && props.default === false && css`
           transform: rotateX(0deg);
-        `}
-
-        ${props => props.scrollable && css`
-          :after {
-            font-family: "FontAwesome";
-            content: "\f078"
-          }
         `}
 
         ${props => props.backgroundColor && css`
@@ -294,14 +282,14 @@ class Styles {
       and (min-width: 720px) 
       and (max-width: 1023px) { 
         padding: 0.25em;
-        margin-top: -2.42em;
+        margin-top: -2.4em;
         min-height: 22em;
 
-        ${props => props.active === 'true' && props.default === 'false' && css`
+        ${props => props.active === 'true' && props.default === false && css`
           animation: ${anims.menuOpenContent} 1s forwards ease-out;
         `}
 
-        ${props => props.active === 'false' && props.default === 'false' && css`
+        ${props => props.active === 'false' && props.default === false && css`
           animation: ${anims.menuCloseContent} 1s forwards ease-out;
         `}
 
@@ -311,11 +299,11 @@ class Styles {
       and (min-width: 1024px) { 
         padding: 1em 0.25em 1em 0;
 
-        ${props => props.active === 'true' && props.default === 'false' && css`
+        ${props => props.active === 'true' && props.default === false && css`
           animation: ${anims.menuOpenContent} 1s forwards ease-out;
         `}
 
-        ${props => props.active === 'false' && props.default === 'false' && css`
+        ${props => props.active === 'false' && props.default === false && css`
           animation: ${anims.menuCloseContent} 1s forwards ease-out;
         `}
 
@@ -356,6 +344,7 @@ class Styles {
     this.li = styled.li`
       list-style-type: none;
       margin-bottom: 0.55em;
+      margin-right: .55em;
       display: inline-block;
     `
 
@@ -363,7 +352,6 @@ class Styles {
     // Form label
     //
     this.label = styled.label`
-      margin: 0.55em 0.25em 0 0;
       font-weight: 400;
       min-width: 4em;
       display: default;
@@ -376,6 +364,13 @@ class Styles {
       cursor: pointer;
       font-size: 1em;
       font-family: 'sans-serif';
+      background-color: white;
+      border-color: #ccc;
+      color: black;
+      &:hover, :active, :focus {
+        background-color: #e6e6e6 !important;
+        border-color: #adadad !important;
+      }
     `
 
     //
@@ -409,13 +404,17 @@ class Styles {
     //  Bootstrap ButtonGroup
     //
     this.btnGroup = styled(ButtonGroup)`
-
+      &button {
+        background-color: white;
+      }
     `;
 
     //
     //  Bootstrap Form
     //
-    this.form = Form;
+    this.form = styled(Form)`
+      margin-bottom: .25em;
+    `;
 
     //
     //  Bootstrap FormGroup
@@ -441,12 +440,33 @@ class Styles {
       margin: 0 0.25em;
       transition: background 0.8s;
       width: 4.5em;
+      border: 1px solid white;
+      border-radius: 6px;
+      &:hover, :active, :focus {
+        border-color: rgb(173, 173, 173) !important;
+      }
+
+      & button {
+        background: transparent;
+        border: none;
+        font-size: 18px;
+        &.dropdown-toggle, :active, .active, :hover, .hover, :focus, .focus {
+          background-color: transparent !important;
+          box-shadow: none !important;
+        }
+        ${props => props.textcolor && props.textcolor === 'black' && css`
+          color: black;
+          &.dropdown-toggle, :active, .active, :hover, .hover, :focus, .focus { 
+            color: black !important;
+          }
+        `}
+      }
     `;
 
     //
     // Dropdown menu items
     //
-    this.dropdownItem = styled(MenuItem)`
+    this.dropdownItem = styled(Dropdown.Item)`
       display: none;
       ${props => props.display && props.display === 'true' && css`
         display: block;

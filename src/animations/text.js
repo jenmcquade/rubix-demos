@@ -1,5 +1,3 @@
-import styled from 'styled-components';
-
 class Text {
   constructor(keyframes) {
     this.fade = keyframes`

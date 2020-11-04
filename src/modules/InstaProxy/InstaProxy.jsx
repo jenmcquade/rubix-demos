@@ -38,10 +38,10 @@ export class InstaProxy extends Component {
     this.setup();
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     let searchProps = getSearchPropsFromUrl(window.location);
-    if(searchProps && this.props.router.location.pathname.indexOf('@/') === -1 &&
-      this.props.router.location.hash.indexOf('#/') === -1) {
+    if(searchProps && window.location.pathname.indexOf('@/') === -1 &&
+      window.location.hash.indexOf('#/') === -1) {
       return false;
     }
   }
@@ -135,14 +135,14 @@ function getSearchPropsFromUrl(location) {
   let path = '';
   let searchType = SEARCH_DEFAULT_TYPE;
   let searchValue = SEARCH_DEFAULT_VALUE;
-  let isHashPath = false;
+  //let isHashPath = false;
   let helperPath = '';
   let pathSearchValue = '';
 
   // Get correct path value from location object
   try {
     if(location.hash !== '') {
-      isHashPath = true;
+      //isHashPath = true;
       path = location.hash;
       if(location.pathname !== '/') {
         helperPath = location.pathname;
@@ -161,7 +161,7 @@ function getSearchPropsFromUrl(location) {
 
   const helperPathArray = helperPath.split('/');
   const searchUrlIndex = pathArray.indexOf('#');
-  let firstPropIsFace = false;
+  //let firstPropIsFace = false;
 
   // Get face to determine
   //  if this is a paged request to all sides
@@ -169,7 +169,7 @@ function getSearchPropsFromUrl(location) {
   for(let face in faces) {
     if (helperPathArray[1] && faces[face] === helperPathArray[1]) {
       faceType=faces[face];
-      firstPropIsFace = true;
+      //firstPropIsFace = true;
       break;
     } 
   }

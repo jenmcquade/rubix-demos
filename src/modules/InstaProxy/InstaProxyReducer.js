@@ -76,7 +76,7 @@ const InstaProxyReducer = (state = initialState, action) => {
             }
             newState.inProcess = false;
             newState.lastPayload = action.value.data;
-            newState.payloadHistory.push(action.value.data.graphql.hashtag.edge_hashtag_to_media.edges)
+            newState.payloadHistory.push(action.value.data.graphql.hashtag.edge_hashtag_to_top_posts.edges)
             return {...state, ...newState };
 
         case TOGGLE_HISTORY_PANEL:

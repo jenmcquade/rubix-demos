@@ -77,6 +77,7 @@ class Theme extends Component {
       themeFace: 'top',
       forms: this.formsState,
       faceId: 'all',
+      height: 0,
     }
 
     this.searchIsUnlocked = true;
@@ -105,7 +106,6 @@ class Theme extends Component {
         return true;
       }
       this.props.dispatch(toggleMenuSetup());
-      this.setState({isDefaultState: false});
     } 
   }
 
@@ -123,6 +123,7 @@ class Theme extends Component {
         autoHeightMin={460} 
         autoHeightMax={500}
         className="scroll-bar"
+        ref={element => this.containerRef = element}
       >
         <SubTitle type="heading">
           Cube Colors and Background Images
@@ -163,11 +164,12 @@ class Theme extends Component {
                     {face.toUpperCase()}
                   </Label>
                   <DropdownButton 
-                    bsSize="large"
+                    size="large"
                     id={'searchType-' + face}
                     title={this.state.forms[face].searchType}
                     onSelect={this.changeSearchType}
-                    dropup={dropupEnabled}
+                    dropup={dropupEnabled.toString()}
+                    textcolor={txtColor}
                     style={{
                       backgroundColor: themeColor, 
                       color: txtColor,
@@ -180,15 +182,14 @@ class Theme extends Component {
                     <DropdownItem display="true" eventKey={face + '-txtColor'}>Text Color</DropdownItem>
                   </DropdownButton>
                   <TextBox
-                    bsSize="large"
+                    size="large"
                     id={'searchTextHashtag-' + face}
                     type="text"
                     style={this.state.forms[face].text.hashTag.style}
-                    placeholder={this.props.router.location.hash.indexOf('/#/') ? this.props.router.location.hash.split('/#/')[1] : ''}
                     onChange={this.searchByHashTag}
                   />
                   <TextBox
-                    bsSize="large"
+                    size="large"
                     id={'searchTextBgColor-' + face}
                     type="text"
                     style={this.state.forms[face].text.bgColor.style}
@@ -196,7 +197,7 @@ class Theme extends Component {
                     onChange={isAll ? this.changeAllBgColor : this.changeBgColor}
                   />
                   <TextBox
-                    bsSize="large"
+                    size="large"
                     id={'searchTextColor-' + face}
                     type="text"
                     style={this.state.forms[face].text.txtColor.style}
@@ -252,7 +253,7 @@ function getInitialFormsState(faces, props) {
 }
 
 function getSliderStyle(screenSize) {
-  let fieldWidth = screenSize === 'xlarge' ? '8.7em' : '5.8em';
+  let fieldWidth = screenSize === 'xlarge' ? '6.5em' : '4.5em';
   let style = { width: fieldWidth, 'margin': '0.8em 0.5em 0 0.5em', display:'none' }
   return style;
 }
@@ -286,7 +287,6 @@ export function changeLoadFace(value) {
 // Retrieve data from store as props
 function mapStateToProps(store) {
   return {
-    router: store.routerReducer,
     app: store.app,
     ig: store.instaProxy,
     menu: store.menu,

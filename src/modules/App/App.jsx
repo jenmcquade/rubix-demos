@@ -17,11 +17,11 @@
  */
 
 import React, { Component } from 'react';
-import { push } from 'react-router-redux'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom'
 import Styles from '../../components/containers/container.styles';
+import { Icon } from '../../components/menus/Common';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 // Additional Modules
 import InstaProxy from '../InstaProxy/InstaProxy';
@@ -105,6 +105,10 @@ export class App extends Component {
       window.location.search.split('?')[1] ? '&' : '?' 
       : '?';
     let igStatus = this.props.ig.status;
+    let gitHubLink = this.props.screenSize > 720 ? 
+      <GitHubLink href="https://github.com/jonmcquade/rubix-demos">
+        <img style={{position: 'absolute', top: 0, right: 0, border: 0}} src="https://camo.githubusercontent.com/52760788cde945287fbb584134c4cbc2bc36f904/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" /> 
+      </GitHubLink> : '';
     return (
       <div>
         {
@@ -120,8 +124,6 @@ export class App extends Component {
             // https://github.com/nfl/react-helmet 
           }
           <Helmet
-            title="Open 3D Viewer"
-            titleTemplate="%s - Default App"
             meta={[
               { charset: 'utf-8' },
               {
@@ -140,9 +142,7 @@ export class App extends Component {
             screenSize={this.props.app.screenSize} 
           />
 
-          <GitHubLink href="https://github.com/jonmcquade/rubix-demos">
-            <img style={{position: 'absolute', top: 0, right: 0, border: 0}} src="https://camo.githubusercontent.com/52760788cde945287fbb584134c4cbc2bc36f904/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" />
-          </GitHubLink>
+          {gitHubLink}
           
           <Wrapper onDoubleClick={this.resetMenus}>
             <Stage 
@@ -156,15 +156,15 @@ export class App extends Component {
           </Wrapper>
 
           <InfoWrap isOpen={ this.props.app.infoPanelIsOpen } ref="InfoWrapper" id="infoWrapper">
-            <InfoLink 
-              to={        
+            <InfoLink
+              to={
                 window.location.pathname + queryChar + 
                 (window.location.search.indexOf('__info') === -1 ? '__info' : '') +
                 window.location.hash 
               }
               onClick={this.toggleAppInfoPanel}
             >
-              <i className='fa fa-info-circle'/>
+              <Icon icon={faInfoCircle} />
             </InfoLink>
             <HRule />
             { <ProxyInfo igStatus={igStatus} /> }
@@ -228,7 +228,6 @@ function resetMenus() {
   }
   this.props.dispatch(toggleHistoryPanel(false, true));
   this.props.dispatch(toggleInfoPanel(false, true));
-  this.props.dispatch(push('/'));
 }
 
 App.propTypes = {

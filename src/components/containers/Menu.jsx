@@ -5,6 +5,7 @@ import { MenuWrapper } from '../menus/Common'
 import Category from '../menus/Category';
 import Perspective from '../menus/Perspective';
 import Theme from '../menus/Theme';
+import { faTh, faHashtag } from '@fortawesome/free-solid-svg-icons';
 
 export default class Menu extends React.Component {
   constructor(props) {
@@ -17,10 +18,10 @@ export default class Menu extends React.Component {
   render() {
     return( 
       <MenuWrapper id="MenuWrapper" role="navigation">
-        <Category router={this.props.router} screenSize={this.props.screenSize} tabindex="0" label="Perspective" id="perspective" iconType="glyphicon glyphicon-th">
+        <Category router={this.props.router} screenSize={this.props.screenSize} tabindex="0" label="Perspective" id="perspective" iconType={faTh}>
           <Perspective />
         </Category>
-        <Category router={this.props.router} screenSize={this.props.screenSize} tabindex="0" label="Theme" id="theme" iconType="fa fa-hashtag">
+        <Category router={this.props.router} screenSize={this.props.screenSize} tabindex="0" label="Theme" id="theme" iconType={faHashtag}>
           <Theme />
         </Category>
       </MenuWrapper>

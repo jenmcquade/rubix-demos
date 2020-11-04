@@ -22,6 +22,8 @@ import Common, {
 
 import { toggleMenu } from './MenuActions';
 
+import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
+
 class Category extends Component {
   /**
    * Constructor
@@ -64,12 +66,13 @@ class Category extends Component {
     if(route.split('/')[1] && route.split('/')[1].toLowerCase() === this.id) {
       this.props.dispatch(toggleMenu(this.id, true));
     }
+    this.setState({contentHeight: this.containerRef.lastElementChild.lastElementChild.clientHeight});
   }
  
   //
   // Lifecycle handlers
   //
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.updateUrl(nextProps);
     this.updateMenuState(nextProps);
   }
@@ -78,8 +81,8 @@ class Category extends Component {
     // Re-theme when dimensions change
     if(this.props.id) {
       this.setScreenTheme(this.props); // See Common.js
-      document.querySelector('#' + this.props.id + ' a').style.backgroundColor = this.themeColor;
-      document.querySelector('#' + this.props.id + ' a').style['color'] = this.triggerColor;
+      // document.querySelector('#' + this.props.id + ' a').style.backgroundColor = this.themeColor;
+      // document.querySelector('#' + this.props.id + ' a').style['color'] = this.triggerColor;
     }
   }
 
@@ -96,22 +99,24 @@ class Category extends Component {
     let menuIsOpen = category.isDefaultState && this.openOnLoad ? true : this.category.menuIsOpen; 
     let iconType = this.props.iconType;
     let inlineContentTransform = this.category.inlineContentTransform;
+    let scrollableIcon = this.state.contentHeight > 499 ? <Icon icon={faAngleDown} /> : '';
+
     return (
-      <Item id={this.id} style={{backgroundColor: this.themeColor}}>
+      <Item id={this.id} style={{backgroundColor: this.themeColor}} ref={element => this.containerRef = element}>
         <Trigger 
-          default={category.isDefaultState.toString()}
+          default={category.isDefaultState}
           openonload={this.openOnLoad.toString()}
           active={menuIsOpen.toString()}
           onClick={this.handleTrigger}
           id={this.id + '-trigger'}
           to={this.triggerUrl}
+          style={{backgroundColor: this.themeColor}}
         >
-          <Icon className={iconType} />
+          <Icon icon={iconType} style={{color: this.triggerColor}} />
           <CategoryLabel>{label}</CategoryLabel>
         </Trigger>
         <Content
-          scrollable={this.props.id === 'theme' ? true : false}
-          default={category.isDefaultState.toString()}
+          default={category.isDefaultState}
           openonload={this.openOnLoad.toString()}
           active={menuIsOpen.toString()} 
           backgroundColor={baseColor}
@@ -121,6 +126,7 @@ class Category extends Component {
         >
           <Title>{label}</Title> 
           { this.props.children }
+          { scrollableIcon }
         </Content>
       </Item>
     );
