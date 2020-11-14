@@ -223,19 +223,37 @@ function setup() {
         this.props.dispatch(setIsMounted());
         return false;
       }
+
+      let searchProps = getSearchPropsFromUrl(window.location);
+      let typeToUpper = searchProps.searchType.toUpperCase();
+      let recent_posts_count = 0;
+      let paging = false;
+      let fetch_type = typeToUpper + '_FETCH_REQUESTED';
+
+      try {
+        recent_posts_count = response.graphql.edge_hashtag_to_media.count;
+      } catch {
+        recent_posts_count = 0;
+      }
+      
+      // FALLBACK: If no recent posts, try paging top posts
+      if(recent_posts_count === 0) {
+        paging = true;
+        fetch_type = typeToUpper + '_FETCH_DEFAULT_PAGING_REQUESTED';
+      } 
+
+      // FIRST SERVICE CALL OF THE APP
       if(response.graphql) {
         this.props.dispatch(setStatus(true));
-        let searchProps = getSearchPropsFromUrl(window.location);
-        let typeToUpper = searchProps.searchType.toUpperCase();
         this.props.dispatch({
-          type: typeToUpper + '_FETCH_REQUESTED', 
+          type: fetch_type, 
           value: {
             searchUri: searchProps.searchUri,
             searchType: searchProps.searchType,
             searchValue: searchProps.searchValue,
-            pages: false,
+            pages: getCubeFaces().length,
             face: searchProps.faceType ? searchProps.faceType : null,
-            faces: true,
+            faces: false,
             isFirstRequest: true,
           }
         });

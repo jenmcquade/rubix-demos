@@ -39,6 +39,7 @@ import {
   changeImageOpacity,
   changeAllImageOpacity,
   searchByHashTag,
+  searchByHashTagPaging,
 } from './helpers/theme_search'
 
 //
@@ -92,6 +93,7 @@ class Theme extends Component {
     this.changeTxtColor = changeTxtColor.bind(this);
     this.convertRGBAToString = convertRGBAToString.bind(this);
     this.searchByHashTag = searchByHashTag.bind(this);
+    this.searchByHashTagPaging = searchByHashTagPaging.bind(this);
     this.setIgSearchType = setIgSearchType.bind(this);
     this.changeAllImageOpacity = changeAllImageOpacity.bind(this);
     this.changeImageOpacity = changeImageOpacity.bind(this);
@@ -186,7 +188,7 @@ class Theme extends Component {
                     id={'searchTextHashtag-' + face}
                     type="text"
                     style={this.state.forms[face].text.hashTag.style}
-                    onChange={this.searchByHashTag}
+                    onChange={face === 'all' ? this.searchByHashTagPaging : this.searchByHashTag}
                   />
                   <TextBox
                     size="large"

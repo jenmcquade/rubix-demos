@@ -26,69 +26,69 @@ export const URL_BASE_HASHTAG = PROXY_SERVER + PATH_HASHTAG;
 export const URL_DEFAULT_SEARCH_URL = PROXY_SERVER + PATH_HASHTAG + '?tag=' + SEARCH_DEFAULT_VALUE;
 
 export function setIsMounted() {
-    return {
-        type: SET_IS_MOUNTED,
-    }
+	return {
+		type: SET_IS_MOUNTED,
+	}
 }
 
 export function setup() {
-    return {
-        type: SETUP,
-    }
+	return {
+		type: SETUP,
+	}
 }
 
 export function setStatus(status) {
-    if (status) {
-        return {
-            type: SET_IS_ONLINE,
-        }
-    } else {
-        return {
-            type: SET_IS_OFFLINE,
-        }
-    }
+	if (status) {
+		return {
+			type: SET_IS_ONLINE,
+		}
+	} else {
+		return {
+			type: SET_IS_OFFLINE,
+		}
+	}
 }
 
 export function setSearchUrl(url) {
-    return {
-        type: SET_IG_SEARCH_URL,
-        value: url,
-    }
+	return {
+		type: SET_IG_SEARCH_URL,
+		value: url,
+	}
 }
 
 export function setSearchType(searchType) {
-    return {
-        type: SET_IG_SEARCH_TYPE,
-    }
+	return {
+		type: SET_IG_SEARCH_TYPE,
+	}
 }
 
 export function setSearchValue(searchValue) {
-    return {
-        type: SET_IG_SEARCH_VALUE,
-        value: searchValue,
-    }
+	return {
+		type: SET_IG_SEARCH_VALUE,
+		value: searchValue,
+	}
 }
 
 export function updateData(data) {
-    return {
-        type: UPDATE_IG_DATA,
-        value: { data: data },
-    }
+	return {
+		type: UPDATE_IG_DATA,
+		value: { data: data },
+	}
 }
 
 export function setServerError(data) {
-    return {
-        type: SET_ERROR,
-        error: data,
-    }
+	return {
+		type: SET_ERROR,
+		error: data,
+	}
 }
 
 export function toggleHistoryPanel(forceOn = false, forceOff = false) {
-    return {
-        type: TOGGLE_HISTORY_PANEL,
-        value: {
-            forceOn: forceOn,
-            forceOff: forceOff,
-        }
-    }
+	return {
+		type: TOGGLE_HISTORY_PANEL,
+		value: {
+			forceOn: forceOn,
+			forceOff: forceOff,
+		}
+	}
 }
