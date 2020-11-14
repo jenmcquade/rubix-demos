@@ -51,7 +51,14 @@ class Styles {
       `}
 
       ${props => !props.isOpen && css`
-        transform: translateY(${process.env.NODE_ENV === 'development' ? '30em' : '10em'});
+        transform: translateY(${process.env.NODE_ENV === 'development' ? '34em' : '11em'});
+
+        @media only screen 
+        and (min-width : 75px) 
+        and (max-width : 667px) 
+        { 
+          transform: translateY(${process.env.NODE_ENV === 'development' ? '30em' : '11em'});
+        }
       `}
     `
 
