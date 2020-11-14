@@ -227,7 +227,6 @@ function setup() {
       let searchProps = getSearchPropsFromUrl(window.location);
       let typeToUpper = searchProps.searchType.toUpperCase();
       let recent_posts_count = 0;
-      let paging = false;
       let fetch_type = typeToUpper + '_FETCH_REQUESTED';
 
       try {
@@ -238,7 +237,6 @@ function setup() {
       
       // FALLBACK: If no recent posts, try paging top posts
       if(recent_posts_count === 0) {
-        paging = true;
         fetch_type = typeToUpper + '_FETCH_DEFAULT_PAGING_REQUESTED';
       } 
 
