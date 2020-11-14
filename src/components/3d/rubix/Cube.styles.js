@@ -28,7 +28,7 @@ class Styles {
       and (min-width : 75px) 
       and (max-width : 667px) 
       { 
-        margin-left: -8em;
+        margin-left: -7em;
         transform: scale(0.6);
       }
       @media only screen 

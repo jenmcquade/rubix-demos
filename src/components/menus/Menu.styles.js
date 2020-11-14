@@ -47,7 +47,7 @@ class Styles {
         min-width: 100%;
         z-index: 99;
         padding: 0;
-        max-height: 100px;
+        max-height: 70px;
       }
 
       @media only screen 
@@ -82,6 +82,7 @@ class Styles {
         transform-origin: top left;
         padding-top: 0px;
         margin: 0 1em 0 1em;
+        height: 100%;
       }
 
       @media only screen 
@@ -136,7 +137,7 @@ class Styles {
         animation: "";
         transform: rotateZ(0deg) translateY(0em);
         padding: 0.5em 0.1em 0 0.1em;
-        font-size: 1em;
+        font-size: 0.7em;
         text-align: center;
         display: table;
         > :focus, :hover {
@@ -196,6 +197,7 @@ class Styles {
         visibility: visible;
         display: block;
         margin: 0.5em;
+        font-size: 1.5rem;
       }
       @media only screen 
       and (min-width: 720px) 
@@ -264,7 +266,7 @@ class Styles {
         position: absolute;
         min-height: 100%;
         min-width: 100%;
-        top: 196%;
+        top: 10.4rem;
         left: 0%;
         display: table-row;
 
@@ -321,6 +323,12 @@ class Styles {
       min-width: 3em;
       ${props => props.type && props.type === 'heading' && css`
         margin-top: 0.5em;
+
+        @media only screen
+        and (min-width : 75px) 
+        and (max-width : 719px) {
+          font-size: 1rem;
+        }
       `}
     `
 
@@ -346,6 +354,14 @@ class Styles {
       margin-bottom: 0.55em;
       margin-right: .55em;
       display: inline-block;
+
+      @media only screen
+      and (min-width : 75px) 
+      and (max-width : 719px) {
+        display: block;
+        margin-bottom: 0.25em;
+        margin-right: 0;
+      }
     `
 
     //
@@ -355,6 +371,12 @@ class Styles {
       font-weight: 400;
       min-width: 4em;
       display: default;
+
+      @media only screen
+      and (min-width : 75px) 
+      and (max-width : 719px) {
+        margin-top: 0.25em;
+      }
     `
 
     //
@@ -414,6 +436,12 @@ class Styles {
     //
     this.form = styled(Form)`
       margin-bottom: .25em;
+
+      @media only screen
+      and (min-width : 75px) 
+      and (max-width : 719px) {
+        margin-bottom: 0;
+      }
     `;
 
     //
@@ -421,6 +449,12 @@ class Styles {
     //
     this.formGroup = styled(FormGroup)`
       display: flex !important;
+
+      @media only screen
+      and (min-width : 75px) 
+      and (max-width : 719px) {
+        margin-bottom: 0.25em;
+      }
     `;
     
     //

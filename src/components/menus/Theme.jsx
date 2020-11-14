@@ -235,16 +235,16 @@ class Theme extends Component {
 //
 function getInitialFormsState(faces, props) {
   let formsState = {};
-  let fieldWidth = props.app.screenSize === 'xlarge' ? '10em' : '7em';
+  let fieldWidth = props.app.screenSize === 'xlarge' ? '10em' : '7.5em';
   let sliderStyle = getSliderStyle(props.app.screenSize);
   for(var face in faces) {
     face = face.toLowerCase();
     formsState[faces[face]] = {
       searchType: 'color',
       text:{
-        hashTag:{value: '', style:{margin: '0 0.25em 0 0.25em', width: fieldWidth, display:'none'}},
-        bgColor:{value: '', style:{margin: '0 0.25em 0 0.25em', width: fieldWidth, display:'inline'}},
-        txtColor:{value: '', style:{margin: '0 0.25em 0 0.25em', width: fieldWidth, display:'none'}}
+        hashTag:{value: '', style:{margin: '0.25em', width: fieldWidth, display:'none'}},
+        bgColor:{value: '', style:{margin: '0.25em', width: fieldWidth, display:'inline'}},
+        txtColor:{value: '', style:{margin: '0.25em', width: fieldWidth, display:'none'}}
       },
       slider:{
         imageOpacity: {value: .5, style: sliderStyle}
