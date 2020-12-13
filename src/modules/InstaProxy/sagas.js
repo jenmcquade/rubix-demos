@@ -140,7 +140,7 @@ function* fetchPages(action) {
 
 		let faces = getCubeFaces(action.value);
 		let nextPage = '';
-
+ 
 		for (i = 0; i < action.value.pages; i++) {
 			let newAction = {...action };
 			newAction.value.face = faces[i];
@@ -223,6 +223,7 @@ function* setSearchType(action) {
 }
 
 function hideCubeImages(props) {
+	console.log(props.faces);
 	// Hide images until new data is loaded
 	if (props.faces) {
 		let faces = getCubeFaces();
