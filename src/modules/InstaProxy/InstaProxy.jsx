@@ -230,7 +230,7 @@ function setup() {
       let fetch_type = typeToUpper + '_FETCH_REQUESTED';
 
       try {
-        recent_posts_count = response.graphql.edge_hashtag_to_media.count;
+        recent_posts_count = response.graphql.hashtag.edge_hashtag_to_media.count;
       } catch {
         recent_posts_count = 0;
       }
@@ -251,7 +251,7 @@ function setup() {
             searchValue: searchProps.searchValue,
             pages: getCubeFaces().length,
             face: searchProps.faceType ? searchProps.faceType : null,
-            faces: false,
+            faces: recent_posts_count === 0 ? false : true,
             isFirstRequest: true,
           }
         });
