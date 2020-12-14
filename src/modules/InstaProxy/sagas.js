@@ -223,7 +223,6 @@ function* setSearchType(action) {
 }
 
 function hideCubeImages(props) {
-	console.log(props.faces);
 	// Hide images until new data is loaded
 	if (props.faces) {
 		let faces = getCubeFaces();
